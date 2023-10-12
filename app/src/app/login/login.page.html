@@ -1,13 +1,56 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
-    <ion-title>Login header</ion-title>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+
+    <ion-title>Login</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Login content</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content>
+  <div class="login-logo">
+    <img src="assets/img/test.jpg" alt="Test image for the login page">
+  </div>
+
+  <div class="login-form">
+    <form #loginForm="ngForm" novalidate>
+      <ion-input
+        label="Username"
+        labelPlacement="stacked"
+        fill="solid"
+        [(ngModel)]="login.username"
+        name="username"
+        type="text"
+        #username="ngModel"
+        spellcheck="false"
+        autocapitalize="off"
+        errorText="Username is required"
+        required="Username is required">
+      </ion-input>
+
+      <ion-input
+        label="Password"
+        labelPlacement="stacked"
+        fill="solid"
+        [(ngModel)]="login.password"
+        name="password"
+        type="password"
+        #password="ngModel"
+        errorText="Password is required"
+        required="Password is required">
+      </ion-input>
+
+      <ion-row>
+        <ion-col>
+          <ion-button (click)="onLogin(loginForm)" type="submit" expand="block">Login</ion-button>
+        </ion-col>
+        <ion-col>
+<!--          <ion-button (click)="onSignup()" color="light" expand="block">Signup</ion-button>-->
+          <ion-button color="light" expand="block">Signup</ion-button>
+        </ion-col>
+      </ion-row>
+    </form>
+  </div>
+
 </ion-content>
