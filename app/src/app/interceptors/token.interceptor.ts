@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent } from '@angular/common/http';
+import {HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpHeaders} from '@angular/common/http';
 import { Observable } from 'rxjs';
 import {StorageService} from "../storage/storage.service";
 import {environment} from "../../environments/environment";
@@ -19,11 +19,6 @@ export class AuthInterceptor implements HttpInterceptor {
         }
       });
     }
-    request = request.clone({
-      setHeaders: {
-        AccessControlAllowOrigin: `${environment.API}`
-      }
-    });
     return next.handle(request);
   }
 }
