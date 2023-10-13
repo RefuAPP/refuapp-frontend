@@ -1,25 +1,37 @@
 import { Injectable } from '@angular/core';
-import { Storage } from '@ionic/storage-angular';
 import {StorageService} from "../storage/storage.service";
-import {BehaviorSubject, Observable, tap} from "rxjs";
 import {LoginRequest} from "../login/schemas/login-request.model";
-import {LoginService} from "../login/login.service";
+import {Observable} from "rxjs";
 import {LoginResponse} from "../login/schemas/login-response.model";
-import {Form, NgForm} from "@angular/forms";
+import {environment} from "../../environments/environment";
+import {HttpClient} from "@angular/common/http";
+import {LoadingController} from "@ionic/angular";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private _isLoggedIn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  isLoggedIn: Observable<boolean> = this._isLoggedIn.asObservable();
+  isLoggedIn: boolean = false;
 
   constructor(
     private storageService: StorageService,
-    private loginService: LoginService
-    ) {
+    private http: HttpClient,
+    private loadingController: LoadingController,
+  ) {
     const token = this.storageService.get('token');
-    this._isLoggedIn.next(!!token);
+    this.isLoggedIn = !!token;
+  }
+  login(credentials: LoginRequest): Observable<LoginResponse> {
+    const formData = new FormData();
+    formData.append('username', credentials.username);
+    formData.append('password', credentials.password);
+    formData.append('scope', credentials.scope);
+
+    return this.http.post<LoginResponse>(`${environment.API}/login`, formData)
   }
 
+  async saveToken(response: LoginResponse): Promise<void> {
+    await this.storageService.set('token', response.access_token);
+    this.isLoggedIn = true;
+  }
 }
