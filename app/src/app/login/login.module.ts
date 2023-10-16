@@ -7,7 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { LoginPageRoutingModule } from './login-routing.module';
 
 import { LoginPage } from './login.page';
-import {MaskitoModule} from "@maskito/angular";
+import { MaskitoModule } from '@maskito/angular';
 
 @NgModule({
   imports: [
@@ -15,8 +15,8 @@ import {MaskitoModule} from "@maskito/angular";
     FormsModule,
     MaskitoModule,
     IonicModule,
-    LoginPageRoutingModule
+    LoginPageRoutingModule,
   ],
-  declarations: [LoginPage]
+  declarations: [LoginPage],
 })
 export class LoginPageModule {}

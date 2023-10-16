@@ -10,7 +10,7 @@
 
 <ion-content>
   <div class="login-logo">
-    <img src="assets/img/test.jpg" alt="Test image for the login page">
+    <img src="assets/img/logo.png" alt="Test image for the login page" />
   </div>
 
   <div class="login-form">
@@ -34,20 +34,21 @@
       <ion-input
         label="Password"
         labelPlacement="stacked"
-        fill="solid"
+        fill="outline"
         [(ngModel)]="login.password"
         name="password"
         type="password"
         errorText="Password is required"
-        required="Password is required">
+        required="Password is required"
+      >
       </ion-input>
-      <ion-note color="danger" *ngIf="hasError">
-        {{errorMessage}}
-      </ion-note>
+      <ion-note color="danger" *ngIf="hasError"> {{errorMessage}} </ion-note>
 
       <ion-row>
         <ion-col>
-          <ion-button (click)="onLogin(loginForm)" type="submit" expand="block">Login</ion-button>
+          <ion-button (click)="onLogin(loginForm)" type="submit" expand="block"
+            >Login</ion-button
+          >
         </ion-col>
         <ion-col>
           <!--          <ion-button (click)="onSignup()" color="light" expand="block">Signup</ion-button>-->
@@ -56,5 +57,4 @@
       </ion-row>
     </form>
   </div>
-
 </ion-content>
