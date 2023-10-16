@@ -10,7 +10,7 @@
 
 <ion-content>
   <div class="login-logo">
-    <img src="assets/img/test.jpg" alt="Test image for the login page" />
+    <img src="assets/img/test.jpg" alt="Test image for the login page">
   </div>
 
   <div class="login-form">
@@ -18,15 +18,16 @@
       <ion-input
         label="Username"
         labelPlacement="stacked"
-        fill="solid"
+        [clearInput]="true"
+        placeholder="(+34) xxx xxx xxx"
+        type="tel"
+        fill="outline"
         [(ngModel)]="login.username"
         name="username"
-        type="text"
-        #username="ngModel"
-        spellcheck="false"
-        autocapitalize="off"
         errorText="Username is required"
-        required="Username is required"
+        required="true"
+        [maskito]="phoneMask"
+        [maskitoElement]="maskPredicate"
       >
       </ion-input>
 
@@ -37,17 +38,16 @@
         [(ngModel)]="login.password"
         name="password"
         type="password"
-        #password="ngModel"
         errorText="Password is required"
-        required="Password is required"
-      >
+        required="Password is required">
       </ion-input>
+      <ion-note color="danger" *ngIf="hasError">
+        {{errorMessage}}
+      </ion-note>
 
       <ion-row>
         <ion-col>
-          <ion-button (click)="onLogin(loginForm)" type="submit" expand="block"
-            >Login</ion-button
-          >
+          <ion-button (click)="onLogin(loginForm)" type="submit" expand="block">Login</ion-button>
         </ion-col>
         <ion-col>
           <!--          <ion-button (click)="onSignup()" color="light" expand="block">Signup</ion-button>-->
@@ -56,4 +56,5 @@
       </ion-row>
     </form>
   </div>
+
 </ion-content>
