@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import {Preferences} from "@capacitor/preferences";
+import { Preferences } from '@capacitor/preferences';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class StorageService {
   public async set(key: string, value: any) {

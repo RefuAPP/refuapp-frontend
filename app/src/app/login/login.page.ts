@@ -1,9 +1,9 @@
-import {Component, OnInit} from '@angular/core';
-import {LoginRequest} from "./schemas/login-request.model";
-import {AuthService} from "../auth/auth.service";
-import {NgForm} from "@angular/forms";
-import {Router} from "@angular/router";
-import {LoadingController} from "@ionic/angular";
+import { Component, OnInit } from '@angular/core';
+import { LoginRequest } from './schemas/login-request.model';
+import { AuthService } from '../auth/auth.service';
+import { NgForm } from '@angular/forms';
+import { Router } from '@angular/router';
+import { LoadingController } from '@ionic/angular';
 
 @Component({
   selector: 'app-login',
@@ -15,14 +15,13 @@ export class LoginPage implements OnInit {
     username: '',
     password: '',
     scope: 'user',
-  }
+  };
 
   constructor(
     private router: Router,
     private authService: AuthService,
     private loadingController: LoadingController,
-  ) {
-  }
+  ) {}
 
   async loginLoading(): Promise<void> {
     const loading = await this.loadingController.create({
@@ -35,7 +34,7 @@ export class LoginPage implements OnInit {
   onLogin(form: NgForm) {
     if (form.invalid) return;
 
-    this.loginLoading().then(r => {
+    this.loginLoading().then((r) => {
       this.authService.login(this.login).subscribe(
         async (response) => {
           await this.authService.saveToken(response);
@@ -45,7 +44,7 @@ export class LoginPage implements OnInit {
         async (error) => {
           // TODO: Switch error.status and show messages
           await this.loadingController.dismiss();
-        }
+        },
       );
     });
   }

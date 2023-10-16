@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
-import {StorageService} from "../storage/storage.service";
-import {LoginRequest} from "../login/schemas/login-request.model";
-import {Observable} from "rxjs";
-import {LoginResponse} from "../login/schemas/login-response.model";
-import {environment} from "../../environments/environment";
-import {HttpClient} from "@angular/common/http";
-import {LoadingController} from "@ionic/angular";
+import { StorageService } from '../storage/storage.service';
+import { LoginRequest } from '../login/schemas/login-request.model';
+import { Observable } from 'rxjs';
+import { LoginResponse } from '../login/schemas/login-response.model';
+import { environment } from '../../environments/environment';
+import { HttpClient } from '@angular/common/http';
+import { LoadingController } from '@ionic/angular';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
   isLoggedIn: boolean = false;
@@ -27,7 +27,7 @@ export class AuthService {
     formData.append('password', credentials.password);
     formData.append('scope', credentials.scope);
 
-    return this.http.post<LoginResponse>(`${environment.API}/login`, formData)
+    return this.http.post<LoginResponse>(`${environment.API}/login`, formData);
   }
 
   async saveToken(response: LoginResponse): Promise<void> {

@@ -6,8 +6,8 @@ import { RefugePage } from './refuge.page';
 const routes: Routes = [
   {
     path: ':id',
-    component: RefugePage
-  }
+    component: RefugePage,
+  },
 ];
 
 @NgModule({

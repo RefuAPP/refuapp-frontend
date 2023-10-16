@@ -9,12 +9,7 @@ import { RefugePageRoutingModule } from './refuge-routing.module';
 import { RefugePage } from './refuge.page';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    IonicModule,
-    RefugePageRoutingModule
-  ],
-  declarations: [RefugePage]
+  imports: [CommonModule, FormsModule, IonicModule, RefugePageRoutingModule],
+  declarations: [RefugePage],
 })
 export class RefugePageModule {}

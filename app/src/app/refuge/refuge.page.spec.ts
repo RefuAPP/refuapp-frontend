@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RefugePage } from './refuge.page';
-import {async} from "rxjs";
+import { async } from 'rxjs';
 
 describe('RefugePage', () => {
   let component: RefugePage;
