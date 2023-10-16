@@ -38,4 +38,6 @@ export class RefugePage implements OnInit {
   clickButton() {
     console.log('click');
   }
+
+  ngOnInit() {}
 }
