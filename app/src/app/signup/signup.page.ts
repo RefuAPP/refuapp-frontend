@@ -1,23 +1,24 @@
 import { Component, OnInit } from '@angular/core';
-import { LoginRequest } from './schemas/login-request.model';
-import { AuthService } from '../auth/auth.service';
-import { NgForm } from '@angular/forms';
-import { Router } from '@angular/router';
-import { LoadingController } from '@ionic/angular';
+import { SignupRequest } from './schemas/signup-request.model';
 import { MaskitoElementPredicateAsync, MaskitoOptions } from '@maskito/core';
 import MaskitoMasks from '../forms/maskito-masks';
+import { Router } from '@angular/router';
+import { AuthService } from '../auth/auth.service';
+import { LoadingController } from '@ionic/angular';
+import { NgForm } from '@angular/forms';
 import { formatPhone } from '../forms/format-phone';
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.page.html',
-  styleUrls: ['./login.page.scss'],
+  selector: 'app-signup',
+  templateUrl: './signup.page.html',
+  styleUrls: ['./signup.page.scss'],
 })
-export class LoginPage implements OnInit {
-  login: LoginRequest = {
+export class SignupPage implements OnInit {
+  signup: SignupRequest = {
     username: '',
     password: '',
-    scope: 'user',
+    phone_number: '',
+    emergency_number: '',
   };
 
   phoneMask: MaskitoOptions = MaskitoMasks.phoneMask;
@@ -34,30 +35,32 @@ export class LoginPage implements OnInit {
 
   ngOnInit() {}
 
-  async loginLoading(): Promise<void> {
+  async signupLoading(): Promise<void> {
     const loading = await this.loadingController.create({
-      message: 'Login in...',
+      message: 'Signing up...',
       translucent: true,
     });
     return await loading.present();
   }
 
-  onLogin(form: NgForm) {
+  onSignUp(form: NgForm) {
     if (form.invalid) return;
 
-    this.login.username = formatPhone(this.login.username);
+    // FIXME: Repeat password not working
 
-    this.loginLoading().then(() => {
-      this.authService.login(this.login).subscribe(
+    this.signup.phone_number = formatPhone(this.signup.phone_number);
+    this.signup.emergency_number = formatPhone(this.signup.emergency_number);
+
+    this.signupLoading().then(() => {
+      this.authService.signup(this.signup).subscribe(
         async (response) => {
           this.hasError = false;
-          await this.authService.saveToken(response);
           await this.loadingController.dismiss();
-          this.router.navigate(['/home']).then();
+          this.router.navigate(['/login']).then();
         },
         async (error) => {
           this.hasError = true;
-          this.errorMessage = error.error.detail;
+          this.errorMessage = error.error.message;
           await this.loadingController.dismiss();
         },
       );

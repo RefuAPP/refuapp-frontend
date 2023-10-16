@@ -1,0 +1,92 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+
+    <ion-title>Sign up</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="sign-up-logo">
+    <img src="assets/img/logo.png" alt="Test image for the login page" />
+  </div>
+
+  <div class="login-form">
+    <form #singUpForm="ngForm" novalidate>
+      <ion-input
+        label="Username"
+        labelPlacement="stacked"
+        fill="outline"
+        [(ngModel)]="signup.username"
+        name="username"
+        type="text"
+        errorText="Username is required"
+        required="true"
+      >
+      </ion-input>
+
+      <ion-input
+        label="Phone number"
+        labelPlacement="stacked"
+        [clearInput]="true"
+        placeholder="(+34) xxx xxx xxx"
+        type="tel"
+        fill="outline"
+        [(ngModel)]="signup.phone_number"
+        name="phone_number"
+        errorText="Phone number is required"
+        required="true"
+        [maskito]="phoneMask"
+        [maskitoElement]="maskPredicate"
+      >
+      </ion-input>
+
+      <ion-input
+        label="Emergency phone number"
+        labelPlacement="stacked"
+        [clearInput]="true"
+        placeholder="(+34) xxx xxx xxx"
+        type="tel"
+        fill="outline"
+        [(ngModel)]="signup.emergency_number"
+        name="emergency_number"
+        errorText="Emergency phone number is required"
+        required="true"
+        [maskito]="phoneMask"
+        [maskitoElement]="maskPredicate"
+      >
+      </ion-input>
+      <ion-input
+        label="Password"
+        labelPlacement="stacked"
+        fill="outline"
+        [(ngModel)]="signup.password"
+        name="password"
+        type="password"
+        errorText="Password is required"
+        required="Password is required"
+      >
+      </ion-input>
+      <ion-input
+        label="Repeat password"
+        labelPlacement="stacked"
+        fill="outline"
+        [(ngModel)]="signup.password"
+        name="password"
+        type="password"
+        errorText="Repeating the password is required"
+        required="Repeating the password is required"
+      >
+      </ion-input>
+      <ion-note color="danger" *ngIf="hasError"> {{errorMessage}} </ion-note>
+
+      <ion-row>
+        <ion-button (click)="onSignUp(singUpForm)" type="submit" expand="block"
+          >Sign up
+        </ion-button>
+      </ion-row>
+    </form>
+  </div>
+</ion-content>
