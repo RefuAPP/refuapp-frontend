@@ -65,39 +65,32 @@ export class LoginPage implements OnInit {
   onLogin(form: NgForm) {
     if (form.invalid) return;
 
-    this.loginLoading().then((r) => {
+    this.login.username = this.formatPhone(this.login.username);
+
+    this.loginLoading().then(() => {
       this.authService.login(this.login).subscribe(
         async (response) => {
+          this.hasError = false;
           await this.authService.saveToken(response);
           await this.loadingController.dismiss();
-          // FIXME: this.router.navigate(['/home']);
+          this.router.navigate(['/home']).then();
         },
         async (error) => {
-          console.log(error);
-          switch (error.status) {
-            case 401:
-              console.log('401 error');
-              console.log(error.error);
-              break;
-            case 404:
-              this.hasError = true;
-              this.errorMessage = error.error.detail;
-              console.log('404 error');
-              console.log(error.error);
-              console.log(this.errorMessage);
-              console.log(this.hasError);
-              break;
-            case 422:
-              console.log('422 error');
-              console.log(error.error);
-              break;
-            default:
-              console.log('default error');
-          }
-          // TODO: Switch error.status and show messages
+          this.hasError = true;
+          this.errorMessage = error.error.detail;
           await this.loadingController.dismiss();
         },
       );
     });
+  }
+
+  private formatPhone(phone: string): string {
+    /*
+    Input format: (+34) 123 456 789
+    Output format: 12345679
+    */
+    phone = phone.replace(/\D/g, ''); // Strip all spaces
+    phone = phone.substring(2); // Remove country code
+    return phone;
   }
 }
