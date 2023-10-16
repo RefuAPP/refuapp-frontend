@@ -24,9 +24,6 @@ export class LoginPage implements OnInit {
   ) {
   }
 
-  ngOnInit() {
-  }
-
   async loginLoading(): Promise<void> {
     const loading = await this.loadingController.create({
       message: 'Login in...',
