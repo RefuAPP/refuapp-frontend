@@ -1,15 +1,19 @@
-export interface Refuge {
-  id: string;
-  name: string;
-  region: string;
-  image: string;
-  altitude: number;
+import { P } from 'ts-pattern';
+
+export const RefugePattern = {
+  id: P.string,
+  name: P.string,
+  region: P.string,
+  image: P.string,
+  altitude: P.number,
   coordinates: {
-    latitude: number;
-    longitude: number;
-  };
+    latitude: P.number,
+    longitude: P.number,
+  },
   capacity: {
-    winter: number;
-    summer: number;
-  };
-}
+    winter: P.number,
+    summer: P.number,
+  },
+};
+
+export type Refuge = P.infer<typeof RefugePattern>;

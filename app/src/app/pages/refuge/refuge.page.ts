@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { Refuge } from '../../schemas/refuge';
-import { ActivatedRoute } from '@angular/router';
-import { RefugeService } from '../../services/refuge/refuge.service';
-import { environment } from '../../../environments/environment';
-import { SearchRefugeError } from '../../services/refuge/search-refuge-error';
 import { AlertController } from '@ionic/angular';
+import { match } from 'ts-pattern';
+import {Refuge, RefugePattern} from "../../schemas/refuge";
+import {ActivatedRoute} from "@angular/router";
+import {RefugeService} from "../../services/refuge/refuge.service";
+import {environment} from "../../../environments/environment";
+import {GetRefugeFromIdErrors, GetRefugeResponse} from "../../services/refuge/get-refuge-schema";
 
 @Component({
   selector: 'app-refuge',
@@ -21,37 +22,39 @@ export class RefugePage implements OnInit {
   ) {
     const refugeId = this.route.snapshot.paramMap.get('id');
     if (refugeId != null) this.fetchRefugeFromId(refugeId);
-    else console.error('RefugePage: refugeId is null');
+    else console.error('TODO: handle refugeId not included in the route');
   }
+
+  getImageUrl(): string | undefined {
+    if (this.refuge == undefined) return undefined;
+    return environment.API + '/static/images/refuges/' + this.refuge.image;
+  }
+
+  clickButton() {
+    console.log('click');
+  }
+
+  ngOnInit() {}
 
   private fetchRefugeFromId(refugeId: string) {
     this.refugeService.getRefugeFrom(refugeId).subscribe({
-      next: (refuge: Refuge) => {
-        this.refuge = refuge;
-      },
-      error: (err: SearchRefugeError) => {
-        this.executeErrorHandler(err);
-      },
+      next: (response: GetRefugeResponse) =>
+        this.handleGetRefugeResponse(response),
+      error: () => this.handleClientError().then(),
     });
   }
 
-  private executeErrorHandler(err: SearchRefugeError) {
-    switch (err) {
-      case SearchRefugeError.CLIENT_ERROR:
-        this.handleClientError().then();
-        break;
-      case SearchRefugeError.NOT_FOUND:
-        this.handleNotFoundRefuge();
-        break;
-      case SearchRefugeError.CLIENT_SEND_DATA_ERROR:
-        this.handleBadDataRequest();
-        break;
-      case SearchRefugeError.UNKNOWN_ERROR:
-        this.handleUnknownError();
-        break;
-      default:
-        throw new Error('Impossible error');
-    }
+  private handleGetRefugeResponse(response: GetRefugeResponse) {
+    match(response)
+      .with(RefugePattern, (refuge: Refuge) => (this.refuge = refuge))
+      .with(GetRefugeFromIdErrors.NOT_FOUND, () => this.handleNotFoundRefuge())
+      .with(GetRefugeFromIdErrors.CLIENT_SEND_DATA_ERROR, () =>
+        this.handleBadDataRequest(),
+      )
+      .with(GetRefugeFromIdErrors.UNKNOWN_ERROR, () =>
+        this.handleUnknownError(),
+      )
+      .exhaustive();
   }
 
   private async handleClientError() {
@@ -73,20 +76,15 @@ export class RefugePage implements OnInit {
     return await alert.present();
   }
 
-  private handleNotFoundRefuge() {}
-
-  private handleBadDataRequest() {}
-
-  private handleUnknownError() {}
-
-  getImageUrl(): string | undefined {
-    if (this.refuge == undefined) return undefined;
-    return environment.API + '/static/images/refuges/' + this.refuge.image;
+  private handleNotFoundRefuge() {
+    console.log('TODO: handleNotFoundRefuge');
   }
 
-  clickButton() {
-    console.log('click');
+  private handleBadDataRequest() {
+    console.log('TODO: handleBadDataRequest');
   }
 
-  ngOnInit() {}
+  private handleUnknownError() {
+    console.log('TODO: handleUnknownError');
+  }
 }

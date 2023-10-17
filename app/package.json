@@ -76,6 +76,7 @@
     "lint-staged": "^15.0.1",
     "prettier": "3.0.3",
     "ts-node": "^8.3.0",
+    "ts-pattern": "^5.0.5",
     "typescript": "~5.0.2"
   },
   "description": "An Ionic project"
