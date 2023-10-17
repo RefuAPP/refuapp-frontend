@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AlertController } from '@ionic/angular';
 import { match } from 'ts-pattern';
 import { Refuge, RefugePattern } from '../../schemas/refuge';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { RefugeService } from '../../services/refuge/refuge.service';
 import { environment } from '../../../environments/environment';
 import {
@@ -19,6 +19,7 @@ export class RefugePage implements OnInit {
   refuge: Refuge | undefined;
 
   constructor(
+    private router: Router,
     private route: ActivatedRoute,
     private refugeService: RefugeService,
     private alertController: AlertController,
@@ -91,7 +92,7 @@ export class RefugePage implements OnInit {
   }
 
   private handleNotFoundRefuge() {
-    console.log('TODO: handleNotFoundRefuge');
+    this.router.navigate(['/not-found-page']).then();
   }
 
   private handleBadDataRequest() {
