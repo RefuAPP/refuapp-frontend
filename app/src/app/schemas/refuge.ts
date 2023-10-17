@@ -1,19 +1,19 @@
 import { P } from 'ts-pattern';
 
-export const RefugePattern = {
-  id: P.string,
-  name: P.string,
-  region: P.string,
-  image: P.string,
-  altitude: P.number,
+export type Refuge = {
+  id: string;
+  name: string;
+  region: string;
+  image: string;
+  altitude: number;
   coordinates: {
-    latitude: P.number,
-    longitude: P.number,
-  },
+    latitude: number;
+    longitude: number;
+  };
   capacity: {
-    winter: P.number,
-    summer: P.number,
-  },
+    winter: number;
+    summer: number;
+  };
 };
 
-export type Refuge = P.infer<typeof RefugePattern>;
+export const RefugePattern: P.Pattern<Refuge> = {};

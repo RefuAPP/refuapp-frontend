@@ -46,13 +46,24 @@ export class RefugePage implements OnInit {
 
   private handleGetRefugeResponse(response: GetRefugeResponse) {
     match(response)
-      .with(RefugePattern, (refuge: Refuge) => (this.refuge = refuge))
+      .with({ status: 'correct' }, (response) => (this.refuge = response.data))
+      .with({ status: 'error' }, (response) => {
+        this.handleError(response.error);
+      })
+      .exhaustive();
+  }
+
+  private handleError(error: GetRefugeFromIdErrors) {
+    match(error)
       .with(GetRefugeFromIdErrors.NOT_FOUND, () => this.handleNotFoundRefuge())
       .with(GetRefugeFromIdErrors.CLIENT_SEND_DATA_ERROR, () =>
         this.handleBadDataRequest(),
       )
       .with(GetRefugeFromIdErrors.UNKNOWN_ERROR, () =>
         this.handleUnknownError(),
+      )
+      .with(GetRefugeFromIdErrors.SERVER_INCORRECT_DATA_FORMAT_ERROR, () =>
+        this.handleBadDataFromServer(),
       )
       .exhaustive();
   }
@@ -86,5 +97,9 @@ export class RefugePage implements OnInit {
 
   private handleUnknownError() {
     console.log('TODO: handleUnknownError');
+  }
+
+  private handleBadDataFromServer() {
+    console.log('TODO: handleUnknownServer');
   }
 }
