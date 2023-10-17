@@ -8,6 +8,7 @@ import { HttpClient } from '@angular/common/http';
 import { LoadingController } from '@ionic/angular';
 import { SignupRequest } from '../signup/schemas/signup-request.model';
 import { SignupResponse } from '../signup/schemas/signup-response.model';
+import { SignupForm } from '../signup/schemas/signup-form.model';
 
 @Injectable({
   providedIn: 'root',
@@ -18,7 +19,6 @@ export class AuthService {
   constructor(
     private storageService: StorageService,
     private http: HttpClient,
-    private loadingController: LoadingController,
   ) {
     const token = this.storageService.get('token');
     this.isLoggedIn = !!token;
@@ -32,14 +32,15 @@ export class AuthService {
     return this.http.post<LoginResponse>(`${environment.API}/login`, formData);
   }
 
-  signup(credentials: SignupRequest): Observable<SignupResponse> {
-    const formData = new FormData();
-    formData.append('username', credentials.username);
-    formData.append('phone_number', credentials.phone_number);
-    formData.append('emergency_number', credentials.emergency_number);
-    formData.append('password', credentials.password);
+  signup(user: SignupForm): Observable<SignupResponse> {
+    let request: SignupRequest = {
+      username: user.username,
+      phone_number: user.phone_number,
+      emergency_number: user.emergency_number,
+      password: user.password,
+    };
 
-    return this.http.post<SignupResponse>(`${environment.API}/users`, formData);
+    return this.http.post<SignupResponse>(`${environment.API}/users`, request);
   }
 
   async saveToken(response: LoginResponse): Promise<void> {

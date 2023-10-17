@@ -63,4 +63,8 @@ export class LoginPage implements OnInit {
       );
     });
   }
+
+  onSignup() {
+    this.router.navigate(['/signup']).then();
+  }
 }

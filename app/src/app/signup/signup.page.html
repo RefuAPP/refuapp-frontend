@@ -73,7 +73,7 @@
         label="Repeat password"
         labelPlacement="stacked"
         fill="outline"
-        [(ngModel)]="signup.password"
+        [(ngModel)]="signup.repeatPassword"
         name="password"
         type="password"
         errorText="Repeating the password is required"
@@ -83,9 +83,14 @@
       <ion-note color="danger" *ngIf="hasError"> {{errorMessage}} </ion-note>
 
       <ion-row>
-        <ion-button (click)="onSignUp(singUpForm)" type="submit" expand="block"
-          >Sign up
-        </ion-button>
+        <ion-col>
+          <ion-button
+            (click)="onSignUp(singUpForm)"
+            type="submit"
+            expand="block"
+            >Sign up
+          </ion-button>
+        </ion-col>
       </ion-row>
     </form>
   </div>

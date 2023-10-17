@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { SignupRequest } from './schemas/signup-request.model';
 import { MaskitoElementPredicateAsync, MaskitoOptions } from '@maskito/core';
 import MaskitoMasks from '../forms/maskito-masks';
 import { Router } from '@angular/router';
@@ -7,6 +6,7 @@ import { AuthService } from '../auth/auth.service';
 import { LoadingController } from '@ionic/angular';
 import { NgForm } from '@angular/forms';
 import { formatPhone } from '../forms/format-phone';
+import { SignupForm } from './schemas/signup-form.model';
 
 @Component({
   selector: 'app-signup',
@@ -14,9 +14,10 @@ import { formatPhone } from '../forms/format-phone';
   styleUrls: ['./signup.page.scss'],
 })
 export class SignupPage implements OnInit {
-  signup: SignupRequest = {
+  signup: SignupForm = {
     username: '',
     password: '',
+    repeatPassword: '',
     phone_number: '',
     emergency_number: '',
   };
@@ -24,8 +25,8 @@ export class SignupPage implements OnInit {
   phoneMask: MaskitoOptions = MaskitoMasks.phoneMask;
   maskPredicate: MaskitoElementPredicateAsync = MaskitoMasks.maskPredicate;
 
-  hasError: boolean = false;
-  errorMessage: string = '';
+  hasError: boolean = true;
+  errorMessage: string = 'I have ginormous balls';
 
   constructor(
     private router: Router,
@@ -45,8 +46,11 @@ export class SignupPage implements OnInit {
 
   onSignUp(form: NgForm) {
     if (form.invalid) return;
-
-    // FIXME: Repeat password not working
+    if (this.signup.password !== this.signup.repeatPassword) {
+      this.hasError = true;
+      this.errorMessage = 'Passwords do not match';
+      return;
+    }
 
     this.signup.phone_number = formatPhone(this.signup.phone_number);
     this.signup.emergency_number = formatPhone(this.signup.emergency_number);
