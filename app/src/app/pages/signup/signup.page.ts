@@ -25,8 +25,8 @@ export class SignupPage implements OnInit {
   phoneMask: MaskitoOptions = MaskitoMasks.phoneMask;
   maskPredicate: MaskitoElementPredicateAsync = MaskitoMasks.maskPredicate;
 
-  hasError: boolean = true;
-  errorMessage: string = 'I have ginormous balls';
+  hasError: boolean = false;
+  errorMessage: string = '';
 
   constructor(
     private router: Router,
