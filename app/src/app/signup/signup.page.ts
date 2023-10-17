@@ -63,9 +63,15 @@ export class SignupPage implements OnInit {
           this.router.navigate(['/login']).then();
         },
         async (error) => {
-          this.hasError = true;
-          this.errorMessage = error.error.message;
-          await this.loadingController.dismiss();
+          switch (error.status) {
+            case 500:
+              this.router.navigate(['/internalerror']).then();
+              break;
+            default:
+              this.hasError = true;
+              this.errorMessage = error.error.detail;
+              await this.loadingController.dismiss();
+          }
         },
       );
     });
