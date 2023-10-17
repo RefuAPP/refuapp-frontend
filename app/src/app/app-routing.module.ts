@@ -34,6 +34,13 @@ const routes: Routes = [
         (m) => m.NotFoundPagePageModule,
       ),
   },
+  {
+    path: 'internal-error-page',
+    loadChildren: () =>
+      import('./pages/internal-error-page/internal-error-page.module').then(
+        (m) => m.InternalErrorPagePageModule,
+      ),
+  },
 ];
 
 @NgModule({
