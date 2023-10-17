@@ -27,6 +27,13 @@ const routes: Routes = [
     loadChildren: () =>
       import('./pages/signup/signup.module').then((m) => m.SignupPageModule),
   },
+  {
+    path: 'not-found-page',
+    loadChildren: () =>
+      import('./pages/not-found-page/not-found-page.module').then(
+        (m) => m.NotFoundPagePageModule,
+      ),
+  },
 ];
 
 @NgModule({
