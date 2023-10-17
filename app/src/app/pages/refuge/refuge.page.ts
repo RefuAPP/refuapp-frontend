@@ -83,7 +83,7 @@ export class RefugePage implements OnInit {
           text: 'OK',
           handler: () => {
             this.alertController.dismiss().then();
-            console.log('TODO: go to home page');
+            console.log('TODO: reload the page');
           },
         },
       ],
@@ -96,14 +96,14 @@ export class RefugePage implements OnInit {
   }
 
   private handleBadDataRequest() {
-    console.log('TODO: handleBadDataRequest');
+    this.router.navigate(['/programming-error']).then();
   }
 
   private handleUnknownError() {
-    console.log('TODO: handleUnknownError');
+    this.router.navigate(['/internal-error-page']).then();
   }
 
   private handleBadDataFromServer() {
-    console.log('TODO: handleUnknownServer');
+    this.router.navigate(['/programming-error']).then();
   }
 }
