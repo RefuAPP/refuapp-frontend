@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Refuge } from '../schemas/refuge';
+import { Refuge } from '../../schemas/refuge';
 import { ActivatedRoute } from '@angular/router';
-import { RefugeService } from '../services/refuge/refuge.service';
-import { environment } from '../../environments/environment';
-import { SearchRefugeError } from '../services/refuge/search-refuge-error';
+import { RefugeService } from '../../services/refuge/refuge.service';
+import { environment } from '../../../environments/environment';
+import { SearchRefugeError } from '../../services/refuge/search-refuge-error';
 import { AlertController } from '@ionic/angular';
 
 @Component({

@@ -7,7 +7,7 @@ import {
   HttpHeaders,
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { StorageService } from '../storage/storage.service';
+import { StorageService } from '../services/storage/storage.service';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {

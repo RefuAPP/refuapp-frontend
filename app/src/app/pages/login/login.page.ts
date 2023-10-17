@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { LoginRequest } from './schemas/login-request.model';
-import { AuthService } from '../auth/auth.service';
+import { LoginRequest } from '../../schemas/login/login-request.model';
+import { AuthService } from '../../services/auth/auth.service';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LoadingController } from '@ionic/angular';
 import { MaskitoElementPredicateAsync, MaskitoOptions } from '@maskito/core';
-import MaskitoMasks from '../forms/maskito-masks';
-import { formatPhone } from '../forms/format-phone';
+import MaskitoMasks from '../../forms/maskito-masks';
+import { formatPhone } from '../../forms/format-phone';
 
 @Component({
   selector: 'app-login',

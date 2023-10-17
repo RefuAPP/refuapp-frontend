@@ -10,22 +10,22 @@ const routes: Routes = [
   {
     path: '',
     loadChildren: () =>
-      import('./home/home.module').then((m) => m.HomePageModule),
+      import('./pages/home/home.module').then((m) => m.HomePageModule),
   },
   {
     path: 'login',
     loadChildren: () =>
-      import('./login/login.module').then((m) => m.LoginPageModule),
+      import('./pages/login/login.module').then((m) => m.LoginPageModule),
   },
   {
     path: 'refuge',
     loadChildren: () =>
-      import('./refuge/refuge.module').then((m) => m.RefugePageModule),
+      import('./pages/refuge/refuge.module').then((m) => m.RefugePageModule),
   },
   {
     path: 'signup',
     loadChildren: () =>
-      import('./signup/signup.module').then((m) => m.SignupPageModule),
+      import('./pages/signup/signup.module').then((m) => m.SignupPageModule),
   },
 ];
 

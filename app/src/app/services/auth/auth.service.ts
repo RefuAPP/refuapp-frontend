@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
 import { StorageService } from '../storage/storage.service';
-import { LoginRequest } from '../login/schemas/login-request.model';
+import { LoginRequest } from '../../schemas/login/login-request.model';
 import { Observable } from 'rxjs';
-import { LoginResponse } from '../login/schemas/login-response.model';
-import { environment } from '../../environments/environment';
+import { LoginResponse } from '../../schemas/login/login-response.model';
+import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { LoadingController } from '@ionic/angular';
-import { SignupRequest } from '../signup/schemas/signup-request.model';
-import { SignupResponse } from '../signup/schemas/signup-response.model';
-import { SignupForm } from '../signup/schemas/signup-form.model';
+import { SignupRequest } from '../../schemas/signup/signup-request.model';
+import { SignupResponse } from '../../schemas/signup/signup-response.model';
+import { SignupForm } from '../../schemas/signup/signup-form.model';
 
 @Injectable({
   providedIn: 'root',
