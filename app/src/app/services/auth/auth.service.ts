@@ -1,25 +1,24 @@
-import { Injectable } from '@angular/core';
-import { StorageService } from '../storage/storage.service';
-import { LoginRequest } from '../../schemas/login/login-request.model';
-import { catchError, map, Observable, ObservableInput, of, retry } from 'rxjs';
+import {Injectable} from '@angular/core';
+import {StorageService} from '../storage/storage.service';
+import {LoginRequest} from '../../schemas/login/login-request.model';
+import {catchError, map, Observable, ObservableInput, of, retry} from 'rxjs';
 import {
-  CorrectLoginResponse,
-  LoginErrors,
-  LoginResponse,
-  CorrectLoginResponsePattern,
+    CorrectLoginResponse,
+    CorrectLoginResponsePattern,
+    LoginErrors,
+    LoginResponse,
 } from '../../schemas/login/login-response.model';
-import { environment } from '../../../environments/environment';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { LoadingController } from '@ionic/angular';
-import { SignupRequest } from '../../schemas/signup/signup-request.model';
+import {environment} from '../../../environments/environment';
+import {HttpClient, HttpErrorResponse} from '@angular/common/http';
+import {SignupRequest} from '../../schemas/signup/signup-request.model';
 import {
-  CorrectSignupResponse,
-  CorrectSignupResponsePattern,
-  SignUpErrors,
-  SignupResponse,
+    CorrectSignupResponse,
+    CorrectSignupResponsePattern,
+    SignUpErrors, SignUpErrorsExtended,
+    SignupResponse,
 } from '../../schemas/signup/signup-response.model';
-import { SignupForm } from '../../schemas/signup/signup-form.model';
-import { isMatching } from 'ts-pattern';
+import {SignupForm} from '../../schemas/signup/signup-form.model';
+import {isMatching} from 'ts-pattern';
 
 @Injectable({
   providedIn: 'root',
@@ -76,21 +75,20 @@ export class AuthService {
     return this.http
       .post<CorrectSignupResponse>(`${environment.API}/users`, request)
       .pipe(
-        map<CorrectSignupResponse, SignupResponse | Error>(
+        map<CorrectSignupResponse, SignupResponse>(
           (response: CorrectSignupResponse) => {
             if (isMatching(CorrectSignupResponsePattern, response))
               return { status: 'correct', data: response };
             return {
               status: 'error',
-              error: SignUpErrors.SERVER_INCORRECT_DATA_FORMAT_ERROR,
-            };
-          },
-        ),
+              error: SignUpErrors.from(SignUpErrors.SERVER_INCORRECT_DATA_FORMAT_ERROR),
+              }
+            }),
         catchError<SignupResponse | Error, ObservableInput<any>>(
           (err: HttpErrorResponse) =>
             of({
               status: 'error',
-              error: SignUpErrors.from(err),
+              error: SignUpErrors.fromHttp(err),
             }),
         ),
         retry(3),

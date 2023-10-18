@@ -9,7 +9,7 @@ import { formatPhone } from '../../forms/format-phone';
 import { SignupForm } from '../../schemas/signup/signup-form.model';
 import {
   CorrectSignupResponse,
-  SignUpErrors,
+  SignUpErrors, SignUpErrorsExtended,
   SignupResponse,
 } from '../../schemas/signup/signup-response.model';
 import { match } from 'ts-pattern';
@@ -94,16 +94,26 @@ export class SignupPage implements OnInit {
     this.router.navigate(['/home']).then();
   }
 
-  private async handleError(error: SignUpErrors) {
+  private async handleError(error: SignUpErrorsExtended) {
+    match(error)
+      .with({ type: '422' }, async (error) => {
+        this.hasError = true;
+        this.errorMessage = error.message;
+        await this.loadingController.dismiss();
+      })
+      .with({ type: 'other' }, async (error) => {
+        this.handleOtherError(error.error).then()
+      })
+      .exhaustive();
+  }
+
+  private async handleOtherError(error: SignUpErrors) {
     match(error)
       .with(SignUpErrors.UNAUTHORIZED, async () => {
         await this.handleUnauthorized();
       })
       .with(SignUpErrors.CONFLICT, async () => {
         await this.handleConflict();
-      })
-      .with(SignUpErrors.CLIENT_SEND_DATA_ERROR, async () => {
-        await this.handleBadDataRequest();
       })
       .with(SignUpErrors.SERVER_INCORRECT_DATA_FORMAT_ERROR, async () => {
         await this.handleBadDataFromServer();
