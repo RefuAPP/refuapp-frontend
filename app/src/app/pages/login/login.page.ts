@@ -129,6 +129,7 @@ export class LoginPage implements OnInit {
     this.hasError = true;
     this.errorMessage = 'Error desconegut';
     await this.loadingController.dismiss();
+    this.router.navigate(['/internalerror']).then();
   }
 
   private async handleBadDataFromServer() {
