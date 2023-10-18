@@ -16,6 +16,8 @@ bower_components/
 # IDEs and editors
 .idea/
 
+packa-lock.json
+
 # misc
 .sass-cache/
 connect.lock/
