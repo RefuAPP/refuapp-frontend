@@ -5,16 +5,16 @@ import { Preferences } from '@capacitor/preferences';
   providedIn: 'root',
 })
 export class StorageService {
-  public async set(key: string, value: any) {
+  public async set(key: string, value: any): Promise<void> {
     await Preferences.set({ key, value });
   }
 
-  public async get(key: string) {
+  public async get(key: string): Promise<string | null> {
     const { value } = await Preferences.get({ key });
     return value;
   }
 
-  public async remove(key: string) {
+  public async remove(key: string): Promise<void> {
     await Preferences.remove({ key });
   }
 }
