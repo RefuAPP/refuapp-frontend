@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { AlertController } from '@ionic/angular';
 import { match } from 'ts-pattern';
-import { Refuge } from '../../schemas/refuge';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RefugeService } from '../../services/refuge/refuge.service';
 import { environment } from '../../../environments/environment';
 import {
   GetRefugeFromIdErrors,
   GetRefugeResponse,
-} from '../../services/refuge/get-refuge-schema';
+} from '../../schemas/refuge/get-refuge-schema';
+import { Refuge } from '../../schemas/refuge/refuge';
 
 @Component({
   selector: 'app-refuge',

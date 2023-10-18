@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Refuge } from 'src/app/schemas/refuge';
+import { Refuge } from 'src/app/schemas/refuge/refuge';
 import { match } from 'ts-pattern';
 
 export enum GetRefugeFromIdErrors {

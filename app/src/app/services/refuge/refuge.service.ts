@@ -2,9 +2,12 @@ import { Injectable } from '@angular/core';
 import { catchError, map, Observable, ObservableInput, of, retry } from 'rxjs';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
-import { isValidId, Refuge, RefugePattern } from '../../schemas/refuge';
-import { GetRefugeFromIdErrors, GetRefugeResponse } from './get-refuge-schema';
 import { isMatching } from 'ts-pattern';
+import {
+  GetRefugeFromIdErrors,
+  GetRefugeResponse,
+} from '../../schemas/refuge/get-refuge-schema';
+import { isValidId, Refuge, RefugePattern } from '../../schemas/refuge/refuge';
 
 @Injectable({
   providedIn: 'root',
