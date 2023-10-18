@@ -25,32 +25,30 @@
   </div>
 
   <div class="about-info">
-    <h3 class="ion-padding-top ion-padding-start">{{refuge?.name}}</h3>
+    <h3 class="ion-padding-top ion-padding-start">{{refuge.name}}</h3>
 
     <ion-list lines="none">
       <ion-item>
         <ion-label> Regió </ion-label>
-        <ion-label class="ion-text-end"> {{refuge?.region}} </ion-label>
+        <ion-label class="ion-text-end"> {{refuge.region}} </ion-label>
       </ion-item>
 
       <ion-item>
         <ion-label> Alitut </ion-label>
-        <ion-label class="ion-text-end">
-          {{refuge?.altitude}} metres
-        </ion-label>
+        <ion-label class="ion-text-end"> {{refuge.altitude}} metres </ion-label>
       </ion-item>
 
       <ion-item>
         <ion-label> Capacitat Invernal </ion-label>
         <ion-label class="ion-text-end">
-          {{refuge?.capacity?.winter}} persones
+          {{refuge.capacity.winter}} persones
         </ion-label>
       </ion-item>
 
       <ion-item>
         <ion-label> Capacitat Estiual </ion-label>
         <ion-label class="ion-text-end">
-          {{refuge?.capacity?.summer}} persones
+          {{refuge.capacity.summer}} persones
         </ion-label>
       </ion-item>
     </ion-list>

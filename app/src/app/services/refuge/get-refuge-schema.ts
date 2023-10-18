@@ -5,6 +5,7 @@ import { match } from 'ts-pattern';
 export enum GetRefugeFromIdErrors {
   NOT_FOUND = 'NOT_FOUND',
   CLIENT_SEND_DATA_ERROR = 'CLIENT_SEND_DATA_ERROR',
+  PROGRAMMER_SEND_DATA_ERROR = 'PROGRAMMER_SEND_DATA_ERROR',
   UNKNOWN_ERROR = 'UNKNOWN_ERROR',
   SERVER_INCORRECT_DATA_FORMAT_ERROR = 'SERVER_INCORRECT_DATA_FORMAT_ERROR',
 }
@@ -27,7 +28,7 @@ export namespace GetRefugeFromIdErrors {
         throw new Error('You are offline or the server is down.');
       })
       .with(404, () => GetRefugeFromIdErrors.NOT_FOUND)
-      .with(422, () => GetRefugeFromIdErrors.CLIENT_SEND_DATA_ERROR)
+      .with(422, () => GetRefugeFromIdErrors.PROGRAMMER_SEND_DATA_ERROR)
       .otherwise(() => GetRefugeFromIdErrors.UNKNOWN_ERROR);
   }
 }

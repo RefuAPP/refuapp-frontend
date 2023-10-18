@@ -1,4 +1,5 @@
 import { P } from 'ts-pattern';
+import { validate as uuidValidate, version as uuidVersion } from 'uuid';
 
 export type Refuge = {
   id: string;
@@ -17,3 +18,7 @@ export type Refuge = {
 };
 
 export const RefugePattern: P.Pattern<Refuge> = {};
+
+export function isValidId(id: string): boolean {
+  return uuidValidate(id) && uuidVersion(id) === 4;
+}

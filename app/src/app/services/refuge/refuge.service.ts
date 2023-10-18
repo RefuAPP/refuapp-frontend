@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { catchError, map, Observable, ObservableInput, of, retry } from 'rxjs';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
-import { Refuge, RefugePattern } from '../../schemas/refuge';
+import { isValidId, Refuge, RefugePattern } from '../../schemas/refuge';
 import { GetRefugeFromIdErrors, GetRefugeResponse } from './get-refuge-schema';
 import { isMatching } from 'ts-pattern';
 
@@ -13,9 +13,19 @@ export class RefugeService {
   constructor(private http: HttpClient) {}
 
   getRefugeFrom(id: string): Observable<GetRefugeResponse> {
-    return this.http.get<Refuge>(environment.API + '/refuges/' + id).pipe(
+    if (!isValidId(id))
+      return of({
+        status: 'error',
+        error: GetRefugeFromIdErrors.CLIENT_SEND_DATA_ERROR,
+      });
+    return this.getRefugeFromApi(id);
+  }
+
+  private getRefugeFromApi(id: string): Observable<GetRefugeResponse> {
+    const endpoint = this.getRefugeFromIdEndpoint(id);
+    return this.http.get<Refuge>(endpoint).pipe(
       map<Refuge, GetRefugeResponse | Error>((refuge: Refuge) => {
-        if (isMatching(refuge, RefugePattern))
+        if (isMatching(RefugePattern, refuge))
           return { status: 'correct', data: refuge };
         return {
           status: 'error',
@@ -31,5 +41,9 @@ export class RefugeService {
       ),
       retry(3),
     );
+  }
+
+  private getRefugeFromIdEndpoint(id: string): string {
+    return `${environment.API}/refuges/${id}`;
   }
 }
