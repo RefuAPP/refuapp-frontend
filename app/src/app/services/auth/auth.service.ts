@@ -49,7 +49,9 @@ export class AuthService {
               return { status: 'correct', data: response };
             return {
               status: 'error',
-              error: LoginErrors.SERVER_INCORRECT_DATA_FORMAT_ERROR,
+              error: LoginErrors.from(
+                LoginErrors.SERVER_INCORRECT_DATA_FORMAT_ERROR,
+              ),
             };
           },
         ),
@@ -57,7 +59,7 @@ export class AuthService {
           (err: HttpErrorResponse) =>
             of({
               status: 'error',
-              error: LoginErrors.from(err),
+              error: LoginErrors.fromHttp(err),
             }),
         ),
         retry(3),

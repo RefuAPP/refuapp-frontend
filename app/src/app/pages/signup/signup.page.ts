@@ -137,13 +137,6 @@ export class SignupPage implements OnInit {
     this.errorMessage = 'Ja existeix un usuari amb aquest número de telèfon';
     await this.loadingController.dismiss();
   }
-
-  private async handleBadDataRequest() {
-    this.hasError = true;
-    this.errorMessage = 'Dades incorrectes';
-    await this.loadingController.dismiss();
-  }
-
   private async handleBadDataFromServer() {
     this.hasError = true;
     this.errorMessage = 'El servidor ha retornat dades incorrectes';

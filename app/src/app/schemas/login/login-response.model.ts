@@ -1,25 +1,43 @@
 import { match, P } from 'ts-pattern';
 import { HttpErrorResponse } from '@angular/common/http';
 
+export type LoginErrorsExtended =
+  | {
+      type: 'other';
+      error: LoginErrors;
+    }
+  | {
+      type: '422';
+      message: string;
+    };
+
 export enum LoginErrors {
   UNAUTHORIZED = 'UNAUTHORIZED',
   NOT_FOUND = 'NOT_FOUND',
-  CLIENT_SEND_DATA_ERROR = 'CLIENT_SEND_DATA_ERROR',
   UNKNOWN_ERROR = 'UNKNOWN_ERROR',
   SERVER_INCORRECT_DATA_FORMAT_ERROR = 'SERVER_INCORRECT_DATA_FORMAT_ERROR',
 }
 
 export namespace LoginErrors {
-  export function from(err: HttpErrorResponse): LoginErrors | never {
+  export function from(error: LoginErrors): LoginErrorsExtended {
+    return { type: 'other', error };
+  }
+
+  export function fromHttp(
+    err: HttpErrorResponse,
+  ): LoginErrorsExtended | never {
     return match(err.status)
-      .returnType<LoginErrors>()
+      .returnType<LoginErrorsExtended>()
       .with(0, () => {
         throw new Error('You are offline or the server is down.');
       })
-      .with(401, () => LoginErrors.UNAUTHORIZED)
-      .with(404, () => LoginErrors.NOT_FOUND)
-      .with(422, () => LoginErrors.CLIENT_SEND_DATA_ERROR)
-      .otherwise(() => LoginErrors.UNKNOWN_ERROR);
+      .with(401, () => LoginErrors.from(LoginErrors.UNAUTHORIZED))
+      .with(404, () => LoginErrors.from(LoginErrors.NOT_FOUND))
+      .with(422, () => {
+        const error: string = err.error.detail[0].msg;
+        return { type: '422', message: error };
+      })
+      .otherwise(() => LoginErrors.from(LoginErrors.UNKNOWN_ERROR));
   }
 }
 
@@ -35,7 +53,7 @@ export type LoginResponse =
     }
   | {
       status: 'error';
-      error: LoginErrors;
+      error: LoginErrorsExtended;
     };
 
 export const CorrectLoginResponsePattern: P.Pattern<CorrectLoginResponse> = {};

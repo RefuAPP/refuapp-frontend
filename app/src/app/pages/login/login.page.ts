@@ -10,6 +10,7 @@ import { formatPhone } from '../../forms/format-phone';
 import {
   CorrectLoginResponse,
   LoginErrors,
+  LoginErrorsExtended,
   LoginResponse,
 } from '../../schemas/login/login-response.model';
 import { match } from 'ts-pattern';
@@ -87,16 +88,26 @@ export class LoginPage implements OnInit {
     this.router.navigate(['/home']).then();
   }
 
-  private async handleError(error: LoginErrors) {
+  private async handleError(error: LoginErrorsExtended) {
+    match(error)
+      .with({ type: '422' }, async (error) => {
+        this.hasError = true;
+        this.errorMessage = error.message;
+        await this.loadingController.dismiss();
+      })
+      .with({ type: 'other' }, async (error) => {
+        await this.handleOtherError(error.error).then();
+      })
+      .exhaustive();
+  }
+
+  private async handleOtherError(error: LoginErrors) {
     match(error)
       .with(LoginErrors.UNAUTHORIZED, async () => {
         await this.handleUnauthorized();
       })
       .with(LoginErrors.NOT_FOUND, async () => {
         await this.handleNotFound();
-      })
-      .with(LoginErrors.CLIENT_SEND_DATA_ERROR, async () => {
-        await this.handleBadDataRequest();
       })
       .with(LoginErrors.UNKNOWN_ERROR, async () => {
         await this.handleUnknownError();
@@ -118,13 +129,6 @@ export class LoginPage implements OnInit {
     this.errorMessage = 'Usuari no trobat';
     await this.loadingController.dismiss();
   }
-
-  private async handleBadDataRequest() {
-    this.hasError = true;
-    this.errorMessage = 'Credencials invàlides';
-    await this.loadingController.dismiss();
-  }
-
   private async handleUnknownError() {
     this.hasError = true;
     this.errorMessage = 'Error desconegut';
