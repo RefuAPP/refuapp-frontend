@@ -12,7 +12,12 @@ import { environment } from '../../../environments/environment';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { LoadingController } from '@ionic/angular';
 import { SignupRequest } from '../../schemas/signup/signup-request.model';
-import { SignupResponse } from '../../schemas/signup/signup-response.model';
+import {
+  CorrectSignupResponse,
+  CorrectSignupResponsePattern,
+  SignUpErrors,
+  SignupResponse,
+} from '../../schemas/signup/signup-response.model';
 import { SignupForm } from '../../schemas/signup/signup-form.model';
 import { isMatching } from 'ts-pattern';
 
@@ -68,7 +73,28 @@ export class AuthService {
       password: user.password,
     };
 
-    return this.http.post<SignupResponse>(`${environment.API}/users`, request);
+    return this.http
+      .post<CorrectSignupResponse>(`${environment.API}/users`, request)
+      .pipe(
+        map<CorrectSignupResponse, SignupResponse | Error>(
+          (response: CorrectSignupResponse) => {
+            if (isMatching(CorrectSignupResponsePattern, response))
+              return { status: 'correct', data: response };
+            return {
+              status: 'error',
+              error: SignUpErrors.SERVER_INCORRECT_DATA_FORMAT_ERROR,
+            };
+          },
+        ),
+        catchError<SignupResponse | Error, ObservableInput<any>>(
+          (err: HttpErrorResponse) =>
+            of({
+              status: 'error',
+              error: SignUpErrors.from(err),
+            }),
+        ),
+        retry(3),
+      );
   }
 
   async saveToken(response: CorrectLoginResponse): Promise<void> {
