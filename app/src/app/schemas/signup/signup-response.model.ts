@@ -1,13 +1,15 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { match, P } from 'ts-pattern';
 
-export type SignUpErrorsExtended = {
-  type: 'other';
-  error: SignUpErrors;
-} | {
-  type: '422';
-  message: string;
-};
+export type SignUpErrorsExtended =
+  | {
+      type: 'other';
+      error: SignUpErrors;
+    }
+  | {
+      type: '422';
+      message: string;
+    };
 export enum SignUpErrors {
   UNAUTHORIZED = 'UNAUTHORIZED',
   CONFLICT = 'CONFLICT',
@@ -20,19 +22,21 @@ export namespace SignUpErrors {
     return { type: 'other', error };
   }
 
-  export function fromHttp(err: HttpErrorResponse): SignUpErrorsExtended | never {
+  export function fromHttp(
+    err: HttpErrorResponse,
+  ): SignUpErrorsExtended | never {
     return match(err.status)
-        .returnType<SignUpErrorsExtended>()
-        .with(0, () => {
-          throw new Error('You are offline or the server is down.');
-        })
-        .with(401, () => SignUpErrors.from(SignUpErrors.UNAUTHORIZED))
-        .with(409, () => SignUpErrors.from(SignUpErrors.CONFLICT))
-        .with(422, () =>  {
-          const error: string = err.error.detail[0].msg
-          return { type : '422', message: error}
-        })
-        .otherwise(() => SignUpErrors.from(SignUpErrors.UNKNOWN_ERROR));
+      .returnType<SignUpErrorsExtended>()
+      .with(0, () => {
+        throw new Error('You are offline or the server is down.');
+      })
+      .with(401, () => SignUpErrors.from(SignUpErrors.UNAUTHORIZED))
+      .with(409, () => SignUpErrors.from(SignUpErrors.CONFLICT))
+      .with(422, () => {
+        const error: string = err.error.detail[0].msg;
+        return { type: '422', message: error };
+      })
+      .otherwise(() => SignUpErrors.from(SignUpErrors.UNKNOWN_ERROR));
   }
 }
 

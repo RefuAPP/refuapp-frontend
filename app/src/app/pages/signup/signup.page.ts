@@ -9,7 +9,8 @@ import { formatPhone } from '../../forms/format-phone';
 import { SignupForm } from '../../schemas/signup/signup-form.model';
 import {
   CorrectSignupResponse,
-  SignUpErrors, SignUpErrorsExtended,
+  SignUpErrors,
+  SignUpErrorsExtended,
   SignupResponse,
 } from '../../schemas/signup/signup-response.model';
 import { match } from 'ts-pattern';
@@ -102,7 +103,7 @@ export class SignupPage implements OnInit {
         await this.loadingController.dismiss();
       })
       .with({ type: 'other' }, async (error) => {
-        this.handleOtherError(error.error).then()
+        this.handleOtherError(error.error).then();
       })
       .exhaustive();
   }

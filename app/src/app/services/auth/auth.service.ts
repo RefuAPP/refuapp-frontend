@@ -1,24 +1,25 @@
-import {Injectable} from '@angular/core';
-import {StorageService} from '../storage/storage.service';
-import {LoginRequest} from '../../schemas/login/login-request.model';
-import {catchError, map, Observable, ObservableInput, of, retry} from 'rxjs';
+import { Injectable } from '@angular/core';
+import { StorageService } from '../storage/storage.service';
+import { LoginRequest } from '../../schemas/login/login-request.model';
+import { catchError, map, Observable, ObservableInput, of, retry } from 'rxjs';
 import {
-    CorrectLoginResponse,
-    CorrectLoginResponsePattern,
-    LoginErrors,
-    LoginResponse,
+  CorrectLoginResponse,
+  CorrectLoginResponsePattern,
+  LoginErrors,
+  LoginResponse,
 } from '../../schemas/login/login-response.model';
-import {environment} from '../../../environments/environment';
-import {HttpClient, HttpErrorResponse} from '@angular/common/http';
-import {SignupRequest} from '../../schemas/signup/signup-request.model';
+import { environment } from '../../../environments/environment';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { SignupRequest } from '../../schemas/signup/signup-request.model';
 import {
-    CorrectSignupResponse,
-    CorrectSignupResponsePattern,
-    SignUpErrors, SignUpErrorsExtended,
-    SignupResponse,
+  CorrectSignupResponse,
+  CorrectSignupResponsePattern,
+  SignUpErrors,
+  SignUpErrorsExtended,
+  SignupResponse,
 } from '../../schemas/signup/signup-response.model';
-import {SignupForm} from '../../schemas/signup/signup-form.model';
-import {isMatching} from 'ts-pattern';
+import { SignupForm } from '../../schemas/signup/signup-form.model';
+import { isMatching } from 'ts-pattern';
 
 @Injectable({
   providedIn: 'root',
@@ -81,9 +82,12 @@ export class AuthService {
               return { status: 'correct', data: response };
             return {
               status: 'error',
-              error: SignUpErrors.from(SignUpErrors.SERVER_INCORRECT_DATA_FORMAT_ERROR),
-              }
-            }),
+              error: SignUpErrors.from(
+                SignUpErrors.SERVER_INCORRECT_DATA_FORMAT_ERROR,
+              ),
+            };
+          },
+        ),
         catchError<SignupResponse | Error, ObservableInput<any>>(
           (err: HttpErrorResponse) =>
             of({
