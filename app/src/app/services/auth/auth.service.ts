@@ -15,7 +15,6 @@ import {
   CorrectSignupResponse,
   CorrectSignupResponsePattern,
   SignUpErrors,
-  SignUpErrorsExtended,
   SignupResponse,
 } from '../../schemas/signup/signup-response.model';
 import { SignupForm } from '../../schemas/signup/signup-form.model';
@@ -65,6 +64,10 @@ export class AuthService {
       );
   }
 
+  logout(): Promise<void> {
+    return this.removeToken();
+  }
+
   signup(user: SignupForm): Observable<SignupResponse> {
     let request: SignupRequest = {
       username: user.username,
@@ -102,5 +105,10 @@ export class AuthService {
   async saveToken(response: CorrectLoginResponse): Promise<void> {
     await this.storageService.set('token', response.access_token);
     this.isLoggedIn = true;
+  }
+
+  async removeToken(): Promise<void> {
+    await this.storageService.remove('token');
+    this.isLoggedIn = false;
   }
 }
