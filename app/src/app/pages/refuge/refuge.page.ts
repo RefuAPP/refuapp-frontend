@@ -3,7 +3,6 @@ import { AlertController } from '@ionic/angular';
 import { match } from 'ts-pattern';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RefugeService } from '../../services/refuge/refuge.service';
-import { environment } from '../../../environments/environment';
 import {
   GetRefugeFromIdErrors,
   GetRefugeResponse,
@@ -30,7 +29,7 @@ export class RefugePage implements OnInit {
 
   getImageUrl(): string | undefined {
     if (this.refuge == undefined) return undefined;
-    return environment.API + '/static/images/refuges/' + this.refuge.image;
+    return this.refugeService.getImageUrlFor(this.refuge);
   }
 
   clickButton() {
