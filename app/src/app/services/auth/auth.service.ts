@@ -10,15 +10,14 @@ import {
 } from '../../schemas/login/login-response.model';
 import { environment } from '../../../environments/environment';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { SignupRequest } from '../../schemas/signup/signup-request.model';
-import {
-  CorrectSignupResponse,
-  CorrectSignupResponsePattern,
-  SignUpErrors,
-  SignupResponse,
-} from '../../schemas/signup/signup-response.model';
-import { SignupForm } from '../../schemas/signup/signup-form.model';
 import { isMatching } from 'ts-pattern';
+import {
+  parseErrorResponse,
+  parseValidResponse,
+  SignupResponse,
+  ValidUserSignUpResponse,
+} from '../../schemas/signup/response/signup-response';
+import { SignupRequest } from '../../schemas/signup/request/signup-request.model';
 
 @Injectable({
   providedIn: 'root',
@@ -70,35 +69,15 @@ export class AuthService {
     return this.removeToken();
   }
 
-  signup(user: SignupForm): Observable<SignupResponse> {
-    let request: SignupRequest = {
-      username: user.username,
-      phone_number: user.phone_number,
-      emergency_number: user.emergency_number,
-      password: user.password,
-    };
-
+  signup(user: SignupRequest): Observable<SignupResponse> {
     return this.http
-      .post<CorrectSignupResponse>(`${environment.API}/users/`, request)
+      .post<ValidUserSignUpResponse>(`${environment.API}/users/`, user)
       .pipe(
-        map<CorrectSignupResponse, SignupResponse>(
-          (response: CorrectSignupResponse) => {
-            if (isMatching(CorrectSignupResponsePattern, response))
-              return { status: 'correct', data: response };
-            return {
-              status: 'error',
-              error: SignUpErrors.from(
-                SignUpErrors.SERVER_INCORRECT_DATA_FORMAT_ERROR,
-              ),
-            };
-          },
+        map((response: ValidUserSignUpResponse) =>
+          parseValidResponse(response),
         ),
-        catchError<SignupResponse | Error, ObservableInput<any>>(
-          (err: HttpErrorResponse) =>
-            of({
-              status: 'error',
-              error: SignUpErrors.fromHttp(err),
-            }),
+        catchError<SignupResponse, ObservableInput<any>>(
+          (err: HttpErrorResponse) => parseErrorResponse(err),
         ),
         retry(3),
       );

@@ -8,12 +8,12 @@ import { NgForm } from '@angular/forms';
 import { formatPhone } from '../../forms/format-phone';
 import { SignupForm } from '../../schemas/signup/signup-form.model';
 import {
-  CorrectSignupResponse,
+  ValidUserSignUpResponse,
+  ServerSignupErrors,
   SignUpErrors,
-  SignUpErrorsExtended,
-  SignupResponse,
 } from '../../schemas/signup/signup-response.model';
 import { match } from 'ts-pattern';
+import { SignupResponse } from '../../schemas/signup/signup-valid-response';
 
 @Component({
   selector: 'app-signup',
@@ -77,7 +77,7 @@ export class SignupPage implements OnInit {
   private async handleSignupResponse(response: SignupResponse) {
     match(response)
       .with({ status: 'correct' }, async (response) => {
-        let signupResponse: CorrectSignupResponse = response.data;
+        let signupResponse: ValidUserSignUpResponse = response.data;
         await this.loadingController.dismiss();
         this.router.navigate(['/login']).then();
       })
@@ -95,7 +95,7 @@ export class SignupPage implements OnInit {
     this.router.navigate(['/home']).then();
   }
 
-  private async handleError(error: SignUpErrorsExtended) {
+  private async handleError(error: SignUpErrors) {
     match(error)
       .with({ type: '422' }, async (error) => {
         this.hasError = true;
@@ -108,18 +108,18 @@ export class SignupPage implements OnInit {
       .exhaustive();
   }
 
-  private async handleOtherError(error: SignUpErrors) {
+  private async handleOtherError(error: ServerSignupErrors) {
     match(error)
-      .with(SignUpErrors.UNAUTHORIZED, async () => {
+      .with(ServerSignupErrors.UNAUTHORIZED, async () => {
         await this.handleUnauthorized();
       })
-      .with(SignUpErrors.CONFLICT, async () => {
+      .with(ServerSignupErrors.CONFLICT, async () => {
         await this.handleConflict();
       })
-      .with(SignUpErrors.SERVER_INCORRECT_DATA_FORMAT_ERROR, async () => {
+      .with(ServerSignupErrors.SERVER_INCORRECT_DATA_FORMAT_ERROR, async () => {
         await this.handleBadDataFromServer();
       })
-      .with(SignUpErrors.UNKNOWN_ERROR, async () => {
+      .with(ServerSignupErrors.UNKNOWN_ERROR, async () => {
         await this.handleUnknownError();
       })
       .exhaustive();

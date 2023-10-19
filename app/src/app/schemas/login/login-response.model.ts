@@ -1,5 +1,5 @@
 import { match, P } from 'ts-pattern';
-import { HttpErrorResponse } from '@angular/common/http';
+import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 
 export type LoginErrorsExtended =
   | {
@@ -31,9 +31,13 @@ export namespace LoginErrors {
       .with(0, () => {
         throw new Error('You are offline or the server is down.');
       })
-      .with(401, () => LoginErrors.from(LoginErrors.UNAUTHORIZED))
-      .with(404, () => LoginErrors.from(LoginErrors.NOT_FOUND))
-      .with(422, () => {
+      .with(HttpStatusCode.Unauthorized, () =>
+        LoginErrors.from(LoginErrors.UNAUTHORIZED),
+      )
+      .with(HttpStatusCode.NotFound, () =>
+        LoginErrors.from(LoginErrors.NOT_FOUND),
+      )
+      .with(HttpStatusCode.UnprocessableEntity, () => {
         const error: string = err.error.detail[0].msg;
         return { type: '422', message: error };
       })
