@@ -41,7 +41,7 @@ export class AuthService {
     formData.append('scope', credentials.scope);
 
     return this.http
-      .post<CorrectLoginResponse>(`${environment.API}/login`, formData)
+      .post<CorrectLoginResponse>(`${environment.API}/login/`, formData)
       .pipe(
         map<CorrectLoginResponse, LoginResponse | Error>(
           (response: CorrectLoginResponse) => {
@@ -79,7 +79,7 @@ export class AuthService {
     };
 
     return this.http
-      .post<CorrectSignupResponse>(`${environment.API}/users`, request)
+      .post<CorrectSignupResponse>(`${environment.API}/users/`, request)
       .pipe(
         map<CorrectSignupResponse, SignupResponse>(
           (response: CorrectSignupResponse) => {

@@ -47,7 +47,7 @@ export class RefugeService {
   }
 
   private getRefugeFromIdEndpoint(id: string): string {
-    return `${environment.API}/refuges/${id}`;
+    return `${environment.API}/refuges/${id}/`;
   }
 
   getImageUrlFor(refuge: Refuge): string {
