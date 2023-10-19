@@ -120,13 +120,13 @@ export class LoginPage implements OnInit {
 
   private async handleUnauthorized() {
     this.hasError = true;
-    this.errorMessage = 'Rol de token incorrecte';
+    this.errorMessage = 'Contrasenya incorrecta';
     await this.loadingController.dismiss();
   }
 
   private async handleNotFound() {
     this.hasError = true;
-    this.errorMessage = 'Usuari no trobat';
+    this.errorMessage = "L'usuari no existeix";
     await this.loadingController.dismiss();
   }
   private async handleUnknownError() {

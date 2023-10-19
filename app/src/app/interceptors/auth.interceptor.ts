@@ -10,8 +10,7 @@ import { StorageService } from '../services/storage/storage.service';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-  constructor(private storageService: StorageService) {
-  }
+  constructor(private storageService: StorageService) {}
 
   intercept(
     request: HttpRequest<any>,
