@@ -3,13 +3,12 @@ import { AuthService } from '../../services/auth/auth.service';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AlertController, LoadingController } from '@ionic/angular';
-import { match } from 'ts-pattern';
+import { isMatching, match } from 'ts-pattern';
+import { phoneMaskPredicate, spainPhoneMask } from '../../schemas/phone/phone';
 import {
-  format,
-  phoneMaskPredicate,
-  spainPhoneMask,
-} from '../../schemas/phone/phone';
-import { UserCredentials } from '../../schemas/user/user';
+  UserCredentials,
+  UserCredentialsPattern,
+} from '../../schemas/user/user';
 import { AuthenticationResponse } from '../../schemas/auth/authenticate';
 import { Token } from '../../schemas/auth/token';
 import {
@@ -17,6 +16,10 @@ import {
   ServerErrors,
   UserErrors,
 } from '../../schemas/auth/errors';
+import {
+  CredentialsError,
+  parseCredentials,
+} from '../../schemas/auth/validate/forms';
 
 @Component({
   selector: 'app-login',
@@ -44,23 +47,21 @@ export class LoginPage implements OnInit {
 
   ngOnInit() {}
 
-  async loginLoading(): Promise<void> {
-    const loading = await this.loadingController.create({
-      message: 'Iniciant Sessió...',
-      translucent: true,
-    });
-    return await loading.present();
-  }
-
   onLogin(form: NgForm) {
     if (form.invalid) return;
+    const credentials = parseCredentials(this.credentials);
+    if (isMatching(UserCredentialsPattern, credentials))
+      this.login(credentials as UserCredentials);
+    else this.handleCredentialsError(credentials as CredentialsError);
+  }
 
-    const formattedPhone = format(this.credentials.phone_number);
-    if (formattedPhone == null) return;
-    this.credentials.phone_number = formattedPhone;
+  onSignup() {
+    this.router.navigate(['/signup']).then();
+  }
 
-    this.loginLoading().then(() => {
-      this.authService.getToken(this.credentials).subscribe({
+  private login(credentials: UserCredentials) {
+    this.startLoadingAnimation().then(() => {
+      this.authService.getToken(credentials).subscribe({
         next: async (response: AuthenticationResponse) => {
           await this.handleLoginResponse(response);
         },
@@ -71,17 +72,22 @@ export class LoginPage implements OnInit {
     });
   }
 
-  onSignup() {
-    this.router.navigate(['/signup']).then();
+  private handleCredentialsError(credentialsError: CredentialsError) {
+    match(credentialsError)
+      .with(CredentialsError.INCORRECT_PHONE_NUMBER, () =>
+        this.showError('Format del número de telèfon incorrecte'),
+      )
+      .exhaustive();
   }
 
   private async handleLoginResponse(response: AuthenticationResponse) {
     match(response)
       .with({ status: 'authenticated' }, async (response) => {
-        const token: Token = response.data;
-        await this.authService.authenticate(token);
-        await this.loadingController.dismiss();
-        this.router.navigate(['/home']).then();
+        await this.finishLoadingAnimationAndExecute(async () => {
+          const token: Token = response.data;
+          await this.authService.authenticate(token);
+          this.router.navigate(['/home']).then();
+        });
       })
       .with({ status: 'error' }, async (response) => {
         await this.handleError(response.error);
@@ -105,7 +111,9 @@ export class LoginPage implements OnInit {
         },
       ],
     });
-    await this.showError(async () => await alert.present());
+    await this.finishLoadingAnimationAndExecute(
+      async () => await alert.present(),
+    );
   }
 
   private async handleError(error: AuthenticationErrors) {
@@ -117,16 +125,16 @@ export class LoginPage implements OnInit {
         await this.goToProgrammingErrorPage();
       })
       .with(UserErrors.INCORRECT_PASSWORD, async () => {
-        await this.showErrorMessage('Contrasenya incorrecta');
+        await this.showErrorAndFinishLoadingAnimation('Contrasenya incorrecta');
       })
       .with(UserErrors.USER_NOT_FOUND, async () => {
-        await this.showErrorMessage("L'usuari no existeix");
+        await this.showErrorAndFinishLoadingAnimation("L'usuari no existeix");
       })
       .exhaustive();
   }
 
   private async goToProgrammingErrorPage() {
-    await this.showError(async () => {
+    await this.finishLoadingAnimationAndExecute(async () => {
       await this.router.navigate(['programming-error'], {
         skipLocationChange: true,
       });
@@ -134,20 +142,34 @@ export class LoginPage implements OnInit {
   }
 
   private async goToInternalErrorPage() {
-    await this.showError(async () => {
+    await this.finishLoadingAnimationAndExecute(async () => {
       await this.router.navigate(['internal-error-page'], {
         skipLocationChange: true,
       });
     });
   }
 
-  private async showError(func: (() => void) | (() => Promise<void>)) {
+  private async startLoadingAnimation(): Promise<void> {
+    const loading = await this.loadingController.create({
+      message: 'Iniciant Sessió...',
+      translucent: true,
+    });
+    return await loading.present();
+  }
+
+  private async finishLoadingAnimationAndExecute(
+    func: (() => void) | (() => Promise<void>),
+  ) {
     await this.loadingController.dismiss();
     await func();
   }
 
-  private async showErrorMessage(message: string) {
-    await this.showError(() => (this.errorMessage = message));
+  private async showErrorAndFinishLoadingAnimation(message: string) {
+    await this.finishLoadingAnimationAndExecute(() => this.showError(message));
+  }
+
+  private showError(message: string) {
+    this.errorMessage = message;
     this.hasError = true;
   }
 }

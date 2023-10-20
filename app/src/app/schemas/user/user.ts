@@ -18,5 +18,6 @@ export type UserCreated = Omit<User, 'password'>;
 
 export type UserForm = CreateUser & { repeatPassword: string };
 
+export const UserCredentialsPattern: P.Pattern<UserCredentials> = {};
 export const CreateUserPattern: P.Pattern<CreateUser> = {};
 export const UserCreatedPattern: P.Pattern<UserCreated> = {};
