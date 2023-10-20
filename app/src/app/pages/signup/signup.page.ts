@@ -1,21 +1,22 @@
 import { Component, OnInit } from '@angular/core';
-import { MaskitoElementPredicateAsync, MaskitoOptions } from '@maskito/core';
-import MaskitoMasks from '../../forms/maskito-masks';
 import { Router } from '@angular/router';
-import { AuthService } from '../../services/auth/auth.service';
 import { AlertController, LoadingController } from '@ionic/angular';
 import { NgForm } from '@angular/forms';
-import { formatPhone } from '../../forms/format-phone';
-import { match } from 'ts-pattern';
-import { SignupForm } from '../../schemas/signup/request/signup-form.model';
+import { isMatching, match } from 'ts-pattern';
+import { UserService } from '../../services/user/user.service';
 import {
-  SignUpData,
-  SignUpResponse,
-} from '../../schemas/signup/response/sign-up-response';
+  CreateUser,
+  CreateUserPattern,
+  UserCreated,
+  UserForm,
+} from '../../schemas/user/user';
+import { CreateUserResponse } from '../../schemas/user/create/create-user-response';
 import {
-  ServerSignupErrors,
-  SignUpError,
-} from '../../schemas/signup/response/sign-up-error';
+  CreateUserError,
+  ServerError,
+} from '../../schemas/user/create/create-user-error';
+import { phoneMaskPredicate, spainPhoneMask } from '../../schemas/phone/phone';
+import { parseForm, UserFormError } from '../../schemas/user/validate/form';
 
 @Component({
   selector: 'app-signup',
@@ -23,23 +24,22 @@ import {
   styleUrls: ['./signup.page.scss'],
 })
 export class SignupPage implements OnInit {
-  form: SignupForm = {
+  form: UserForm = {
     username: '',
     password: '',
     repeatPassword: '',
     phone_number: '',
     emergency_number: '',
   };
-
-  phoneMask: MaskitoOptions = MaskitoMasks.phoneMask;
-  maskPredicate: MaskitoElementPredicateAsync = MaskitoMasks.maskPredicate;
+  phoneMask = spainPhoneMask;
+  maskPredicate = phoneMaskPredicate;
 
   hasError: boolean = false;
   errorMessage: string = '';
 
   constructor(
     private router: Router,
-    private authService: AuthService,
+    private userService: UserService,
     private loadingController: LoadingController,
     private alertController: AlertController,
   ) {}
@@ -56,17 +56,15 @@ export class SignupPage implements OnInit {
 
   onSignUp(form: NgForm) {
     if (form.invalid) return;
-    if (this.form.password !== this.form.repeatPassword) {
-      this.hasError = true;
-      this.errorMessage = 'Passwords do not match';
-      return;
-    }
+    const request = parseForm(this.form);
+    if (isMatching(CreateUserPattern, request))
+      this.createUser(request as CreateUser);
+    else this.showFormError(request as UserFormError).then();
+  }
 
-    this.form.phone_number = formatPhone(this.form.phone_number);
-    this.form.emergency_number = formatPhone(this.form.emergency_number);
-
+  private createUser(request: CreateUser) {
     this.signupLoading().then(() => {
-      this.authService.signup(this.form).subscribe({
+      this.userService.create(request).subscribe({
         next: async (response) => {
           await this.handleSignupResponse(response);
         },
@@ -77,9 +75,25 @@ export class SignupPage implements OnInit {
     });
   }
 
-  private async handleSignupResponse(response: SignUpResponse) {
+  private async showFormError(formError: UserFormError) {
+    match(formError)
+      .with(UserFormError.PASSWORDS_DO_NOT_MATCH, async () => {
+        await this.showErrorMessage('Les contrasenyes no coincideixen');
+      })
+      .with(UserFormError.INCORRECT_PHONE_NUMBER, async () => {
+        await this.showErrorMessage('El número de telèfon és incorrecte');
+      })
+      .with(UserFormError.INCORRECT_EMERGENCY_NUMBER, async () => {
+        await this.showErrorMessage(
+          "El número de telèfon d'emergència és incorrecte",
+        );
+      })
+      .exhaustive();
+  }
+
+  private async handleSignupResponse(response: CreateUserResponse) {
     match(response)
-      .with({ status: 'correct' }, async (response) => {
+      .with({ status: 'created' }, async (response) => {
         await this.handleCorrectSignup(response.data);
       })
       .with({ status: 'error' }, async (response) => {
@@ -88,26 +102,24 @@ export class SignupPage implements OnInit {
       .exhaustive();
   }
 
-  private async handleCorrectSignup(data: SignUpData) {
+  private async handleCorrectSignup(data: UserCreated) {
     console.log(`Correct signup! ${JSON.stringify(data)}`);
     await this.loadingController.dismiss();
     this.router.navigate(['/login']).then();
   }
 
-  private async handleError(error: SignUpError) {
+  private async handleError(error: CreateUserError) {
     match(error)
-      .with(ServerSignupErrors.UNKNOWN_ERROR, async () => {
+      .with(ServerError.UNKNOWN_ERROR, async () => {
         await this.handleUnknownError();
       })
-      .with(ServerSignupErrors.SERVER_INCORRECT_DATA_FORMAT_ERROR, async () => {
+      .with(ServerError.INCORRECT_DATA, async () => {
         await this.handleBadDataFromServer();
       })
-      .with({ type: 'invalid-user-data' }, async (error) => {
-        this.hasError = true;
-        this.errorMessage = error.message;
-        await this.loadingController.dismiss();
+      .with({ type: 'INVALID_USER_DATA' }, async (error) => {
+        await this.showErrorMessage(error.message);
       })
-      .with('PHONE_ALREADY_EXISTS', async (error) => {
+      .with('PHONE_ALREADY_EXISTS', async () => {
         await this.handleAlreadyExistingPhone();
       })
       .exhaustive();

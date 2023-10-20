@@ -1,24 +1,24 @@
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { isMatching, match, P } from 'ts-pattern';
 
-export type SignUpError = ServerSignupErrors | ClientSignupError;
+export type CreateUserError = ServerError | ClientError;
 
-export enum ServerSignupErrors {
+export enum ServerError {
   UNKNOWN_ERROR = 'UNKNOWN_ERROR',
-  SERVER_INCORRECT_DATA_FORMAT_ERROR = 'SERVER_INCORRECT_DATA_FORMAT_ERROR',
+  INCORRECT_DATA = 'INCORRECT_DATA',
 }
 
-export type ClientSignupError =
+export type ClientError =
   | 'PHONE_ALREADY_EXISTS'
   | {
-      type: 'invalid-user-data';
+      type: 'INVALID_USER_DATA';
       message: string;
     };
 
-export namespace SignUpError {
-  export function fromHttp(err: HttpErrorResponse): SignUpError | never {
+export namespace CreateUserError {
+  export function fromHttp(err: HttpErrorResponse): CreateUserError | never {
     return match(err.status)
-      .returnType<SignUpError>()
+      .returnType<CreateUserError>()
       .with(0, () => {
         throw new Error('You are offline or the server is down.');
       })
@@ -26,7 +26,7 @@ export namespace SignUpError {
       .with(HttpStatusCode.UnprocessableEntity, () =>
         getErrorFromUnprocessableEntity(err),
       )
-      .otherwise(() => ServerSignupErrors.UNKNOWN_ERROR);
+      .otherwise(() => ServerError.UNKNOWN_ERROR);
   }
 }
 
@@ -43,9 +43,11 @@ type UnprocessableEntitySignUp = {
 const UnprocessableEntitySignUpPattern: P.Pattern<UnprocessableEntitySignUp> =
   {};
 
-function getErrorFromUnprocessableEntity(err: HttpErrorResponse): SignUpError {
+function getErrorFromUnprocessableEntity(
+  err: HttpErrorResponse,
+): CreateUserError {
   const errorResponse: UnprocessableEntitySignUp = err.error;
   if (isMatching(UnprocessableEntitySignUpPattern, errorResponse))
-    return { type: 'invalid-user-data', message: errorResponse.detail[0].msg };
-  return ServerSignupErrors.SERVER_INCORRECT_DATA_FORMAT_ERROR;
+    return { type: 'INVALID_USER_DATA', message: errorResponse.detail[0].msg };
+  return ServerError.INCORRECT_DATA;
 }

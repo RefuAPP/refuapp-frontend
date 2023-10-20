@@ -4,9 +4,6 @@ import { AuthService } from '../../services/auth/auth.service';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LoadingController } from '@ionic/angular';
-import { MaskitoElementPredicateAsync, MaskitoOptions } from '@maskito/core';
-import MaskitoMasks from '../../forms/maskito-masks';
-import { formatPhone } from '../../forms/format-phone';
 import {
   CorrectLoginResponse,
   LoginErrors,
@@ -14,6 +11,11 @@ import {
   LoginResponse,
 } from '../../schemas/login/login-response.model';
 import { match } from 'ts-pattern';
+import {
+  format,
+  phoneMaskPredicate,
+  spainPhoneMask,
+} from '../../schemas/phone/phone';
 
 @Component({
   selector: 'app-login',
@@ -27,8 +29,8 @@ export class LoginPage implements OnInit {
     scope: 'user',
   };
 
-  phoneMask: MaskitoOptions = MaskitoMasks.phoneMask;
-  maskPredicate: MaskitoElementPredicateAsync = MaskitoMasks.maskPredicate;
+  phoneMask = spainPhoneMask;
+  maskPredicate = phoneMaskPredicate;
 
   hasError: boolean = false;
   errorMessage: string = '';
@@ -52,7 +54,9 @@ export class LoginPage implements OnInit {
   onLogin(form: NgForm) {
     if (form.invalid) return;
 
-    this.login.username = formatPhone(this.login.username);
+    const formattedPhone = format(this.login.username);
+    if (formattedPhone == null) return;
+    this.login.username = formattedPhone;
 
     this.loginLoading().then(() => {
       this.authService.login(this.login).subscribe({
@@ -64,6 +68,10 @@ export class LoginPage implements OnInit {
         },
       });
     });
+  }
+
+  onSignup() {
+    this.router.navigate(['/signup']).then();
   }
 
   private async handleLoginResponse(response: LoginResponse) {
@@ -129,6 +137,7 @@ export class LoginPage implements OnInit {
     this.errorMessage = "L'usuari no existeix";
     await this.loadingController.dismiss();
   }
+
   private async handleUnknownError() {
     this.hasError = true;
     this.errorMessage = 'Error desconegut';
@@ -140,9 +149,5 @@ export class LoginPage implements OnInit {
     this.hasError = true;
     this.errorMessage = 'El servidor ha enviat dades invàlides';
     await this.loadingController.dismiss();
-  }
-
-  onSignup() {
-    this.router.navigate(['/signup']).then();
   }
 }

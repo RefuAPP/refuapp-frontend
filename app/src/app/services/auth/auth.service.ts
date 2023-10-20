@@ -11,13 +11,6 @@ import {
 import { environment } from '../../../environments/environment';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { isMatching } from 'ts-pattern';
-import {
-  parseErrorResponse,
-  parseValidResponse,
-  SignUpResponse,
-  SignUpData,
-} from '../../schemas/signup/response/sign-up-response';
-import { SignupRequest } from '../../schemas/signup/request/signup-request.model';
 
 @Injectable({
   providedIn: 'root',
@@ -67,16 +60,6 @@ export class AuthService {
 
   logout(): Promise<void> {
     return this.removeToken();
-  }
-
-  signup(user: SignupRequest): Observable<SignUpResponse> {
-    return this.http.post<SignUpData>(`${environment.API}/users/`, user).pipe(
-      map((response: SignUpData) => parseValidResponse(response)),
-      catchError<SignUpResponse, ObservableInput<any>>(
-        (err: HttpErrorResponse) => parseErrorResponse(err),
-      ),
-      retry(3),
-    );
   }
 
   async saveToken(response: CorrectLoginResponse): Promise<void> {
