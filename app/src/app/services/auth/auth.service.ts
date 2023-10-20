@@ -11,6 +11,8 @@ import {
 } from '../../schemas/auth/authenticate';
 import { Token } from '../../schemas/auth/token';
 
+const authUri = `${environment.API}/login/`;
+
 @Injectable({
   providedIn: 'root',
 })
@@ -21,15 +23,8 @@ export class AuthService {
   ) {}
 
   getToken(credentials: UserCredentials): Observable<AuthenticationResponse> {
-    const formData = new FormData();
-    formData.append('username', credentials.phone_number);
-    formData.append('password', credentials.password);
-    formData.append('scope', 'user');
-    return this.http.post<Token>(`${environment.API}/login/`, formData).pipe(
-      map((response: Token) => fromResponse(response)),
-      catchError((err: HttpErrorResponse) => of(fromError(err))),
-      retry(3),
-    );
+    const data = this.getFormDataFrom(credentials);
+    return this.getTokenFromApi(data);
   }
 
   async authenticate(token: Token) {
@@ -43,5 +38,21 @@ export class AuthService {
   async isAuthenticated(): Promise<boolean> {
     const token = await this.storageService.get('token');
     return token != null;
+  }
+
+  private getTokenFromApi(data: FormData): Observable<AuthenticationResponse> {
+    return this.http.post<Token>(authUri, data).pipe(
+      map((response: Token) => fromResponse(response)),
+      catchError((err: HttpErrorResponse) => of(fromError(err))),
+      retry(3),
+    );
+  }
+
+  private getFormDataFrom(credentials: UserCredentials): FormData {
+    const formData = new FormData();
+    formData.append('username', credentials.phone_number);
+    formData.append('password', credentials.password);
+    formData.append('scope', 'user');
+    return formData;
   }
 }

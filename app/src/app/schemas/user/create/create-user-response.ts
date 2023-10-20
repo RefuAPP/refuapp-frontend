@@ -1,7 +1,6 @@
-import { of } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
-import { ServerError, CreateUserError } from './create-user-error';
-import { isMatching, P } from 'ts-pattern';
+import { CreateUserError, ServerError } from './create-user-error';
+import { isMatching } from 'ts-pattern';
 import { UserCreated, UserCreatedPattern } from '../user';
 
 export type CreateUserResponse =
@@ -14,7 +13,7 @@ export type CreateUserResponse =
       error: CreateUserError;
     };
 
-export function parseValidResponse(response: UserCreated): CreateUserResponse {
+export function fromResponse(response: any): CreateUserResponse {
   if (isMatching(UserCreatedPattern, response))
     return { status: 'created', data: response };
   return {
@@ -23,9 +22,9 @@ export function parseValidResponse(response: UserCreated): CreateUserResponse {
   };
 }
 
-export function parseErrorResponse(err: HttpErrorResponse) {
-  return of({
+export function fromError(err: HttpErrorResponse): CreateUserResponse {
+  return {
     status: 'error',
     error: CreateUserError.fromHttp(err),
-  });
+  };
 }
