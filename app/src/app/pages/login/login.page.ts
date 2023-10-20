@@ -86,7 +86,7 @@ export class LoginPage implements OnInit {
         this.finishLoadingAnimationAndExecute(async () => {
           const token: Token = response.data;
           await this.authService.authenticate(token);
-          this.router.navigate(['/home']).then();
+          this.router.navigate(['/']).then();
         }).then();
       })
       .with({ status: 'error' }, (response) => {
