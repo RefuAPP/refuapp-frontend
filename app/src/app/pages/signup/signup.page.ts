@@ -3,17 +3,19 @@ import { MaskitoElementPredicateAsync, MaskitoOptions } from '@maskito/core';
 import MaskitoMasks from '../../forms/maskito-masks';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth/auth.service';
-import { LoadingController } from '@ionic/angular';
+import { AlertController, LoadingController } from '@ionic/angular';
 import { NgForm } from '@angular/forms';
 import { formatPhone } from '../../forms/format-phone';
-import { SignupForm } from '../../schemas/signup/signup-form.model';
-import {
-  ValidUserSignUpResponse,
-  ServerSignupErrors,
-  SignUpErrors,
-} from '../../schemas/signup/signup-response.model';
 import { match } from 'ts-pattern';
-import { SignupResponse } from '../../schemas/signup/signup-valid-response';
+import { SignupForm } from '../../schemas/signup/request/signup-form.model';
+import {
+  SignUpData,
+  SignUpResponse,
+} from '../../schemas/signup/response/sign-up-response';
+import {
+  ServerSignupErrors,
+  SignUpError,
+} from '../../schemas/signup/response/sign-up-error';
 
 @Component({
   selector: 'app-signup',
@@ -21,7 +23,7 @@ import { SignupResponse } from '../../schemas/signup/signup-valid-response';
   styleUrls: ['./signup.page.scss'],
 })
 export class SignupPage implements OnInit {
-  signup: SignupForm = {
+  form: SignupForm = {
     username: '',
     password: '',
     repeatPassword: '',
@@ -39,13 +41,14 @@ export class SignupPage implements OnInit {
     private router: Router,
     private authService: AuthService,
     private loadingController: LoadingController,
+    private alertController: AlertController,
   ) {}
 
   ngOnInit() {}
 
   async signupLoading(): Promise<void> {
     const loading = await this.loadingController.create({
-      message: 'Signing up...',
+      message: 'Creant usuari...',
       translucent: true,
     });
     return await loading.present();
@@ -53,17 +56,17 @@ export class SignupPage implements OnInit {
 
   onSignUp(form: NgForm) {
     if (form.invalid) return;
-    if (this.signup.password !== this.signup.repeatPassword) {
+    if (this.form.password !== this.form.repeatPassword) {
       this.hasError = true;
       this.errorMessage = 'Passwords do not match';
       return;
     }
 
-    this.signup.phone_number = formatPhone(this.signup.phone_number);
-    this.signup.emergency_number = formatPhone(this.signup.emergency_number);
+    this.form.phone_number = formatPhone(this.form.phone_number);
+    this.form.emergency_number = formatPhone(this.form.emergency_number);
 
     this.signupLoading().then(() => {
-      this.authService.signup(this.signup).subscribe({
+      this.authService.signup(this.form).subscribe({
         next: async (response) => {
           await this.handleSignupResponse(response);
         },
@@ -74,12 +77,10 @@ export class SignupPage implements OnInit {
     });
   }
 
-  private async handleSignupResponse(response: SignupResponse) {
+  private async handleSignupResponse(response: SignUpResponse) {
     match(response)
       .with({ status: 'correct' }, async (response) => {
-        let signupResponse: ValidUserSignUpResponse = response.data;
-        await this.loadingController.dismiss();
-        this.router.navigate(['/login']).then();
+        await this.handleCorrectSignup(response.data);
       })
       .with({ status: 'error' }, async (response) => {
         await this.handleError(response.error);
@@ -87,65 +88,79 @@ export class SignupPage implements OnInit {
       .exhaustive();
   }
 
-  private async handleClientError() {
-    this.hasError = true;
-    this.errorMessage =
-      'Funciona la connexió a Internet? Potser és culpa nostra i el nostre servidor està caigut.';
+  private async handleCorrectSignup(data: SignUpData) {
+    console.log(`Correct signup! ${JSON.stringify(data)}`);
     await this.loadingController.dismiss();
-    this.router.navigate(['/home']).then();
+    this.router.navigate(['/login']).then();
   }
 
-  private async handleError(error: SignUpErrors) {
+  private async handleError(error: SignUpError) {
     match(error)
-      .with({ type: '422' }, async (error) => {
-        this.hasError = true;
-        this.errorMessage = error.message;
-        await this.loadingController.dismiss();
-      })
-      .with({ type: 'other' }, async (error) => {
-        this.handleOtherError(error.error).then();
-      })
-      .exhaustive();
-  }
-
-  private async handleOtherError(error: ServerSignupErrors) {
-    match(error)
-      .with(ServerSignupErrors.UNAUTHORIZED, async () => {
-        await this.handleUnauthorized();
-      })
-      .with(ServerSignupErrors.CONFLICT, async () => {
-        await this.handleConflict();
+      .with(ServerSignupErrors.UNKNOWN_ERROR, async () => {
+        await this.handleUnknownError();
       })
       .with(ServerSignupErrors.SERVER_INCORRECT_DATA_FORMAT_ERROR, async () => {
         await this.handleBadDataFromServer();
       })
-      .with(ServerSignupErrors.UNKNOWN_ERROR, async () => {
-        await this.handleUnknownError();
+      .with({ type: 'invalid-user-data' }, async (error) => {
+        this.hasError = true;
+        this.errorMessage = error.message;
+        await this.loadingController.dismiss();
+      })
+      .with('PHONE_ALREADY_EXISTS', async (error) => {
+        await this.handleAlreadyExistingPhone();
       })
       .exhaustive();
   }
 
-  private async handleUnauthorized() {
-    this.hasError = true;
-    this.errorMessage = 'Rol de token incorrecte';
-    await this.loadingController.dismiss();
-    this.router.navigate(['/home']).then();
+  private async handleClientError() {
+    const alert = await this.alertController.create({
+      header: 'Alerta',
+      subHeader: 'El teu dispositiu està fallant',
+      message:
+        'Funciona la connexió a Internet? Potser és culpa nostra i el nostre servidor està caigut.',
+      buttons: [
+        {
+          text: "Ves a l'inici",
+          handler: () => {
+            this.alertController.dismiss().then();
+            this.router.navigate(['/home']).then();
+          },
+        },
+      ],
+    });
+    await this.showError(async () => await alert.present());
   }
 
-  private async handleConflict() {
-    this.hasError = true;
-    this.errorMessage = 'Ja existeix un usuari amb aquest número de telèfon';
-    await this.loadingController.dismiss();
+  private async handleAlreadyExistingPhone() {
+    await this.showErrorMessage(
+      'Ja existeix un usuari amb aquest número de telèfon',
+    );
   }
+
   private async handleBadDataFromServer() {
-    this.hasError = true;
-    this.errorMessage = 'El servidor ha retornat dades incorrectes';
-    await this.loadingController.dismiss();
+    await this.showError(async () => {
+      await this.router.navigate(['programming-error'], {
+        skipLocationChange: true,
+      });
+    });
   }
 
   private async handleUnknownError() {
+    await this.showError(async () => {
+      await this.router.navigate(['internal-error-page'], {
+        skipLocationChange: true,
+      });
+    });
+  }
+
+  private async showError(func: (() => void) | (() => Promise<void>)) {
     this.hasError = true;
-    this.errorMessage = 'Error desconegut';
     await this.loadingController.dismiss();
+    await func();
+  }
+
+  private async showErrorMessage(message: string) {
+    await this.showError(() => (this.errorMessage = message));
   }
 }

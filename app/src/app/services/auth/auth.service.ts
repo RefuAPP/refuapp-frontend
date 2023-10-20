@@ -14,9 +14,9 @@ import { isMatching } from 'ts-pattern';
 import {
   parseErrorResponse,
   parseValidResponse,
-  SignupResponse,
-  ValidUserSignUpResponse,
-} from '../../schemas/signup/response/signup-response';
+  SignUpResponse,
+  SignUpData,
+} from '../../schemas/signup/response/sign-up-response';
 import { SignupRequest } from '../../schemas/signup/request/signup-request.model';
 
 @Injectable({
@@ -69,18 +69,14 @@ export class AuthService {
     return this.removeToken();
   }
 
-  signup(user: SignupRequest): Observable<SignupResponse> {
-    return this.http
-      .post<ValidUserSignUpResponse>(`${environment.API}/users/`, user)
-      .pipe(
-        map((response: ValidUserSignUpResponse) =>
-          parseValidResponse(response),
-        ),
-        catchError<SignupResponse, ObservableInput<any>>(
-          (err: HttpErrorResponse) => parseErrorResponse(err),
-        ),
-        retry(3),
-      );
+  signup(user: SignupRequest): Observable<SignUpResponse> {
+    return this.http.post<SignUpData>(`${environment.API}/users/`, user).pipe(
+      map((response: SignUpData) => parseValidResponse(response)),
+      catchError<SignUpResponse, ObservableInput<any>>(
+        (err: HttpErrorResponse) => parseErrorResponse(err),
+      ),
+      retry(3),
+    );
   }
 
   async saveToken(response: CorrectLoginResponse): Promise<void> {
