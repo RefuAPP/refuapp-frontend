@@ -62,10 +62,10 @@ export class LoginPage implements OnInit {
   private login(credentials: UserCredentials) {
     this.startLoadingAnimation().then(() => {
       this.authService.getToken(credentials).subscribe({
-        next: async (response: AuthenticationResponse) => {
-          await this.handleLoginResponse(response);
+        next: (response: AuthenticationResponse) => {
+          this.handleLoginResponse(response);
         },
-        error: async () => {
+        error: () => {
           this.handleClientError().then();
         },
       });
@@ -80,17 +80,17 @@ export class LoginPage implements OnInit {
       .exhaustive();
   }
 
-  private async handleLoginResponse(response: AuthenticationResponse) {
+  private handleLoginResponse(response: AuthenticationResponse) {
     match(response)
-      .with({ status: 'authenticated' }, async (response) => {
-        await this.finishLoadingAnimationAndExecute(async () => {
+      .with({ status: 'authenticated' }, (response) => {
+        this.finishLoadingAnimationAndExecute(async () => {
           const token: Token = response.data;
           await this.authService.authenticate(token);
           this.router.navigate(['/home']).then();
-        });
+        }).then();
       })
-      .with({ status: 'error' }, async (response) => {
-        await this.handleError(response.error);
+      .with({ status: 'error' }, (response) => {
+        this.handleError(response.error);
       })
       .exhaustive();
   }
@@ -116,19 +116,21 @@ export class LoginPage implements OnInit {
     );
   }
 
-  private async handleError(error: AuthenticationErrors) {
+  private handleError(error: AuthenticationErrors) {
     match(error)
-      .with(ServerErrors.UNKNOWN_ERROR, async () => {
-        await this.goToInternalErrorPage();
+      .with(ServerErrors.UNKNOWN_ERROR, () => {
+        this.goToInternalErrorPage().then();
       })
-      .with(ServerErrors.INCORRECT_DATA_FORMAT, async () => {
-        await this.goToProgrammingErrorPage();
+      .with(ServerErrors.INCORRECT_DATA_FORMAT, () => {
+        this.goToProgrammingErrorPage().then();
       })
-      .with(UserErrors.INCORRECT_PASSWORD, async () => {
-        await this.showErrorAndFinishLoadingAnimation('Contrasenya incorrecta');
+      .with(UserErrors.INCORRECT_PASSWORD, () => {
+        this.showErrorAndFinishLoadingAnimation(
+          'Contrasenya incorrecta',
+        ).then();
       })
-      .with(UserErrors.USER_NOT_FOUND, async () => {
-        await this.showErrorAndFinishLoadingAnimation("L'usuari no existeix");
+      .with(UserErrors.USER_NOT_FOUND, () => {
+        this.showErrorAndFinishLoadingAnimation("L'usuari no existeix").then();
       })
       .exhaustive();
   }

@@ -59,68 +59,69 @@ export class SignupPage implements OnInit {
     const request = parseForm(this.form);
     if (isMatching(CreateUserPattern, request))
       this.createUser(request as CreateUser);
-    else this.showFormError(request as UserFormError).then();
+    else this.showFormError(request as UserFormError);
   }
 
   private createUser(request: CreateUser) {
     this.signupLoading().then(() => {
       this.userService.create(request).subscribe({
-        next: async (response) => {
-          await this.handleSignupResponse(response);
+        next: (response) => {
+          this.handleSignupResponse(response);
         },
-        error: async () => {
+        error: () => {
           this.handleClientError().then();
         },
       });
     });
   }
 
-  private async showFormError(formError: UserFormError) {
+  private showFormError(formError: UserFormError) {
     match(formError)
-      .with(UserFormError.PASSWORDS_DO_NOT_MATCH, async () => {
-        await this.showErrorMessage('Les contrasenyes no coincideixen');
+      .with(UserFormError.PASSWORDS_DO_NOT_MATCH, () => {
+        this.showErrorMessage('Les contrasenyes no coincideixen').then();
       })
-      .with(UserFormError.INCORRECT_PHONE_NUMBER, async () => {
-        await this.showErrorMessage('El número de telèfon és incorrecte');
+      .with(UserFormError.INCORRECT_PHONE_NUMBER, () => {
+        this.showErrorMessage('El número de telèfon és incorrecte').then();
       })
-      .with(UserFormError.INCORRECT_EMERGENCY_NUMBER, async () => {
-        await this.showErrorMessage(
+      .with(UserFormError.INCORRECT_EMERGENCY_NUMBER, () => {
+        this.showErrorMessage(
           "El número de telèfon d'emergència és incorrecte",
-        );
+        ).then();
       })
       .exhaustive();
   }
 
-  private async handleSignupResponse(response: CreateUserResponse) {
+  private handleSignupResponse(response: CreateUserResponse) {
     match(response)
-      .with({ status: 'created' }, async (response) => {
-        await this.handleCorrectSignup(response.data);
+      .with({ status: 'created' }, (response) => {
+        this.handleCorrectSignup(response.data);
       })
       .with({ status: 'error' }, async (response) => {
-        await this.handleError(response.error);
+        this.handleError(response.error);
       })
       .exhaustive();
   }
 
-  private async handleCorrectSignup(data: UserCreated) {
+  private handleCorrectSignup(data: UserCreated) {
     console.log(`Correct signup! ${JSON.stringify(data)}`);
-    await this.loadingController.dismiss();
-    this.router.navigate(['/login']).then();
+    this.loadingController
+      .dismiss()
+      .then(() => this.router.navigate(['/login']).then());
   }
 
-  private async handleError(error: CreateUserError) {
+  private handleError(error: CreateUserError) {
     match(error)
-      .with(ServerError.UNKNOWN_ERROR, async () => {
-        await this.handleUnknownError();
+      .with(ServerError.UNKNOWN_ERROR, () => {
+        this.handleUnknownError().then();
       })
-      .with(ServerError.INCORRECT_DATA, async () => {
-        await this.handleBadDataFromServer();
+      .with(ServerError.INCORRECT_DATA, () => {
+        this.handleBadDataFromServer().then();
       })
-      .with({ type: 'INVALID_USER_DATA' }, async (error) => {
-        await this.showErrorMessage(error.message);
+      .with({ type: 'INVALID_USER_DATA' }, (error) => {
+        this.showErrorMessage(error.message).then();
       })
-      .with('PHONE_ALREADY_EXISTS', async () => {
-        await this.handleAlreadyExistingPhone();
+      .with('PHONE_ALREADY_EXISTS', () => {
+        this.handleAlreadyExistingPhone().then();
       })
       .exhaustive();
   }
