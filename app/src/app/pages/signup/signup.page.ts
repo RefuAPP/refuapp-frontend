@@ -167,12 +167,12 @@ export class SignupPage implements OnInit {
   }
 
   private async showError(func: (() => void) | (() => Promise<void>)) {
-    this.hasError = true;
     await this.loadingController.dismiss();
     await func();
   }
 
   private async showErrorMessage(message: string) {
     await this.showError(() => (this.errorMessage = message));
+    this.hasError = true;
   }
 }

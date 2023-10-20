@@ -1,21 +1,22 @@
 import { Component, OnInit } from '@angular/core';
-import { LoginRequest } from '../../schemas/login/login-request.model';
 import { AuthService } from '../../services/auth/auth.service';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
-import { LoadingController } from '@ionic/angular';
-import {
-  CorrectLoginResponse,
-  LoginErrors,
-  LoginErrorsExtended,
-  LoginResponse,
-} from '../../schemas/login/login-response.model';
+import { AlertController, LoadingController } from '@ionic/angular';
 import { match } from 'ts-pattern';
 import {
   format,
   phoneMaskPredicate,
   spainPhoneMask,
 } from '../../schemas/phone/phone';
+import { UserCredentials } from '../../schemas/user/user';
+import { AuthenticationResponse } from '../../schemas/auth/authenticate';
+import { Token } from '../../schemas/auth/token';
+import {
+  AuthenticationErrors,
+  ServerErrors,
+  UserErrors,
+} from '../../schemas/auth/errors';
 
 @Component({
   selector: 'app-login',
@@ -23,10 +24,9 @@ import {
   styleUrls: ['./login.page.scss'],
 })
 export class LoginPage implements OnInit {
-  login: LoginRequest = {
-    username: '',
+  credentials: UserCredentials = {
+    phone_number: '',
     password: '',
-    scope: 'user',
   };
 
   phoneMask = spainPhoneMask;
@@ -38,6 +38,7 @@ export class LoginPage implements OnInit {
   constructor(
     private router: Router,
     private authService: AuthService,
+    private alertController: AlertController,
     private loadingController: LoadingController,
   ) {}
 
@@ -45,7 +46,7 @@ export class LoginPage implements OnInit {
 
   async loginLoading(): Promise<void> {
     const loading = await this.loadingController.create({
-      message: 'Login in...',
+      message: 'Iniciant Sessió...',
       translucent: true,
     });
     return await loading.present();
@@ -54,13 +55,13 @@ export class LoginPage implements OnInit {
   onLogin(form: NgForm) {
     if (form.invalid) return;
 
-    const formattedPhone = format(this.login.username);
+    const formattedPhone = format(this.credentials.phone_number);
     if (formattedPhone == null) return;
-    this.login.username = formattedPhone;
+    this.credentials.phone_number = formattedPhone;
 
     this.loginLoading().then(() => {
-      this.authService.login(this.login).subscribe({
-        next: async (response: LoginResponse) => {
+      this.authService.getToken(this.credentials).subscribe({
+        next: async (response: AuthenticationResponse) => {
           await this.handleLoginResponse(response);
         },
         error: async () => {
@@ -74,11 +75,11 @@ export class LoginPage implements OnInit {
     this.router.navigate(['/signup']).then();
   }
 
-  private async handleLoginResponse(response: LoginResponse) {
+  private async handleLoginResponse(response: AuthenticationResponse) {
     match(response)
-      .with({ status: 'correct' }, async (response) => {
-        let loginResponse: CorrectLoginResponse = response.data;
-        await this.authService.saveToken(loginResponse);
+      .with({ status: 'authenticated' }, async (response) => {
+        const token: Token = response.data;
+        await this.authService.authenticate(token);
         await this.loadingController.dismiss();
         this.router.navigate(['/home']).then();
       })
@@ -89,65 +90,64 @@ export class LoginPage implements OnInit {
   }
 
   private async handleClientError() {
-    this.hasError = true;
-    this.errorMessage =
-      'Funciona la connexió a Internet? Potser és culpa nostra i el nostre servidor està caigut.';
-    await this.loadingController.dismiss();
-    this.router.navigate(['/home']).then();
+    const alert = await this.alertController.create({
+      header: 'Alerta',
+      subHeader: 'El teu dispositiu està fallant',
+      message:
+        'Funciona la connexió a Internet? Potser és culpa nostra i el nostre servidor està caigut.',
+      buttons: [
+        {
+          text: "Ves a l'inici",
+          handler: () => {
+            this.alertController.dismiss().then();
+            this.router.navigate(['/home']).then();
+          },
+        },
+      ],
+    });
+    await this.showError(async () => await alert.present());
   }
 
-  private async handleError(error: LoginErrorsExtended) {
+  private async handleError(error: AuthenticationErrors) {
     match(error)
-      .with({ type: '422' }, async (error) => {
-        this.hasError = true;
-        this.errorMessage = error.message;
-        await this.loadingController.dismiss();
+      .with(ServerErrors.UNKNOWN_ERROR, async () => {
+        await this.goToInternalErrorPage();
       })
-      .with({ type: 'other' }, async (error) => {
-        await this.handleOtherError(error.error).then();
+      .with(ServerErrors.INCORRECT_DATA_FORMAT, async () => {
+        await this.goToProgrammingErrorPage();
+      })
+      .with(UserErrors.INCORRECT_PASSWORD, async () => {
+        await this.showErrorMessage('Contrasenya incorrecta');
+      })
+      .with(UserErrors.USER_NOT_FOUND, async () => {
+        await this.showErrorMessage("L'usuari no existeix");
       })
       .exhaustive();
   }
 
-  private async handleOtherError(error: LoginErrors) {
-    match(error)
-      .with(LoginErrors.UNAUTHORIZED, async () => {
-        await this.handleUnauthorized();
-      })
-      .with(LoginErrors.NOT_FOUND, async () => {
-        await this.handleNotFound();
-      })
-      .with(LoginErrors.UNKNOWN_ERROR, async () => {
-        await this.handleUnknownError();
-      })
-      .with(LoginErrors.SERVER_INCORRECT_DATA_FORMAT_ERROR, async () => {
-        await this.handleBadDataFromServer();
-      })
-      .exhaustive();
+  private async goToProgrammingErrorPage() {
+    await this.showError(async () => {
+      await this.router.navigate(['programming-error'], {
+        skipLocationChange: true,
+      });
+    });
   }
 
-  private async handleUnauthorized() {
-    this.hasError = true;
-    this.errorMessage = 'Contrasenya incorrecta';
-    await this.loadingController.dismiss();
+  private async goToInternalErrorPage() {
+    await this.showError(async () => {
+      await this.router.navigate(['internal-error-page'], {
+        skipLocationChange: true,
+      });
+    });
   }
 
-  private async handleNotFound() {
-    this.hasError = true;
-    this.errorMessage = "L'usuari no existeix";
+  private async showError(func: (() => void) | (() => Promise<void>)) {
     await this.loadingController.dismiss();
+    await func();
   }
 
-  private async handleUnknownError() {
+  private async showErrorMessage(message: string) {
+    await this.showError(() => (this.errorMessage = message));
     this.hasError = true;
-    this.errorMessage = 'Error desconegut';
-    await this.loadingController.dismiss();
-    this.router.navigate(['/internalerror']).then();
-  }
-
-  private async handleBadDataFromServer() {
-    this.hasError = true;
-    this.errorMessage = 'El servidor ha enviat dades invàlides';
-    await this.loadingController.dismiss();
   }
 }

@@ -1,74 +1,47 @@
 import { Injectable } from '@angular/core';
 import { StorageService } from '../storage/storage.service';
-import { LoginRequest } from '../../schemas/login/login-request.model';
-import { catchError, map, Observable, ObservableInput, of, retry } from 'rxjs';
-import {
-  CorrectLoginResponse,
-  CorrectLoginResponsePattern,
-  LoginErrors,
-  LoginResponse,
-} from '../../schemas/login/login-response.model';
+import { catchError, map, Observable, of, retry } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { isMatching } from 'ts-pattern';
+import { UserCredentials } from '../../schemas/user/user';
+import {
+  AuthenticationResponse,
+  fromError,
+  fromResponse,
+} from '../../schemas/auth/authenticate';
+import { Token } from '../../schemas/auth/token';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  isLoggedIn: boolean = false;
-
   constructor(
     private storageService: StorageService,
     private http: HttpClient,
-  ) {
-    const token = this.storageService.get('token');
-    this.isLoggedIn = !!token;
-  }
+  ) {}
 
-  login(credentials: LoginRequest): Observable<LoginResponse> {
+  getToken(credentials: UserCredentials): Observable<AuthenticationResponse> {
     const formData = new FormData();
-    formData.append('username', credentials.username);
+    formData.append('username', credentials.phone_number);
     formData.append('password', credentials.password);
-    formData.append('scope', credentials.scope);
-
-    return this.http
-      .post<CorrectLoginResponse>(`${environment.API}/login/`, formData)
-      .pipe(
-        map<CorrectLoginResponse, LoginResponse | Error>(
-          (response: CorrectLoginResponse) => {
-            if (isMatching(CorrectLoginResponsePattern, response))
-              return { status: 'correct', data: response };
-            return {
-              status: 'error',
-              error: LoginErrors.from(
-                LoginErrors.SERVER_INCORRECT_DATA_FORMAT_ERROR,
-              ),
-            };
-          },
-        ),
-        catchError<LoginResponse | Error, ObservableInput<any>>(
-          (err: HttpErrorResponse) =>
-            of({
-              status: 'error',
-              error: LoginErrors.fromHttp(err),
-            }),
-        ),
-        retry(3),
-      );
+    formData.append('scope', 'user');
+    return this.http.post<Token>(`${environment.API}/login/`, formData).pipe(
+      map((response: Token) => fromResponse(response)),
+      catchError((err: HttpErrorResponse) => of(fromError(err))),
+      retry(3),
+    );
   }
 
-  logout(): Promise<void> {
-    return this.removeToken();
+  async authenticate(token: Token) {
+    await this.storageService.set('token', token.access_token);
   }
 
-  async saveToken(response: CorrectLoginResponse): Promise<void> {
-    await this.storageService.set('token', response.access_token);
-    this.isLoggedIn = true;
+  async deauthenticate(): Promise<void> {
+    if (await this.isAuthenticated()) await this.storageService.remove('token');
   }
 
-  async removeToken(): Promise<void> {
-    await this.storageService.remove('token');
-    this.isLoggedIn = false;
+  async isAuthenticated(): Promise<boolean> {
+    const token = await this.storageService.get('token');
+    return token != null;
   }
 }

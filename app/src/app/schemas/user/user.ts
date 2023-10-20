@@ -1,13 +1,16 @@
 import { P } from 'ts-pattern/dist';
 import { Phone } from '../phone/phone';
 
+export type UserCredentials = {
+  phone_number: Phone;
+  password: string;
+};
+
 type User = {
   id: string;
   username: string;
-  password: string;
-  phone_number: Phone;
   emergency_number: Phone;
-};
+} & UserCredentials;
 
 export type CreateUser = Omit<User, 'id'>;
 
