@@ -1,7 +1,6 @@
 import { Component, ElementRef, NgZone, ViewChild } from '@angular/core';
 import { MapService } from '../../services/map/map.service';
 import { SearchService } from '../../services/search/search.service';
-import { Refuge } from '../../schemas/refuge/refuge';
 
 @Component({
   selector: 'app-home',

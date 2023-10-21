@@ -1,6 +1,6 @@
 const fs = require('fs');
 
-const angularEnvironmentFile = `export const environment = {
+const angularEnvironmentFile = `export const secretEnvironment = {
   mapsKey: "${process.env['MAPS_API_KEY']}",
 };
 `;
