@@ -1,6 +1,7 @@
 import { Component, ElementRef, NgZone, ViewChild } from '@angular/core';
 import { MapService } from '../../services/map/map.service';
 import { SearchService } from '../../services/search/search.service';
+import { Refuge } from '../../schemas/refuge/refuge';
 
 @Component({
   selector: 'app-home',
@@ -23,6 +24,13 @@ export class HomePage {
   }
 
   selectSearchResult(item: google.maps.places.AutocompletePrediction) {
-    alert(JSON.stringify(item));
+    this.searchService.clearSearch();
+    this.mapService.moveMapTo(item.place_id);
+  }
+
+  selectFirstSearchResult() {
+    if (this.searchService.autocompletePredictions.length > 0) {
+      this.selectSearchResult(this.searchService.autocompletePredictions[0]);
+    }
   }
 }

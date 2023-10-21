@@ -8,6 +8,7 @@
       (ionInput)="searchService.updateSearchPredictions()"
       placeholder="Search for a place"
       (ionClear)="searchService.clearSearch()"
+      (keyup.enter)="selectFirstSearchResult()"
     ></ion-searchbar>
     <ion-title></ion-title>
   </ion-toolbar>

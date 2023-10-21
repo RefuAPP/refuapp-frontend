@@ -3,6 +3,9 @@ import { AlertController } from '@ionic/angular';
 import { GoogleMap } from '@capacitor/google-maps';
 import { secretEnvironment } from '../../../environments/environment.secret';
 import { environment } from '../../../environments/environment';
+import { CameraConfig } from '@capacitor/google-maps/dist/typings/ts_old/definitions';
+import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 const mapStyles = [
   {
@@ -35,8 +38,49 @@ const mapConfig = {
 })
 export class MapService {
   private map?: GoogleMap;
+  private placesService = new google.maps.places.PlacesService(
+    document.createElement('div'),
+  );
 
-  constructor(private alertController: AlertController) {}
+  constructor(
+    private router: Router,
+    private http: HttpClient,
+    private alertController: AlertController,
+  ) {}
+
+  moveMapTo(placeId: string) {
+    if (!this.map) return;
+    this.fetchDetailsFromPlaceId(placeId, (lat, lng) => {
+      this.moveMapCameraTo({
+        coordinate: {
+          lat: lat,
+          lng: lng,
+        },
+        zoom: 15,
+        animate: true,
+      });
+    });
+  }
+
+  private moveMapCameraTo(cameraConfig: CameraConfig) {
+    this.map!.setCamera(cameraConfig).then();
+  }
+
+  private fetchDetailsFromPlaceId(
+    placeId: string,
+    onDetailsFetched: (lat: number, lng: number) => void,
+  ) {
+    this.placesService.getDetails(
+      {
+        placeId: placeId,
+      },
+      (place, status) => {
+        const lat = place?.geometry?.location?.lat();
+        const lng = place?.geometry?.location?.lng();
+        if (lat && lng) onDetailsFetched(lat, lng);
+      },
+    );
+  }
 
   createMap(mapRef?: ElementRef) {
     mapRef ? this.createGoogleMap(mapRef) : this.renderError();
@@ -60,9 +104,9 @@ export class MapService {
           'Hi ha hagut un error carregant el mapa, si us plau, torna-ho a intentar.',
         buttons: [
           {
-            text: 'Reintentar',
+            text: 'Ok',
             handler: () => {
-              window.location.reload();
+              this.alertController.dismiss().then();
             },
           },
         ],
