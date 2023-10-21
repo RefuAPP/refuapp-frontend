@@ -8,12 +8,46 @@ import {
   GetRefugeResponse,
 } from '../../schemas/refuge/get-refuge-schema';
 import { isValidId, Refuge, RefugePattern } from '../../schemas/refuge/refuge';
+import {
+  GetAllRefugesErrors,
+  GetAllRefugesResponse,
+} from '../../schemas/refuge/get-all-refuges-schema';
 
 @Injectable({
   providedIn: 'root',
 })
 export class RefugeService {
   constructor(private http: HttpClient) {}
+
+  getRefuges(): Observable<GetAllRefugesResponse> {
+    return this.getAllRefugesFromApi();
+  }
+
+  private getAllRefugesFromApi(): Observable<GetAllRefugesResponse> {
+    const endpoint = this.getAllRefugesEndpoint();
+    return this.http.get<Refuge[]>(endpoint).pipe(
+      map<Refuge[], GetAllRefugesResponse | Error>((refuges: Refuge[]) => {
+        if (isMatching(RefugePattern, refuges.values()))
+          return { status: 'correct', data: refuges };
+        return {
+          status: 'error',
+          error: GetAllRefugesErrors.SERVER_INCORRECT_DATA_FORMAT_ERROR,
+        };
+      }),
+      catchError<GetAllRefugesResponse | Error, ObservableInput<any>>(
+        (err: HttpErrorResponse) =>
+          of({
+            status: 'error',
+            error: GetAllRefugesErrors.from(err),
+          }),
+      ),
+      retry(3),
+    );
+  }
+
+  private getAllRefugesEndpoint(): string {
+    return `${environment.API}/refuges/`;
+  }
 
   getRefugeFrom(id: string): Observable<GetRefugeResponse> {
     if (!isValidId(id))

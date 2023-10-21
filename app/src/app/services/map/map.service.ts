@@ -1,11 +1,13 @@
 import { ElementRef, Injectable } from '@angular/core';
 import { AlertController } from '@ionic/angular';
 import { GoogleMap } from '@capacitor/google-maps';
+import { Marker } from '@capacitor/google-maps';
 import { secretEnvironment } from '../../../environments/environment.secret';
 import { environment } from '../../../environments/environment';
 import { CameraConfig } from '@capacitor/google-maps/dist/typings/ts_old/definitions';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { Refuge } from '../../schemas/refuge/refuge';
 
 const mapStyles = [
   {
@@ -38,6 +40,8 @@ const mapConfig = {
 })
 export class MapService {
   private map?: GoogleMap;
+  //  Dictionary of marker ids and their corresponding refuges
+  refuges: { [markerId: string]: Refuge } = {};
   private placesService = new google.maps.places.PlacesService(
     document.createElement('div'),
   );
@@ -47,6 +51,31 @@ export class MapService {
     private http: HttpClient,
     private alertController: AlertController,
   ) {}
+
+  addRefuges(refuges: Refuge[], onMarkerClick: (refuge: Refuge) => void) {
+    if (!this.map) return;
+    this.addMarkers(refuges);
+    this.map!.setOnMarkerClickListener((marker) => {
+      const refuge = this.refuges[marker.markerId];
+      if (refuge && onMarkerClick) onMarkerClick(refuge);
+    });
+  }
+
+  private addMarkers(refuges: Refuge[]) {
+    let markers = refuges.map((refuge) => this.getMarkerFromRefuge(refuge));
+    this.map!.addMarkers(markers).then((markerIds) => {
+      markerIds.forEach((markerId, index) => {
+        this.refuges[markerId] = refuges[index];
+      });
+    });
+  }
+
+  private getMarkerFromRefuge(refuge: Refuge): Marker {
+    const { latitude, longitude } = refuge.coordinates;
+    return {
+      coordinate: { lat: latitude, lng: longitude },
+    };
+  }
 
   moveMapTo(placeId: string) {
     if (!this.map) return;
