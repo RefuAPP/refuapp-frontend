@@ -1,4 +1,6 @@
 FROM node:20-alpine as build
+ARG MAPS_API_KEY
+ENV MAPS_API_KEY $MAPS_API_KEY
 WORKDIR /app
 COPY ./app/package*.json /app/
 RUN npm install -g ionic
