@@ -27,12 +27,11 @@ export class HomePage {
     private mapService: MapService,
     private refugeService: RefugeService,
     private alertController: AlertController,
-  ) {
-    this.getRefuges();
-  }
+  ) {}
 
   ngAfterViewInit() {
     this.mapService.createMap(this.mapRef);
+    this.getRefuges();
   }
 
   selectSearchResult(item: google.maps.places.AutocompletePrediction) {
