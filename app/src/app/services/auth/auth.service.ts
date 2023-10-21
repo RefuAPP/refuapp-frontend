@@ -1,6 +1,17 @@
 import { Injectable } from '@angular/core';
 import { StorageService } from '../storage/storage.service';
-import { catchError, map, Observable, of, retry } from 'rxjs';
+import {
+  BehaviorSubject,
+  catchError,
+  from,
+  last,
+  lastValueFrom,
+  map,
+  Observable,
+  of,
+  retry,
+  Subject,
+} from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { UserCredentials } from '../../schemas/user/user';
@@ -17,10 +28,17 @@ const authUri = `${environment.API}/login/`;
   providedIn: 'root',
 })
 export class AuthService {
+  private authenticatedChannel: BehaviorSubject<boolean> =
+    new BehaviorSubject<boolean>(false);
+
   constructor(
     private storageService: StorageService,
     private http: HttpClient,
-  ) {}
+  ) {
+    this.isAuthenticatedPromise().then((auth) => {
+      this.authenticatedChannel.next(auth);
+    });
+  }
 
   getToken(credentials: UserCredentials): Observable<AuthenticationResponse> {
     const data = this.getFormDataFrom(credentials);
@@ -29,13 +47,21 @@ export class AuthService {
 
   async authenticate(token: Token) {
     await this.storageService.set('token', token.access_token);
+    this.authenticatedChannel.next(true);
   }
 
   async deauthenticate(): Promise<void> {
-    if (await this.isAuthenticated()) await this.storageService.remove('token');
+    if (await this.isAuthenticatedPromise()) {
+      await this.storageService.remove('token');
+      this.authenticatedChannel.next(false);
+    }
   }
 
-  async isAuthenticated(): Promise<boolean> {
+  isAuthenticated(): Observable<boolean> {
+    return this.authenticatedChannel;
+  }
+
+  private async isAuthenticatedPromise(): Promise<boolean> {
     const token = await this.storageService.get('token');
     return token != null;
   }
