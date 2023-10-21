@@ -54,7 +54,6 @@
                   "with": "src/environments/environment.prod.ts"
                 }
               ],
-              "index": "src/index.prod.html",
               "outputHashing": "all"
             },
             "development": {
