@@ -83,11 +83,11 @@ export class LoginPage implements OnInit {
   private handleLoginResponse(response: AuthenticationResponse) {
     match(response)
       .with({ status: 'authenticated' }, (response) => {
-        this.finishLoadingAnimationAndExecute(async () => {
+        this.loadingController.dismiss().then(() => {
           const token: Token = response.data;
-          await this.authService.authenticate(token);
+          this.authService.authenticate(token);
           this.router.navigate(['/']).then();
-        }).then();
+        });
       })
       .with({ status: 'error' }, (response) => {
         this.handleError(response.error);

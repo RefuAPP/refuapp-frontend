@@ -1,17 +1,6 @@
 import { Injectable } from '@angular/core';
 import { StorageService } from '../storage/storage.service';
-import {
-  BehaviorSubject,
-  catchError,
-  from,
-  last,
-  lastValueFrom,
-  map,
-  Observable,
-  of,
-  retry,
-  Subject,
-} from 'rxjs';
+import { catchError, map, Observable, of, ReplaySubject, retry } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { UserCredentials } from '../../schemas/user/user';
@@ -28,8 +17,8 @@ const authUri = `${environment.API}/login/`;
   providedIn: 'root',
 })
 export class AuthService {
-  private authenticatedChannel: BehaviorSubject<boolean> =
-    new BehaviorSubject<boolean>(false);
+  private authenticatedChannel: ReplaySubject<boolean> =
+    new ReplaySubject<boolean>(1);
 
   constructor(
     private storageService: StorageService,
@@ -45,20 +34,24 @@ export class AuthService {
     return this.getTokenFromApi(data);
   }
 
-  async authenticate(token: Token) {
-    await this.storageService.set('token', token.access_token);
-    this.authenticatedChannel.next(true);
+  authenticate(token: Token) {
+    this.storageService
+      .set('token', token.access_token)
+      .then(() => this.authenticatedChannel.next(true));
   }
 
-  async deauthenticate(): Promise<void> {
-    if (await this.isAuthenticatedPromise()) {
-      await this.storageService.remove('token');
-      this.authenticatedChannel.next(false);
-    }
+  deauthenticate() {
+    this.isAuthenticatedPromise().then((auth) => {
+      if (auth) {
+        this.storageService
+          .remove('token')
+          .then(() => this.authenticatedChannel.next(false));
+      }
+    });
   }
 
   isAuthenticated(): Observable<boolean> {
-    return this.authenticatedChannel;
+    return this.authenticatedChannel.asObservable();
   }
 
   private async isAuthenticatedPromise(): Promise<boolean> {

@@ -48,6 +48,11 @@ const routes: Routes = [
         (m) => m.ProgrammingErrorPageModule,
       ),
   },
+  {
+    path: 'logout',
+    loadChildren: () =>
+      import('./pages/logout/logout.module').then((m) => m.LogoutPageModule),
+  },
 ];
 
 @NgModule({
