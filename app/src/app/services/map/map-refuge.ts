@@ -1,5 +1,7 @@
 import { Refuge } from '../../schemas/refuge/refuge';
-import { GoogleMap } from '@capacitor/google-maps';
+import { GoogleMap, Marker } from '@capacitor/google-maps';
+import { Coordinates } from '../search/search.service';
+import { LatLng } from '@capacitor/google-maps/dist/typings/ts_old/definitions';
 
 export type MarkerWithRefuge = {
   id: String;
@@ -38,11 +40,26 @@ export class MapRefuge {
         return { lat: coordinates.latitude, lng: coordinates.longitude };
       })
       .map((coordinates) => {
-        return { coordinate: coordinates };
+        return this.getMarkerForCoordinates(coordinates);
       })
-      .map((coordinates) => {
-        return map.addMarker(coordinates);
+      .map((marker) => {
+        return map.addMarker(marker);
       });
+  }
+
+  private getMarkerForCoordinates(coordinates: LatLng): Marker {
+    return {
+      coordinate: coordinates,
+      iconSize: {
+        width: 73,
+        height: 91,
+      },
+      iconAnchor: {
+        x: 25,
+        y: 50,
+      },
+      iconUrl: 'assets/icon/marker2.png',
+    };
   }
 
   getRefugeFor(id: string): Refuge | undefined {
