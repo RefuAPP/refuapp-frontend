@@ -31,9 +31,6 @@ export class HomePage {
 
   ngAfterViewInit() {
     this.mapService.createMap(this.mapRef);
-  }
-
-  onAddMarkersClick() {
     this.getRefuges();
   }
 
