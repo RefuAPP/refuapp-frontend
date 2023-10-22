@@ -24,22 +24,21 @@ export class HomePage implements AfterViewInit {
   @ViewChild('mapRef', { static: false }) mapRef?: ElementRef;
   search: string = '';
   searchResults: Observable<AutocompletePrediction[]>;
-  private searchService: SearchService;
 
   constructor(
     private router: Router,
     private mapService: MapService,
     private refugeService: RefugeService,
+    private searchService: SearchService,
     private alertController: AlertController,
   ) {
-    this.searchService = new SearchService();
     this.searchResults = this.searchService.getPredictions();
   }
 
   ngAfterViewInit() {
     if (this.mapRef)
       this.mapService.createMap(this.mapRef, MapConfiguration).then();
-    else console.log('TODO: SHOW ERROR');
+    else this.renderMapError();
   }
 
   onAddMarkersClick() {
@@ -48,8 +47,7 @@ export class HomePage implements AfterViewInit {
 
   selectSearchResult(item: AutocompletePrediction) {
     this.searchService.toCoordinates(item).then((coordinates) => {
-      // TODO: Handle null
-      this.mapService.move(coordinates!);
+      if (coordinates != null) this.mapService.move(coordinates);
       this.searchService.clear();
     });
   }
@@ -129,5 +127,23 @@ export class HomePage implements AfterViewInit {
         skipLocationChange: true,
       })
       .then();
+  }
+
+  private renderMapError() {
+    this.alertController
+      .create({
+        header: 'Error',
+        message:
+          'Hi ha hagut un error carregant el mapa, si us plau, torna-ho a intentar.',
+        buttons: [
+          {
+            text: 'Ok',
+            handler: () => {
+              this.alertController.dismiss().then();
+            },
+          },
+        ],
+      })
+      .then((alert) => alert.present());
   }
 }

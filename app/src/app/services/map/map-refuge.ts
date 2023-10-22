@@ -15,6 +15,9 @@ function zip(markersId: String[], refuges: Refuge[]): MarkerWithRefuge[] {
   });
 }
 
+/**
+ * Encapsulates the logic of mapping a refuge to a marker
+ */
 export class MapRefuge {
   private refugesWithMarkers: MarkerWithRefuge[] = [];
 

@@ -22,9 +22,11 @@ export class MapService {
     await this.mapRefuge.addMarkers(refuges, this.map);
     await this.map.setOnMarkerClickListener((marker) => {
       const refuge = this.mapRefuge.getRefugeFor(marker.markerId);
-      refuge
-        ? onRefugeClick(refuge)
-        : console.error(`MAP: Refuge for marker: ${marker.markerId} not found`);
+      if (refuge !== undefined) onRefugeClick(refuge);
+      else
+        console.error(
+          `Google Map: Refuge for marker: ${marker.markerId} not found`,
+        );
     });
   }
 
@@ -53,22 +55,4 @@ export class MapService {
   private moveMapCameraTo(cameraConfig: CameraConfig) {
     this.map!.setCamera(cameraConfig).then();
   }
-
-  // private renderError() {
-  //   this.alertController
-  //     .create({
-  //       header: 'Error',
-  //       message:
-  //         'Hi ha hagut un error carregant el mapa, si us plau, torna-ho a intentar.',
-  //       buttons: [
-  //         {
-  //           text: 'Ok',
-  //           handler: () => {
-  //             this.alertController.dismiss().then();
-  //           },
-  //         },
-  //       ],
-  //     })
-  //     .then((alert) => alert.present());
-  // }
 }
