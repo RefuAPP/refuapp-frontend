@@ -40,8 +40,10 @@
     "@ionic/storage-angular": "^4.0.0",
     "@maskito/angular": "^1.7.0",
     "@maskito/core": "^1.7.0",
+    "@types/scriptjs": "^0.0.4",
     "ionicons": "^7.0.0",
     "rxjs": "~7.8.0",
+    "scriptjs": "^2.5.9",
     "tslib": "^2.3.0",
     "zone.js": "~0.13.0"
   },

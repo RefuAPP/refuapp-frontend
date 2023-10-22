@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AuthService } from './services/auth/auth.service';
 import { map, Observable } from 'rxjs';
+import { get } from 'scriptjs';
+import { secretEnvironment } from '../environments/environment.secret';
 
 export interface Page {
   title: string;
@@ -24,7 +26,9 @@ const bottomPages: Page[] = [
   templateUrl: 'app.component.html',
   styleUrls: ['app.component.scss'],
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
+  googleMapsLoaded = false;
+
   bottomPages: Observable<Page[]> = this.authService.isAuthenticated().pipe(
     map((isAuthenticated) => {
       if (isAuthenticated) return bottomPages.slice(0, 2);
@@ -40,4 +44,13 @@ export class AppComponent {
   );
 
   constructor(private authService: AuthService) {}
+
+  ngOnInit(): void {
+    get(
+      `https://maps.googleapis.com/maps/api/js?key=${secretEnvironment.mapsKey}&libraries=places&language=ca`,
+      () => {
+        this.googleMapsLoaded = true;
+      },
+    );
+  }
 }
