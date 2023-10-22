@@ -1,7 +1,6 @@
 import { ElementRef, Injectable } from '@angular/core';
 import { AlertController } from '@ionic/angular';
-import { GoogleMap } from '@capacitor/google-maps';
-import { Marker } from '@capacitor/google-maps';
+import { GoogleMap, Marker } from '@capacitor/google-maps';
 import { secretEnvironment } from '../../../environments/environment.secret';
 import { environment } from '../../../environments/environment';
 import { CameraConfig } from '@capacitor/google-maps/dist/typings/ts_old/definitions';
@@ -39,9 +38,9 @@ const mapConfig = {
   providedIn: 'root',
 })
 export class MapService {
-  private map?: GoogleMap;
   //  Dictionary of marker ids and their corresponding refuges
   refuges: { [markerId: string]: Refuge } = {};
+  private map?: GoogleMap;
   private placesService = new google.maps.places.PlacesService(
     document.createElement('div'),
   );
@@ -61,6 +60,24 @@ export class MapService {
     });
   }
 
+  moveMapTo(placeId: string) {
+    if (!this.map) return;
+    this.fetchDetailsFromPlaceId(placeId, (lat, lng) => {
+      this.moveMapCameraTo({
+        coordinate: {
+          lat: lat,
+          lng: lng,
+        },
+        zoom: 15,
+        animate: true,
+      });
+    });
+  }
+
+  createMap(mapRef?: ElementRef) {
+    mapRef ? this.createGoogleMap(mapRef) : this.renderError();
+  }
+
   private addMarkers(refuges: Refuge[]) {
     let markers = refuges.map((refuge) => this.getMarkerFromRefuge(refuge));
     this.map!.addMarkers(markers).then((markerIds) => {
@@ -75,20 +92,6 @@ export class MapService {
     return {
       coordinate: { lat: latitude, lng: longitude },
     };
-  }
-
-  moveMapTo(placeId: string) {
-    if (!this.map) return;
-    this.fetchDetailsFromPlaceId(placeId, (lat, lng) => {
-      this.moveMapCameraTo({
-        coordinate: {
-          lat: lat,
-          lng: lng,
-        },
-        zoom: 15,
-        animate: true,
-      });
-    });
   }
 
   private moveMapCameraTo(cameraConfig: CameraConfig) {
@@ -109,10 +112,6 @@ export class MapService {
         if (lat && lng) onDetailsFetched(lat, lng);
       },
     );
-  }
-
-  createMap(mapRef?: ElementRef) {
-    mapRef ? this.createGoogleMap(mapRef) : this.renderError();
   }
 
   private async createGoogleMap(mapRef: ElementRef) {
