@@ -9,17 +9,16 @@
       </ion-button>
     </ion-buttons>
     <ion-searchbar
-      [(ngModel)]="searchService.autocompleteRequest.input"
-      (ionInput)="searchService.updateSearchPredictions()"
+      [(ngModel)]="search"
+      (ionInput)="onSearchChange()"
       placeholder="Search for a place"
-      (ionClear)="searchService.clearSearch()"
       (keyup.enter)="selectFirstSearchResult()"
     ></ion-searchbar>
     <ion-title></ion-title>
   </ion-toolbar>
   <ion-list>
     <ion-item
-      *ngFor="let item of searchService.autocompletePredictions"
+      *ngFor="let item of searchResults | async"
       tappable
       (click)="selectSearchResult(item)"
     >

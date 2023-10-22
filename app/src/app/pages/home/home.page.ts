@@ -1,4 +1,4 @@
-import { Component, ElementRef, NgZone, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
 import { MapService } from '../../services/map/map.service';
 import { SearchService } from '../../services/search/search.service';
 import { RefugeService } from '../../services/refuge/refuge.service';
@@ -10,45 +10,61 @@ import {
 } from '../../schemas/refuge/get-all-refuges-schema';
 import { match } from 'ts-pattern';
 import { Refuge } from '../../schemas/refuge/refuge';
+import { MapConfiguration } from './map-configuration';
+import { Observable, take } from 'rxjs';
+
+type AutocompletePrediction = google.maps.places.AutocompletePrediction;
 
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
 })
-export class HomePage {
+export class HomePage implements AfterViewInit {
   @ViewChild('mapRef', { static: false }) mapRef?: ElementRef;
-  searchService: SearchService = new SearchService();
-  refuges: Refuge[] = [];
+  search: string = '';
+  searchResults: Observable<AutocompletePrediction[]>;
+  private searchService: SearchService;
 
   constructor(
-    private zone: NgZone,
     private router: Router,
     private mapService: MapService,
     private refugeService: RefugeService,
     private alertController: AlertController,
-  ) {}
+  ) {
+    this.searchService = new SearchService();
+    this.searchResults = this.searchService.getPredictions();
+  }
 
   ngAfterViewInit() {
-    this.mapService.createMap(this.mapRef);
+    if (this.mapRef)
+      this.mapService.createMap(this.mapRef, MapConfiguration).then();
+    else console.log('TODO: SHOW ERROR');
   }
 
   onAddMarkersClick() {
-    this.getRefuges();
+    this.addRefugesToMap();
   }
 
-  selectSearchResult(item: google.maps.places.AutocompletePrediction) {
-    this.searchService.clearSearch();
-    this.mapService.moveMapTo(item.place_id);
+  selectSearchResult(item: AutocompletePrediction) {
+    this.searchService.toCoordinates(item).then((coordinates) => {
+      // TODO: Handle null
+      this.mapService.move(coordinates!);
+      this.searchService.clear();
+    });
   }
 
   selectFirstSearchResult() {
-    if (this.searchService.autocompletePredictions.length > 0) {
-      this.selectSearchResult(this.searchService.autocompletePredictions[0]);
-    }
+    this.searchResults.pipe(take(1)).subscribe((predictions) => {
+      if (predictions.length > 0) this.selectSearchResult(predictions[0]);
+    });
   }
 
-  getRefuges() {
+  onSearchChange() {
+    this.searchService.sendRequest(this.search);
+  }
+
+  addRefugesToMap() {
     return this.refugeService.getRefuges().subscribe({
       next: (response: any) => this.handleGetAllRefugesResponse(response),
       error: () => this.handleClientError().then(),
@@ -58,11 +74,12 @@ export class HomePage {
   private handleGetAllRefugesResponse(response: GetAllRefugesResponse) {
     match(response)
       .with({ status: 'correct' }, (response) => {
-        this.refuges = response.data;
-        this.mapService.addRefuges(this.refuges, (refuge: Refuge) => {
-          console.log(refuge.name);
-          this.router.navigate(['refuges', refuge.id]);
-        });
+        this.mapService
+          .addRefuges(response.data, (refuge: Refuge) => {
+            console.log(refuge.name);
+            this.router.navigate(['refuges', refuge.id]).then();
+          })
+          .then();
       })
       .with({ status: 'error' }, (response) => {
         this.handleError(response.error);
@@ -90,7 +107,7 @@ export class HomePage {
           text: "D'acord",
           handler: () => {
             this.alertController.dismiss().then();
-            this.getRefuges();
+            this.addRefugesToMap();
           },
         },
       ],
