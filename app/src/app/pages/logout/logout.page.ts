@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth/auth.service';
 import { Router } from '@angular/router';
-import { last, lastValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-logout',
@@ -13,17 +12,8 @@ export class LogoutPage implements OnInit {
     private authService: AuthService,
     private router: Router,
   ) {
-    const auth = authService.isAuthenticated();
-    const authSubscription = auth.subscribe((isAuthenticated) => {
-      if (isAuthenticated) {
-        this.authService.deauthenticate();
-        authSubscription.unsubscribe();
-        this.router.navigate(['/home']).then();
-      } else {
-        authSubscription.unsubscribe();
-        this.router.navigate(['/home']).then();
-      }
-    });
+    this.authService.deauthenticate();
+    this.router.navigate(['/home']).then();
   }
 
   ngOnInit() {}
