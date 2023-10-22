@@ -31,7 +31,9 @@ export class HomePage {
 
   ngAfterViewInit() {
     this.mapService.createMap(this.mapRef);
-    this.getRefuges();
+    setTimeout(() => {
+      this.getRefuges();
+    }, 1000);
   }
 
   selectSearchResult(item: google.maps.places.AutocompletePrediction) {
@@ -58,7 +60,7 @@ export class HomePage {
         this.refuges = response.data;
         this.mapService.addRefuges(this.refuges, (refuge: Refuge) => {
           console.log(refuge.name);
-          this.router.navigate(['refuges', refuge.id]);
+          alert(refuge.name);
         });
       })
       .with({ status: 'error' }, (response) => {
