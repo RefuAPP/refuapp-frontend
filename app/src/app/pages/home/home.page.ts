@@ -36,13 +36,13 @@ export class HomePage implements AfterViewInit {
   }
 
   ngAfterViewInit() {
-    if (this.mapRef)
-      this.mapService.createMap(this.mapRef, MapConfiguration).then();
-    else this.renderMapError();
-  }
-
-  onAddMarkersClick() {
-    this.addRefugesToMap();
+    if (this.mapRef) {
+      this.mapService
+        .createMap(this.mapRef, MapConfiguration)
+        .then(() => this.addRefugesToMap());
+    } else {
+      this.renderMapError();
+    }
   }
 
   selectSearchResult(item: AutocompletePrediction) {
@@ -75,7 +75,7 @@ export class HomePage implements AfterViewInit {
         this.mapService
           .addRefuges(response.data, (refuge: Refuge) => {
             console.log(refuge.name);
-            this.router.navigate(['refuges', refuge.id]).then();
+            alert(refuge.name);
           })
           .then();
       })

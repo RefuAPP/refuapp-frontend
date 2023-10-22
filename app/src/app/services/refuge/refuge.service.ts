@@ -23,6 +23,19 @@ export class RefugeService {
     return this.getAllRefugesFromApi();
   }
 
+  getRefugeFrom(id: string): Observable<GetRefugeResponse> {
+    if (!isValidId(id))
+      return of({
+        status: 'error',
+        error: GetRefugeFromIdErrors.CLIENT_SEND_DATA_ERROR,
+      });
+    return this.getRefugeFromApi(id);
+  }
+
+  getImageUrlFor(refuge: Refuge): string {
+    return `${environment.API}/static/images/refuges/${refuge.image}`;
+  }
+
   private getAllRefugesFromApi(): Observable<GetAllRefugesResponse> {
     const endpoint = this.getAllRefugesEndpoint();
     return this.http.get<Refuge[]>(endpoint).pipe(
@@ -49,15 +62,6 @@ export class RefugeService {
     return `${environment.API}/refuges/`;
   }
 
-  getRefugeFrom(id: string): Observable<GetRefugeResponse> {
-    if (!isValidId(id))
-      return of({
-        status: 'error',
-        error: GetRefugeFromIdErrors.CLIENT_SEND_DATA_ERROR,
-      });
-    return this.getRefugeFromApi(id);
-  }
-
   private getRefugeFromApi(id: string): Observable<GetRefugeResponse> {
     const endpoint = this.getRefugeFromIdEndpoint(id);
     return this.http.get<Refuge>(endpoint).pipe(
@@ -82,9 +86,5 @@ export class RefugeService {
 
   private getRefugeFromIdEndpoint(id: string): string {
     return `${environment.API}/refuges/${id}/`;
-  }
-
-  getImageUrlFor(refuge: Refuge): string {
-    return `${environment.API}/static/images/refuges/${refuge.image}`;
   }
 }
