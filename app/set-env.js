@@ -59,7 +59,7 @@ fs.writeFile('./android/local.properties', androidEnvironmentFile, err=> {
   }
 });
 
-fs.writeFile('./index.html', indexHtml, err=> {
+fs.writeFile('./src/index.html', indexHtml, err=> {
   if (err) {
     console.error("Error writing index.html file");
     console.error(err);
