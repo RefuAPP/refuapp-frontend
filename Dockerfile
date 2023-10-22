@@ -8,7 +8,6 @@ RUN npm install
 COPY ./app /app/
 ENV NODE_OPTIONS=--max_old_space_size=4096
 RUN npm run config
-COPY ./app/src/index.prod.html /app/src/index.html
 RUN ionic build --prod
 FROM nginx:alpine
 COPY ./nginx.conf /etc/nginx/nginx.conf
