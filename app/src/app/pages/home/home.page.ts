@@ -12,6 +12,7 @@ import { match } from 'ts-pattern';
 import { Refuge } from '../../schemas/refuge/refuge';
 import { MapConfiguration } from './map-configuration';
 import { Observable, take } from 'rxjs';
+import { LocalNotifications } from '@capacitor/local-notifications';
 
 type AutocompletePrediction = google.maps.places.AutocompletePrediction;
 
@@ -34,6 +35,28 @@ export class HomePage implements AfterViewInit {
   ) {
     this.searchResults = this.searchService.getPredictions();
   }
+
+  async ngOnInit() {}
+
+  async scheduleBasic() {
+    await LocalNotifications.requestPermissions().then((result) => {
+      console.log(result);
+      LocalNotifications.schedule({
+        notifications: [
+          {
+            title: "We're going to Switzerland",
+            body: 'Notification body',
+            id: 1,
+            extra: {
+              data: 'Pass data to your handler',
+            },
+          },
+        ],
+      });
+    });
+  }
+
+  async scheduleAdvanced() {}
 
   ngAfterViewInit() {
     if (this.mapRef) {

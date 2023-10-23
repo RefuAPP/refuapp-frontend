@@ -3,10 +3,13 @@
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-fab-button (click)="scheduleBasic()" size="small"> </ion-fab-button>
+    </ion-buttons>
     <ion-searchbar
       [(ngModel)]="search"
       (ionInput)="onSearchChange()"
-      placeholder="Search for a place"
+      placeholder="Search for a "
       (keyup.enter)="selectFirstSearchResult()"
     ></ion-searchbar>
     <ion-title></ion-title>
