@@ -1,6 +1,7 @@
 const fs = require('fs');
 
 const mapsKey = process.env['MAPS_API_KEY'];
+const backendUrl = process.env['BACKEND_URL'];
 
 const angularEnvironmentFile = `export const secretEnvironment = {
   mapsKey: "${mapsKey}",
@@ -10,6 +11,14 @@ const angularEnvironmentFile = `export const secretEnvironment = {
 const androidEnvironmentFile = `
 MAPS_API_KEY=${mapsKey}
 `;
+
+const productionEnvironmentFile = `
+export const environment = {
+  production: true,
+  API: "${backendUrl}",
+  MAPS_FORCE_CREATE: false,
+};
+`
 
 fs.writeFile('./src/environments/environment.secret.ts', angularEnvironmentFile, err => {
     if (err) {
@@ -28,3 +37,12 @@ fs.writeFile('./android/local.properties', androidEnvironmentFile, err => {
         console.log(`Android local.properties file generated`);
     }
 });
+
+fs.writeFile('./src/environments/environment.prod.ts', productionEnvironmentFile, err => {
+  if (err) {
+    console.error("Error writing environment.prod.ts file");
+    console.error(err);
+  } else {
+    console.log(`Generated production environment file`);
+  }
+})
