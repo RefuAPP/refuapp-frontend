@@ -50,6 +50,7 @@ export class MapService {
       forceCreate: environment.MAPS_FORCE_CREATE,
       config: config,
     });
+    this.map.enableClustering(2).then();
   }
 
   private moveMapCameraTo(cameraConfig: CameraConfig) {

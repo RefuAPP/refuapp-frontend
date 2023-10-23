@@ -55,8 +55,8 @@ export class MapRefuge {
         height: 91,
       },
       iconAnchor: {
-        x: 25,
-        y: 50,
+        x: 36,
+        y: 91,
       },
       iconUrl: 'assets/icon/marker2.png',
     };
