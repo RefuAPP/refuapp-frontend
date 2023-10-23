@@ -2,6 +2,7 @@ const fs = require('fs');
 
 const mapsKey = process.env['MAPS_API_KEY'];
 const backendUrl = process.env['BACKEND_URL'];
+const sensorsBackendUrl = process.env['SENSORS_BACKEND_URL'];
 
 const angularEnvironmentFile = `export const secretEnvironment = {
   mapsKey: "${mapsKey}",
@@ -17,6 +18,7 @@ export const environment = {
   production: true,
   API: "${backendUrl}",
   MAPS_FORCE_CREATE: false,
+  SENSORS_API: "${sensorsBackendUrl}",
 };
 `
 

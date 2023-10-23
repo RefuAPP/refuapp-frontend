@@ -1,4 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { AlertController } from '@ionic/angular';
 import { match } from 'ts-pattern';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -8,14 +14,16 @@ import {
   GetRefugeResponse,
 } from '../../schemas/refuge/get-refuge-schema';
 import { Refuge } from '../../schemas/refuge/refuge';
+import { createChart } from 'lightweight-charts';
 
 @Component({
   selector: 'app-refuge',
   templateUrl: './refuge.page.html',
   styleUrls: ['./refuge.page.scss'],
 })
-export class RefugePage implements OnInit {
+export class RefugePage implements OnInit, AfterViewInit {
   refuge?: Refuge;
+  @ViewChild('chart') chart?: ElementRef;
 
   constructor(
     private router: Router,
@@ -37,6 +45,30 @@ export class RefugePage implements OnInit {
   }
 
   ngOnInit() {}
+
+  ngAfterViewInit() {
+    if (this.chart === undefined) {
+      console.log('TODO: Handle programming error');
+    } else {
+      const chart = createChart(this.chart.nativeElement, {
+        width: 400,
+        height: 300,
+      });
+      const lineSeries = chart.addLineSeries();
+      lineSeries.setData([
+        { time: '2019-04-11', value: 80.01 },
+        { time: '2019-04-12', value: 96.63 },
+        { time: '2019-04-13', value: 76.64 },
+        { time: '2019-04-14', value: 81.89 },
+        { time: '2019-04-15', value: 74.43 },
+        { time: '2019-04-16', value: 80.01 },
+        { time: '2019-04-17', value: 96.63 },
+        { time: '2019-04-18', value: 76.64 },
+        { time: '2019-04-19', value: 81.89 },
+        { time: '2019-04-20', value: 74.43 },
+      ]);
+    }
+  }
 
   private async fetchRefuge(refugeId: string | null): Promise<void> {
     if (refugeId != null) this.fetchRefugeFromId(refugeId);
