@@ -1,5 +1,6 @@
 import {
   AfterViewInit,
+  ChangeDetectorRef,
   Component,
   ElementRef,
   OnInit,
@@ -23,16 +24,17 @@ import { createChart } from 'lightweight-charts';
 })
 export class RefugePage implements OnInit, AfterViewInit {
   refuge?: Refuge;
-  @ViewChild('chart') chart?: ElementRef;
+  @ViewChild('chart', { static: false }) chart?: ElementRef;
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private refugeService: RefugeService,
     private alertController: AlertController,
+    private changeDetectorRef: ChangeDetectorRef,
   ) {
     const refugeId = this.getRefugeIdFromUrl();
-    this.fetchRefuge(refugeId).then();
+    this.fetchRefuge(refugeId);
   }
 
   getImageUrl(): string | undefined {
@@ -46,33 +48,11 @@ export class RefugePage implements OnInit, AfterViewInit {
 
   ngOnInit() {}
 
-  ngAfterViewInit() {
-    if (this.chart === undefined) {
-      console.log('TODO: Handle programming error');
-    } else {
-      const chart = createChart(this.chart.nativeElement, {
-        width: 400,
-        height: 300,
-      });
-      const lineSeries = chart.addLineSeries();
-      lineSeries.setData([
-        { time: '2019-04-11', value: 80.01 },
-        { time: '2019-04-12', value: 96.63 },
-        { time: '2019-04-13', value: 76.64 },
-        { time: '2019-04-14', value: 81.89 },
-        { time: '2019-04-15', value: 74.43 },
-        { time: '2019-04-16', value: 80.01 },
-        { time: '2019-04-17', value: 96.63 },
-        { time: '2019-04-18', value: 76.64 },
-        { time: '2019-04-19', value: 81.89 },
-        { time: '2019-04-20', value: 74.43 },
-      ]);
-    }
-  }
+  ngAfterViewInit() {}
 
-  private async fetchRefuge(refugeId: string | null): Promise<void> {
+  private fetchRefuge(refugeId: string | null) {
     if (refugeId != null) this.fetchRefugeFromId(refugeId);
-    else this.router.navigate(['login']).then();
+    else this.router.navigate(['/']).then();
   }
 
   private getRefugeIdFromUrl(): string | null {
@@ -89,11 +69,42 @@ export class RefugePage implements OnInit, AfterViewInit {
 
   private handleGetRefugeResponse(response: GetRefugeResponse) {
     match(response)
-      .with({ status: 'correct' }, (response) => (this.refuge = response.data))
+      .with({ status: 'correct' }, (response) =>
+        this.onRefugeLoaded(response.data),
+      )
       .with({ status: 'error' }, (response) => {
         this.handleError(response.error);
       })
       .exhaustive();
+  }
+
+  private onRefugeLoaded(refuge: Refuge) {
+    this.refuge = refuge;
+    this.changeDetectorRef.detectChanges();
+    if (this.chart === undefined) {
+      console.log('chart undefined');
+      return;
+    }
+    const chartElement = this.chart.nativeElement;
+    const chart = createChart(chartElement, {
+      width: 3000,
+      height: 300,
+    });
+    // Create chart adjusting the size to the current div size
+    const lineSeries = chart.addLineSeries();
+    lineSeries.setData([
+      { time: '2019-04-11', value: 80.01 },
+      { time: '2019-04-12', value: 96.63 },
+      { time: '2019-04-13', value: 76.64 },
+      { time: '2019-04-14', value: 81.89 },
+      { time: '2019-04-15', value: 74.43 },
+      { time: '2019-04-16', value: 80.01 },
+      { time: '2019-04-17', value: 96.63 },
+      { time: '2019-04-18', value: 76.64 },
+      { time: '2019-04-19', value: 81.89 },
+      { time: '2019-04-20', value: 74.43 },
+    ]);
+    chart.timeScale().fitContent();
   }
 
   private handleError(error: GetRefugeFromIdErrors) {
