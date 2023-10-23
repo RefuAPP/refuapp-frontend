@@ -49,8 +49,12 @@ export class MapService {
       element: mapRef.nativeElement,
       forceCreate: environment.MAPS_FORCE_CREATE,
       config: config,
-    });
-    this.map.enableClustering(2).then();
+    }).then()
+  }
+
+  async enableClustering() {
+    if (!this.map) return;
+    await this.map.enableClustering(2);
   }
 
   private moveMapCameraTo(cameraConfig: CameraConfig) {

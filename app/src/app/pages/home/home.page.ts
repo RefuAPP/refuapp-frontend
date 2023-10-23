@@ -77,7 +77,9 @@ export class HomePage implements AfterViewInit {
             console.log(refuge.name);
             alert(refuge.name);
           })
-          .then();
+          .then(
+              () => this.mapService.enableClustering().then(),
+          );
       })
       .with({ status: 'error' }, (response) => {
         this.handleError(response.error);
