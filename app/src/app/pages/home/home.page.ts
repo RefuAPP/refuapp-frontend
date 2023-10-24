@@ -27,7 +27,8 @@ type AutocompletePrediction = google.maps.places.AutocompletePrediction;
 export class HomePage implements AfterViewInit {
   @ViewChild('mapRef', {static: false}) mapRef?: ElementRef;
   search: string = '';
-  private refugeId?: string = undefined;
+  private readonly refugeId?: string = undefined;
+  private isModalOpen: boolean = false;
   searchResults: Observable<AutocompletePrediction[]>;
 
   constructor(
@@ -70,6 +71,10 @@ export class HomePage implements AfterViewInit {
     } else {
       this.renderMapError();
     }
+  }
+
+  ngOnDestroy() {
+    this.mapService.onDestroy();
   }
 
   private showRefugeIfOnUrl() {
@@ -148,8 +153,8 @@ export class HomePage implements AfterViewInit {
 
   private handleGetAllRefugesResponse(response: GetAllRefugesResponse) {
     match(response)
-      .with({status: 'correct'}, async (response) => {
-        await this.addRefugesToMap(response.data)
+      .with({status: 'correct'}, (response) => {
+        this.addRefugesToMap(response.data)
       })
       .with({status: 'error'}, (response) => {
         this.handleGetAllRefugesError(response.error);
@@ -157,8 +162,8 @@ export class HomePage implements AfterViewInit {
       .exhaustive();
   }
 
-  private async addRefugesToMap(refuges: Refuge[]) {
-    await this.mapService.addRefuges(
+  private addRefugesToMap(refuges: Refuge[]) {
+    this.mapService.addRefuges(
       refuges,
       (refuge: Refuge) => this.onRefugeClick(refuge)
     ).then(() => this.mapService.enableClustering());
@@ -166,8 +171,11 @@ export class HomePage implements AfterViewInit {
 
   private onRefugeClick(refuge: Refuge) {
     this.location.go(`/home/${refuge.id}`);
-    const modal = this.modalController.create(getModalConfigurationFrom(refuge));
-    modal.then((modal) => modal.present());
+    this.modalController.create(
+      getModalConfigurationFrom(refuge)
+    ).then(async (modal) => {
+      await modal.present()
+    });
   }
 
   private handleGetAllRefugesError(error: GetAllRefugesErrors) {

@@ -17,6 +17,10 @@ export class MapService {
 
   constructor() {}
 
+  onDestroy() {
+    this.map?.destroy();
+  }
+
   async addRefuges(refuges: Refuge[], onRefugeClick: (refuge: Refuge) => void) {
     if (!this.map) return;
     await this.mapRefuge.addMarkers(refuges, this.map);
