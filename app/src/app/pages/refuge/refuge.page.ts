@@ -16,6 +16,7 @@ import {
 } from '../../schemas/refuge/get-refuge-schema';
 import {Refuge} from '../../schemas/refuge/refuge';
 import {createChart} from 'lightweight-charts';
+import {getChartConfiguration} from "./chart-configuration";
 
 @Component({
   selector: 'app-refuge',
@@ -48,7 +49,10 @@ export class RefugePage implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    if (this.refuge) return;
+    if (this.refuge) {
+      this.onRefugeLoaded(this.refuge);
+      return
+    }
     const refugeId = this.getRefugeIdFromUrl();
     this.fetchRefuge(refugeId);
   }
@@ -89,10 +93,12 @@ export class RefugePage implements OnInit, AfterViewInit {
       return;
     }
     const chartElement = this.chart.nativeElement;
-    const chart = createChart(chartElement, {
-      width: 3000,
-      height: 300,
-    });
+    const chart = createChart(
+      chartElement,
+      getChartConfiguration(
+        this.getTextColorFromCss(),
+        this.getBackgroundColorFromCss())
+    );
     // Create chart adjusting the size to the current div size
     const lineSeries = chart.addLineSeries();
     lineSeries.setData([
@@ -108,6 +114,20 @@ export class RefugePage implements OnInit, AfterViewInit {
       {time: '2019-04-20', value: 74.43},
     ]);
     chart.timeScale().fitContent();
+  }
+
+  private getBackgroundColorFromCss(): string {
+    const element = document.querySelector('ion-content');
+    if (element == null) return 'white';
+    const style = window.getComputedStyle(element);
+    return style.backgroundColor;
+  }
+
+  private getTextColorFromCss(): string {
+    const element = document.querySelector('ion-content');
+    if (element == null) return 'black';
+    const style = window.getComputedStyle(element);
+    return style.color;
   }
 
   private handleError(error: GetRefugeFromIdErrors) {

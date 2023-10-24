@@ -37,14 +37,21 @@
   position: relative;
   margin-top: -10px;
   border-radius: 10px;
-  height: 10%;
-  width: 100%;
-  background: var(--ion-background-color, #ffffff);
   z-index: 2; // display rounded border above header image
   // set divs inside respect to parent
-  display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
+  //display: flex;
+  //flex-direction: row;
+  //justify-content: space-evenly;
+  justify-content: center;
+}
+
+:host ::ng-deep .tv-lightweight-charts {
+  width: 90% !important;
+  margin-inline: 10%;
+}
+
+:host ::ng-deep .tv-lightweight-charts table{
+  width: 90% !important;
 }
 
 .about-info h3 {
