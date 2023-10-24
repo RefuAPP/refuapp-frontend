@@ -51,14 +51,14 @@ export class MapRefuge {
     return {
       coordinate: coordinates,
       iconSize: {
-        width: 73,
-        height: 91,
+        width: 40,
+        height: 58,
       },
       iconAnchor: {
-        x: 36,
-        y: 91,
+        x: 20,
+        y: 58,
       },
-      iconUrl: 'assets/icon/marker2.png',
+      iconUrl: 'assets/icon/marker.png',
     };
   }
 
