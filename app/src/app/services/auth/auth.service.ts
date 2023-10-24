@@ -10,8 +10,16 @@ import {
   fromResponse,
 } from '../../schemas/auth/authenticate';
 import { Token } from '../../schemas/auth/token';
+import jwtDecode from 'jwt-decode';
 
 const authUri = `${environment.API}/login/`;
+
+type JwtPayload = {
+  id: string;
+  scopes: string[];
+  exp: number;
+};
+const tokenStorageKey = 'token';
 
 @Injectable({
   providedIn: 'root',
@@ -36,7 +44,7 @@ export class AuthService {
 
   authenticate(token: Token) {
     this.storageService
-      .set('token', token.access_token)
+      .set(tokenStorageKey, token.access_token)
       .then(() => this.authenticatedChannel.next(true));
   }
 
@@ -44,7 +52,7 @@ export class AuthService {
     this.isAuthenticatedPromise().then((auth) => {
       if (auth) {
         this.storageService
-          .remove('token')
+          .remove(tokenStorageKey)
           .then(() => this.authenticatedChannel.next(false));
       }
     });
@@ -54,8 +62,15 @@ export class AuthService {
     return this.authenticatedChannel.asObservable();
   }
 
+  async getUserId(): Promise<string | null> {
+    const token = await this.storageService.get(tokenStorageKey);
+    if (token === null) return null;
+    const payload = jwtDecode<JwtPayload>(token);
+    return payload.id;
+  }
+
   private async isAuthenticatedPromise(): Promise<boolean> {
-    const token = await this.storageService.get('token');
+    const token = await this.storageService.get(tokenStorageKey);
     return token != null;
   }
 
