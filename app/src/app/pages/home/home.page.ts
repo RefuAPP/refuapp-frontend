@@ -13,9 +13,7 @@ import {match} from 'ts-pattern';
 import {Refuge} from '../../schemas/refuge/refuge';
 import {MapConfiguration} from './map-configuration';
 import {Observable, take} from 'rxjs';
-import {RefugePage} from "../refuge/refuge.page";
-import {LoginPage} from "../login/login.page";
-import {ModalConfiguration} from "./modal-configuration";
+import {getModalConfigurationFrom} from "./modal-configuration";
 
 type AutocompletePrediction = google.maps.places.AutocompletePrediction;
 
@@ -95,7 +93,7 @@ export class HomePage implements AfterViewInit {
 
   private onRefugeClick(refuge: Refuge) {
     this.location.go(`/home/${refuge.id}`);
-    const modal = this.modalController.create(ModalConfiguration);
+    const modal = this.modalController.create(getModalConfigurationFrom(refuge));
     modal.then((modal) => modal.present());
   }
 

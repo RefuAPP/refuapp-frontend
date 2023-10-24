@@ -2,20 +2,20 @@ import {
   AfterViewInit,
   ChangeDetectorRef,
   Component,
-  ElementRef,
+  ElementRef, Input,
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { AlertController } from '@ionic/angular';
-import { match } from 'ts-pattern';
-import { ActivatedRoute, Router } from '@angular/router';
-import { RefugeService } from '../../services/refuge/refuge.service';
+import {AlertController} from '@ionic/angular';
+import {match} from 'ts-pattern';
+import {ActivatedRoute, Router} from '@angular/router';
+import {RefugeService} from '../../services/refuge/refuge.service';
 import {
   GetRefugeFromIdErrors,
   GetRefugeResponse,
 } from '../../schemas/refuge/get-refuge-schema';
-import { Refuge } from '../../schemas/refuge/refuge';
-import { createChart } from 'lightweight-charts';
+import {Refuge} from '../../schemas/refuge/refuge';
+import {createChart} from 'lightweight-charts';
 
 @Component({
   selector: 'app-refuge',
@@ -23,8 +23,8 @@ import { createChart } from 'lightweight-charts';
   styleUrls: ['./refuge.page.scss'],
 })
 export class RefugePage implements OnInit, AfterViewInit {
-  refuge?: Refuge;
-  @ViewChild('chart', { static: false }) chart?: ElementRef;
+  @Input() refuge?: Refuge;
+  @ViewChild('chart', {static: false}) chart?: ElementRef;
 
   constructor(
     private router: Router,
@@ -33,8 +33,10 @@ export class RefugePage implements OnInit, AfterViewInit {
     private alertController: AlertController,
     private changeDetectorRef: ChangeDetectorRef,
   ) {
-    const refugeId = this.getRefugeIdFromUrl();
-    this.fetchRefuge(refugeId);
+    if (this.refuge == undefined) {
+      const refugeId = this.getRefugeIdFromUrl();
+      this.fetchRefuge(refugeId);
+    }
   }
 
   getImageUrl(): string | undefined {
@@ -46,9 +48,11 @@ export class RefugePage implements OnInit, AfterViewInit {
     console.log('click');
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 
-  ngAfterViewInit() {}
+  ngAfterViewInit() {
+  }
 
   private fetchRefuge(refugeId: string | null) {
     if (refugeId != null) this.fetchRefugeFromId(refugeId);
@@ -69,10 +73,10 @@ export class RefugePage implements OnInit, AfterViewInit {
 
   private handleGetRefugeResponse(response: GetRefugeResponse) {
     match(response)
-      .with({ status: 'correct' }, (response) =>
+      .with({status: 'correct'}, (response) =>
         this.onRefugeLoaded(response.data),
       )
-      .with({ status: 'error' }, (response) => {
+      .with({status: 'error'}, (response) => {
         this.handleError(response.error);
       })
       .exhaustive();
@@ -93,16 +97,16 @@ export class RefugePage implements OnInit, AfterViewInit {
     // Create chart adjusting the size to the current div size
     const lineSeries = chart.addLineSeries();
     lineSeries.setData([
-      { time: '2019-04-11', value: 80.01 },
-      { time: '2019-04-12', value: 96.63 },
-      { time: '2019-04-13', value: 76.64 },
-      { time: '2019-04-14', value: 81.89 },
-      { time: '2019-04-15', value: 74.43 },
-      { time: '2019-04-16', value: 80.01 },
-      { time: '2019-04-17', value: 96.63 },
-      { time: '2019-04-18', value: 76.64 },
-      { time: '2019-04-19', value: 81.89 },
-      { time: '2019-04-20', value: 74.43 },
+      {time: '2019-04-11', value: 80.01},
+      {time: '2019-04-12', value: 96.63},
+      {time: '2019-04-13', value: 76.64},
+      {time: '2019-04-14', value: 81.89},
+      {time: '2019-04-15', value: 74.43},
+      {time: '2019-04-16', value: 80.01},
+      {time: '2019-04-17', value: 96.63},
+      {time: '2019-04-18', value: 76.64},
+      {time: '2019-04-19', value: 81.89},
+      {time: '2019-04-20', value: 74.43},
     ]);
     chart.timeScale().fitContent();
   }
