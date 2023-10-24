@@ -33,10 +33,6 @@ export class RefugePage implements OnInit, AfterViewInit {
     private alertController: AlertController,
     private changeDetectorRef: ChangeDetectorRef,
   ) {
-    if (this.refuge == undefined) {
-      const refugeId = this.getRefugeIdFromUrl();
-      this.fetchRefuge(refugeId);
-    }
   }
 
   getImageUrl(): string | undefined {
@@ -52,6 +48,9 @@ export class RefugePage implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
+    if (this.refuge) return;
+    const refugeId = this.getRefugeIdFromUrl();
+    this.fetchRefuge(refugeId);
   }
 
   private fetchRefuge(refugeId: string | null) {
