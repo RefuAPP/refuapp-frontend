@@ -1,17 +1,21 @@
-import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
-import { MapService } from '../../services/map/map.service';
-import { SearchService } from '../../services/search/search.service';
-import { RefugeService } from '../../services/refuge/refuge.service';
-import { AlertController } from '@ionic/angular';
-import { Router } from '@angular/router';
+import {AfterViewInit, Component, ElementRef, ViewChild} from '@angular/core';
+import {Location} from '@angular/common';
+import {MapService} from '../../services/map/map.service';
+import {SearchService} from '../../services/search/search.service';
+import {RefugeService} from '../../services/refuge/refuge.service';
+import {AlertController, ModalController} from '@ionic/angular';
+import {Router} from '@angular/router';
 import {
   GetAllRefugesErrors,
   GetAllRefugesResponse,
 } from '../../schemas/refuge/get-all-refuges-schema';
-import { match } from 'ts-pattern';
-import { Refuge } from '../../schemas/refuge/refuge';
-import { MapConfiguration } from './map-configuration';
-import { Observable, take } from 'rxjs';
+import {match} from 'ts-pattern';
+import {Refuge} from '../../schemas/refuge/refuge';
+import {MapConfiguration} from './map-configuration';
+import {Observable, take} from 'rxjs';
+import {RefugePage} from "../refuge/refuge.page";
+import {LoginPage} from "../login/login.page";
+import {ModalConfiguration} from "./modal-configuration";
 
 type AutocompletePrediction = google.maps.places.AutocompletePrediction;
 
@@ -21,7 +25,7 @@ type AutocompletePrediction = google.maps.places.AutocompletePrediction;
   styleUrls: ['home.page.scss'],
 })
 export class HomePage implements AfterViewInit {
-  @ViewChild('mapRef', { static: false }) mapRef?: ElementRef;
+  @ViewChild('mapRef', {static: false}) mapRef?: ElementRef;
   search: string = '';
   searchResults: Observable<AutocompletePrediction[]>;
 
@@ -30,7 +34,9 @@ export class HomePage implements AfterViewInit {
     private mapService: MapService,
     private refugeService: RefugeService,
     private searchService: SearchService,
+    private location: Location,
     private alertController: AlertController,
+    private modalController: ModalController,
   ) {
     this.searchResults = this.searchService.getPredictions();
   }
@@ -39,7 +45,7 @@ export class HomePage implements AfterViewInit {
     if (this.mapRef) {
       this.mapService
         .createMap(this.mapRef, MapConfiguration)
-        .then(() => this.addRefugesToMap());
+        .then(() => this.fetchRefuges());
     } else {
       this.renderMapError();
     }
@@ -62,7 +68,7 @@ export class HomePage implements AfterViewInit {
     this.searchService.sendRequest(this.search);
   }
 
-  addRefugesToMap() {
+  fetchRefuges() {
     return this.refugeService.getRefuges().subscribe({
       next: (response: any) => this.handleGetAllRefugesResponse(response),
       error: () => this.handleClientError().then(),
@@ -71,20 +77,26 @@ export class HomePage implements AfterViewInit {
 
   private handleGetAllRefugesResponse(response: GetAllRefugesResponse) {
     match(response)
-      .with({ status: 'correct' }, (response) => {
-        this.mapService
-          .addRefuges(response.data, (refuge: Refuge) => {
-            console.log(refuge.name);
-            alert(refuge.name);
-          })
-          .then(
-              () => this.mapService.enableClustering().then(),
-          );
+      .with({status: 'correct'}, async (response) => {
+        await this.addRefugesToMap(response.data)
       })
-      .with({ status: 'error' }, (response) => {
+      .with({status: 'error'}, (response) => {
         this.handleError(response.error);
       })
       .exhaustive();
+  }
+
+  private async addRefugesToMap(refuges: Refuge[]) {
+    await this.mapService.addRefuges(
+      refuges,
+      (refuge: Refuge) => this.onRefugeClick(refuge)
+    ).then(() => this.mapService.enableClustering());
+  }
+
+  private onRefugeClick(refuge: Refuge) {
+    this.location.go(`/home/${refuge.id}`);
+    const modal = this.modalController.create(ModalConfiguration);
+    modal.then((modal) => modal.present());
   }
 
   private handleError(error: GetAllRefugesErrors) {
@@ -107,7 +119,7 @@ export class HomePage implements AfterViewInit {
           text: "D'acord",
           handler: () => {
             this.alertController.dismiss().then();
-            this.addRefugesToMap();
+            this.fetchRefuges();
           },
         },
       ],
