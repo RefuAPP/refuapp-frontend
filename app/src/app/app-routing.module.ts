@@ -13,7 +13,7 @@ const routes: Routes = [
       import('./pages/home/home.module').then((m) => m.HomePageModule),
   },
   {
-    path: 'reserevations',
+    path: 'reservations',
     loadChildren: () =>
       import('./pages/reservations/reservations.module').then((m) => m.ReservationsPageModule),
   },
