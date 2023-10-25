@@ -1,17 +1,18 @@
 import { Injectable } from '@angular/core';
 import {
   catchError,
+  distinctUntilChanged,
   forkJoin,
   map,
   mergeAll,
+  mergeMap,
   Observable,
   of,
   retry,
+  share,
+  timer,
 } from 'rxjs';
 import {
-  getNightsFrom,
-  isBigger,
-  Night,
   Reservation,
   Reservations,
 } from '../../schemas/reservations/reservation';
@@ -26,10 +27,16 @@ import {
 import {
   CorrectGetReservations,
   ErrorGetReservationsPattern,
-  fromError as fromRefugeAndUserError,
-  fromResponse as fromRefugeAndUserResponse,
+  fromError as fromReservationsError,
+  fromResponse as fromReservationsResponse,
   GetReservations,
 } from '../../schemas/reservations/get-reservations-refuge-user';
+import {
+  getNightsFrom,
+  isFurtherAway,
+  Night,
+  nightFromDate,
+} from '../../schemas/night/night';
 
 @Injectable({
   providedIn: 'root',
@@ -37,15 +44,19 @@ import {
 export class ReservationsService {
   constructor(private http: HttpClient) {}
 
-  getReservationsForUser(userId: string): Observable<Reservations> {
-    return of([]);
+  getReservationsForUserFromToday(userId: string): Observable<Reservations> {
+    const reservationsWithErrors = this.getReservationsForUser(userId);
+    const reservations = this.toReservations(reservationsWithErrors);
+    const night = nightFromDate(new Date());
+    return reservations.pipe(
+      map((reservations) =>
+        reservations.filter((reservation) =>
+          isFurtherAway(reservation.night, night),
+        ),
+      ),
+    );
   }
 
-  /**
-   * Get reservations for a refuge and a number of days from now
-   * @param refugeId
-   * @param daysFromNow
-   */
   getReservationsForRefuge(
     refugeId: string,
     daysFromNow: number,
@@ -56,44 +67,17 @@ export class ReservationsService {
     const today = new Date();
     const nights = getNightsFrom(today, daysFromNow);
     const reservations = nights.map((night) => {
-      return this.getReservationsForRefugeAndNight(refugeId, night).pipe(
+      return this.toReservations(
+        this.getReservationsForRefugeAndNight(refugeId, night),
+      ).pipe(
         map((reservations) => {
-          if (isMatching(ErrorGetReservationsPattern, reservations))
-            return {
-              night: night,
-              reservations: [],
-            };
-          return {
-            night: night,
-            reservations: (reservations as CorrectGetReservations).reservations,
-          };
+          return { night: night, reservations: reservations };
         }),
       );
     });
     return forkJoin(reservations).pipe(mergeAll());
   }
 
-  /**
-   * Get reservations for a refuge and one night
-   * @param refugeId
-   * @param night
-   */
-  getReservationsForRefugeAndNight(
-    refugeId: string,
-    night: Night,
-  ): Observable<GetReservations> {
-    const uri = this.getUriForRefugeAndNight(refugeId, night);
-    return this.http.get<Reservations>(uri).pipe(
-      map((reservations) => fromRefugeAndUserResponse(reservations)),
-      catchError((err: HttpErrorResponse) => of(fromRefugeAndUserError(err))),
-      retry(3),
-    );
-  }
-
-  /**
-   * Get a reservation from its id
-   * @param reservationId
-   */
   getReservation(reservationId: string): Observable<GetReservation> {
     const reservationUri = this.getUriForReservation(reservationId);
     return this.http.get<Reservation>(reservationUri).pipe(
@@ -103,14 +87,39 @@ export class ReservationsService {
     );
   }
 
-  /**
-   * Get reservations from a given night for a refuge and a user.
-   * In case of error, returns an empty array (no reservations)
-   * @param refugeId
-   * @param userId
-   * @param night
-   */
-  getReservationsForRefugeAndUserFrom(
+  getReservationsForRefugeAndUserFromToday(
+    refugeId: string,
+    userId: string,
+  ): Observable<Reservations> {
+    return timer(0, 3_000)
+      .pipe(
+        mergeMap(() => {
+          const today = new Date();
+          const night = nightFromDate(today);
+          return this._getReservationsForRefugeAndUserFrom(
+            refugeId,
+            userId,
+            night,
+          );
+        }),
+        distinctUntilChanged((a, b) => JSON.stringify(a) === JSON.stringify(b)),
+      )
+      .pipe(share());
+  }
+
+  private getReservationsForRefugeAndNight(
+    refugeId: string,
+    night: Night,
+  ): Observable<GetReservations> {
+    const uri = this.getUriForRefugeAndNight(refugeId, night);
+    return this.http.get<Reservations>(uri).pipe(
+      map((reservations) => fromReservationsResponse(reservations)),
+      catchError((err: HttpErrorResponse) => of(fromReservationsError(err))),
+      retry(3),
+    );
+  }
+
+  private _getReservationsForRefugeAndUserFrom(
     refugeId: string,
     userId: string,
     night: Night,
@@ -122,7 +131,7 @@ export class ReservationsService {
       }),
       map((reservations) =>
         reservations.filter((reservation) =>
-          isBigger(reservation.night, night),
+          isFurtherAway(reservation.night, night),
         ),
       ),
     );
@@ -134,9 +143,29 @@ export class ReservationsService {
   ): Observable<GetReservations> {
     const uri = this.getUriForUserAndRefuge(refugeId, userId);
     return this.http.get<Reservations>(uri).pipe(
-      map((reservations) => fromRefugeAndUserResponse(reservations)),
-      catchError((err: HttpErrorResponse) => of(fromRefugeAndUserError(err))),
+      map((reservations) => fromReservationsResponse(reservations)),
+      catchError((err: HttpErrorResponse) => of(fromReservationsError(err))),
       retry(3),
+    );
+  }
+
+  private getReservationsForUser(userId: string): Observable<GetReservations> {
+    const uri = this.getUriForUser(userId);
+    return this.http.get<Reservations>(uri).pipe(
+      map((reservations) => fromReservationsResponse(reservations)),
+      catchError((err: HttpErrorResponse) => of(fromReservationsError(err))),
+      retry(3),
+    );
+  }
+
+  private toReservations(
+    getReservations: Observable<GetReservations>,
+  ): Observable<Reservations> {
+    return getReservations.pipe(
+      map((reservations) => {
+        if (isMatching(ErrorGetReservationsPattern, reservations)) return [];
+        return (reservations as CorrectGetReservations).reservations;
+      }),
     );
   }
 
