@@ -13,6 +13,11 @@ const routes: Routes = [
       import('./pages/home/home.module').then((m) => m.HomePageModule),
   },
   {
+    path: 'reserevations',
+    loadChildren: () =>
+      import('./pages/reservations/reservations.module').then((m) => m.ReservationsPageModule),
+  },
+  {
     path: 'login',
     loadChildren: () =>
       import('./pages/login/login.module').then((m) => m.LoginPageModule),
@@ -52,6 +57,10 @@ const routes: Routes = [
     path: 'logout',
     loadChildren: () =>
       import('./pages/logout/logout.module').then((m) => m.LogoutPageModule),
+  },
+  {
+    path: 'reservations',
+    loadChildren: () => import('./pages/reservations/reservations.module').then(m => m.ReservationsPageModule)
   },
 ];
 
