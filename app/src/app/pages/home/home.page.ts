@@ -31,7 +31,6 @@ export class HomePage implements AfterViewInit {
   @ViewChild('mapRef', { static: false }) mapRef?: ElementRef;
   search: string = '';
   private readonly refugeId?: string = undefined;
-  private isModalOpen: boolean = false;
   searchResults: Observable<AutocompletePrediction[]>;
 
   constructor(

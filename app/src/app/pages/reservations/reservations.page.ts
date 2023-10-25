@@ -1,18 +1,16 @@
 import {Component, OnInit} from '@angular/core';
-import {Platform} from "@ionic/angular";
+import {BehaviorSubject, Observable, Subject} from "rxjs";
 
 export type Group = {
   name: string;
   day: string;
-  sessions: Session[];
+  reservations: Reservation[];
 }
 
-export type Session = {
-  tracks: string[];
+export type Reservation = {
   timeStart: string;
   timeEnd: string;
   location: string;
-
   name: string;
   id: string;
 }
@@ -23,29 +21,34 @@ export type Session = {
   styleUrls: ['./reservations.page.scss'],
 })
 export class ReservationsPage implements OnInit {
+  searchTerm: string = '';
+  reservations: Observable<Reservation[]> = new Observable<Reservation[]>();
+  private search: Subject<String>
 
   groups: Group[] = [];
-
-  isMobile() {
-    return this.platform.is('mobile');
+  onReservationClick(session: Reservation) {
+    console.log('Reservation clicked', session);
   }
 
-  isDesktop() {
-    return this.platform.is('desktop');
+  onRemoveReservation(session: Reservation) {
+    console.log('Remove reservation', session);
+  }
+
+  searchByName() {
+    this.search.next(this.searchTerm);
   }
 
   constructor(
-    private platform: Platform,
   ) {
+    this.search = new BehaviorSubject<String>("");
     this.groups = [
       {
         name: 'Group 1',
         day: 'Day 1',
-        sessions: [
+        reservations: [
           {
             id: '1',
             name: 'Session 1',
-            tracks: ['Track 1', 'Track 2'],
             timeStart: '10:00',
             timeEnd: '11:00',
             location: 'Location 1'
@@ -53,7 +56,6 @@ export class ReservationsPage implements OnInit {
           {
             id: '2',
             name: 'Session 2',
-            tracks: ['Track 1', 'Track 2'],
             timeStart: '11:00',
             timeEnd: '12:00',
             location: 'Location 2'
@@ -63,11 +65,10 @@ export class ReservationsPage implements OnInit {
       {
         name: 'Group 2',
         day: 'Day 2',
-        sessions: [
+        reservations: [
           {
             id: '3',
             name: 'Session 3',
-            tracks: ['Track 1', 'Track 2'],
             timeStart: '10:00',
             timeEnd: '11:00',
             location: 'Location 3'
@@ -75,7 +76,6 @@ export class ReservationsPage implements OnInit {
           {
             id: '4',
             name: 'Session 4',
-            tracks: ['Track 1', 'Track 2'],
             timeStart: '11:00',
             timeEnd: '12:00',
             location: 'Location 4'
