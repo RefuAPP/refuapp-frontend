@@ -16,10 +16,11 @@ const topPages: Page[] = [
 ];
 
 const bottomPages: Page[] = [
-  { title: 'Account', url: '/user', icon: 'person' },
+  { title: 'Account', url: '/profile', icon: 'person' },
   { title: 'Logout', url: '/logout', icon: 'log-out' },
   { title: 'Login', url: '/login', icon: 'log-in' },
 ];
+
 
 @Component({
   selector: 'app-root',
