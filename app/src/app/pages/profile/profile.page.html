@@ -1,0 +1,26 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+
+    <ion-title>Profile</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card>
+    <ion-card-header>
+      <div class="header-container">
+        <div class="user-info">
+          <ion-card-title><h1>User Name: {{ user.username }}</h1></ion-card-title>
+          <div class="details">
+            <h1>Phone Number: {{ user.phone_number }}</h1>
+            <h1>Emergency Number: {{ user.emergency_number }}</h1>
+          </div>
+        </div>
+        <img class="profile-image" src="assets/img/perfil.jpg" alt="Profile photo">
+      </div>
+    </ion-card-header>
+  </ion-card>
+</ion-content>
