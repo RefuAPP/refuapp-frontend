@@ -59,13 +59,8 @@ const routes: Routes = [
       import('./pages/logout/logout.module').then((m) => m.LogoutPageModule),
   },
   {
-<<<<<<< HEAD
-    path: 'reservations',
-    loadChildren: () => import('./pages/reservations/reservations.module').then(m => m.ReservationsPageModule)
-=======
     path: 'profile',
     loadChildren: () => import('./pages/profile/profile.module').then( m => m.ProfilePageModule)
->>>>>>> 170d51f (Adding profile in app-routing-module)
   },
 ];
 
