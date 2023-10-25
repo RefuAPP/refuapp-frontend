@@ -1,21 +1,24 @@
-import {AfterViewInit, Component, ElementRef, ViewChild} from '@angular/core';
-import {Location} from '@angular/common';
-import {MapService} from '../../services/map/map.service';
-import {SearchService} from '../../services/search/search.service';
-import {RefugeService} from '../../services/refuge/refuge.service';
-import {AlertController, ModalController} from '@ionic/angular';
-import {ActivatedRoute, Router} from '@angular/router';
+import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
+import { Location } from '@angular/common';
+import { MapService } from '../../services/map/map.service';
+import { SearchService } from '../../services/search/search.service';
+import { RefugeService } from '../../services/refuge/refuge.service';
+import { AlertController, ModalController } from '@ionic/angular';
+import { ActivatedRoute, Router } from '@angular/router';
 import {
   GetAllRefugesErrors,
   GetAllRefugesResponse,
 } from '../../schemas/refuge/get-all-refuges-schema';
-import {match} from 'ts-pattern';
-import {Refuge} from '../../schemas/refuge/refuge';
-import {MapConfiguration} from './map-configuration';
-import {Observable, take} from 'rxjs';
-import {getModalConfigurationFrom} from "./modal-configuration";
-import {GetRefugeFromIdErrors, GetRefugeResponse} from "../../schemas/refuge/get-refuge-schema";
-import {createChart} from "lightweight-charts";
+import { match } from 'ts-pattern';
+import { Refuge } from '../../schemas/refuge/refuge';
+import { MapConfiguration } from './map-configuration';
+import { Observable, take } from 'rxjs';
+import { getModalConfigurationFrom } from './modal-configuration';
+import {
+  GetRefugeFromIdErrors,
+  GetRefugeResponse,
+} from '../../schemas/refuge/get-refuge-schema';
+import { createChart } from 'lightweight-charts';
 
 type AutocompletePrediction = google.maps.places.AutocompletePrediction;
 
@@ -25,7 +28,7 @@ type AutocompletePrediction = google.maps.places.AutocompletePrediction;
   styleUrls: ['home.page.scss'],
 })
 export class HomePage implements AfterViewInit {
-  @ViewChild('mapRef', {static: false}) mapRef?: ElementRef;
+  @ViewChild('mapRef', { static: false }) mapRef?: ElementRef;
   search: string = '';
   private readonly refugeId?: string = undefined;
   private isModalOpen: boolean = false;
@@ -83,16 +86,17 @@ export class HomePage implements AfterViewInit {
 
   private showRefuge(refugeId: string) {
     this.refugeService.getRefugeFrom(refugeId).subscribe({
-      next: (response: GetRefugeResponse) => this.handleGetRefugeResponse(response),
+      next: (response: GetRefugeResponse) =>
+        this.handleGetRefugeResponse(response),
       error: () => this.handleClientError().then(),
     });
   }
   private handleGetRefugeResponse(response: GetRefugeResponse) {
     match(response)
-      .with({status: 'correct'}, (response) =>
+      .with({ status: 'correct' }, (response) =>
         this.onRefugeLoaded(response.data),
       )
-      .with({status: 'error'}, (response) => {
+      .with({ status: 'error' }, (response) => {
         this.handleGetRefugeError(response.error);
       })
       .exhaustive();
@@ -153,29 +157,28 @@ export class HomePage implements AfterViewInit {
 
   private handleGetAllRefugesResponse(response: GetAllRefugesResponse) {
     match(response)
-      .with({status: 'correct'}, (response) => {
-        this.addRefugesToMap(response.data)
+      .with({ status: 'correct' }, (response) => {
+        this.addRefugesToMap(response.data);
       })
-      .with({status: 'error'}, (response) => {
+      .with({ status: 'error' }, (response) => {
         this.handleGetAllRefugesError(response.error);
       })
       .exhaustive();
   }
 
   private addRefugesToMap(refuges: Refuge[]) {
-    this.mapService.addRefuges(
-      refuges,
-      (refuge: Refuge) => this.onRefugeClick(refuge)
-    ).then(() => this.mapService.enableClustering());
+    this.mapService
+      .addRefuges(refuges, (refuge: Refuge) => this.onRefugeClick(refuge))
+      .then(() => this.mapService.enableClustering());
   }
 
   private onRefugeClick(refuge: Refuge) {
     this.location.go(`/home/${refuge.id}`);
-    this.modalController.create(
-      getModalConfigurationFrom(refuge)
-    ).then(async (modal) => {
-      await modal.present()
-    });
+    this.modalController
+      .create(getModalConfigurationFrom(refuge))
+      .then(async (modal) => {
+        await modal.present();
+      });
   }
 
   private handleGetAllRefugesError(error: GetAllRefugesErrors) {

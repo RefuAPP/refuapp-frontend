@@ -1,47 +1,34 @@
 import { Injectable } from '@angular/core';
 import {
   catchError,
-  combineLatest,
-  concatAll,
-  filter,
-  flatMap,
   forkJoin,
-  from,
   map,
-  merge,
   mergeAll,
-  mergeMap,
   Observable,
   of,
-  pipe,
   retry,
-  toArray,
 } from 'rxjs';
 import {
+  getNightsFrom,
+  isBigger,
+  Night,
   Reservation,
-  ReservationId,
-  ReservationPattern,
   Reservations,
-  ReservationsPattern,
 } from '../../schemas/reservations/reservation';
 import { environment } from '../../../environments/environment';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { isMatching } from 'ts-pattern';
 import {
-  CorrectGetReservation,
   fromError as fromReservationError,
   fromResponse as fromReservationResponse,
   GetReservation,
-  GetReservationError,
 } from '../../schemas/reservations/get-reservation';
 import {
-  CorrectRefugeAndUserReservation,
-  CorrectRefugeAndUserReservationPattern,
+  CorrectGetReservations,
+  ErrorGetReservationsPattern,
   fromError as fromRefugeAndUserError,
   fromResponse as fromRefugeAndUserResponse,
   GetReservations,
-  GetReservationsRefugeAndUser,
-  ReservationRefugeAndUserError,
 } from '../../schemas/reservations/get-reservations-refuge-user';
 
 @Injectable({
@@ -50,37 +37,64 @@ import {
 export class ReservationsService {
   constructor(private http: HttpClient) {}
 
-  _getReservationsForUser(userId: string): Observable<Reservations> {
+  getReservationsForUser(userId: string): Observable<Reservations> {
     return of([]);
   }
 
-  _getReservationsForRefuge(refugeId: string): Observable<Reservations> {
-    return of([]);
-  }
-
-  getReservationsForRefugeAndUser(
+  /**
+   * Get reservations for a refuge and a number of days from now
+   * @param refugeId
+   * @param daysFromNow
+   */
+  getReservationsForRefuge(
     refugeId: string,
-    userId: string,
-  ): Observable<Reservation[]> {
-    const reservationsId: Observable<string[]> =
-      this._getReservationsForRefugeAndUser(refugeId, userId).pipe(
-        filter((reservations) => reservations.status === 'ok'),
-        map(
-          (reservations) =>
-            (reservations as CorrectRefugeAndUserReservation).reservations,
-        ),
+    daysFromNow: number,
+  ): Observable<{
+    night: Night;
+    reservations: Reservations;
+  }> {
+    const today = new Date();
+    const nights = getNightsFrom(today, daysFromNow);
+    const reservations = nights.map((night) => {
+      return this.getReservationsForRefugeAndNight(refugeId, night).pipe(
+        map((reservations) => {
+          if (isMatching(ErrorGetReservationsPattern, reservations))
+            return {
+              night: night,
+              reservations: [],
+            };
+          return {
+            night: night,
+            reservations: (reservations as CorrectGetReservations).reservations,
+          };
+        }),
       );
-    return reservationsId.pipe(
-      mergeMap((ids) =>
-        from(ids).pipe(mergeMap((id) => this.getReservation(id))),
-      ),
-      filter((reservation) => reservation.status === 'ok'),
-      map((reservation) => (reservation as CorrectGetReservation).reservation),
-      toArray(),
+    });
+    return forkJoin(reservations).pipe(mergeAll());
+  }
+
+  /**
+   * Get reservations for a refuge and one night
+   * @param refugeId
+   * @param night
+   */
+  getReservationsForRefugeAndNight(
+    refugeId: string,
+    night: Night,
+  ): Observable<GetReservations> {
+    const uri = this.getUriForRefugeAndNight(refugeId, night);
+    return this.http.get<Reservations>(uri).pipe(
+      map((reservations) => fromRefugeAndUserResponse(reservations)),
+      catchError((err: HttpErrorResponse) => of(fromRefugeAndUserError(err))),
+      retry(3),
     );
   }
 
-  getReservation(reservationId: ReservationId): Observable<GetReservation> {
+  /**
+   * Get a reservation from its id
+   * @param reservationId
+   */
+  getReservation(reservationId: string): Observable<GetReservation> {
     const reservationUri = this.getUriForReservation(reservationId);
     return this.http.get<Reservation>(reservationUri).pipe(
       map((reservation) => fromReservationResponse(reservation)),
@@ -89,10 +103,35 @@ export class ReservationsService {
     );
   }
 
-  private _getReservationsForRefugeAndUser(
+  /**
+   * Get reservations from a given night for a refuge and a user.
+   * In case of error, returns an empty array (no reservations)
+   * @param refugeId
+   * @param userId
+   * @param night
+   */
+  getReservationsForRefugeAndUserFrom(
     refugeId: string,
     userId: string,
-  ): Observable<GetReservationsRefugeAndUser> {
+    night: Night,
+  ): Observable<Reservations> {
+    return this.getReservationsForRefugeAndUser(refugeId, userId).pipe(
+      map((response) => {
+        if (isMatching(ErrorGetReservationsPattern, response)) return [];
+        return (response as CorrectGetReservations).reservations;
+      }),
+      map((reservations) =>
+        reservations.filter((reservation) =>
+          isBigger(reservation.night, night),
+        ),
+      ),
+    );
+  }
+
+  private getReservationsForRefugeAndUser(
+    refugeId: string,
+    userId: string,
+  ): Observable<GetReservations> {
     const uri = this.getUriForUserAndRefuge(refugeId, userId);
     return this.http.get<Reservations>(uri).pipe(
       map((reservations) => fromRefugeAndUserResponse(reservations)),
@@ -109,7 +148,11 @@ export class ReservationsService {
     return `${environment.API}/reservations/user/${userId}`;
   }
 
-  private getUriForReservation(reservationId: ReservationId) {
+  private getUriForRefugeAndNight(refugeId: string, night: Night) {
+    return `${environment.API}/reservations/refuge/${refugeId}/year/${night.year}/month/${night.month}/day/${night.day}}`;
+  }
+
+  private getUriForReservation(reservationId: string) {
     return `${environment.API}/reservations/${reservationId}`;
   }
 }

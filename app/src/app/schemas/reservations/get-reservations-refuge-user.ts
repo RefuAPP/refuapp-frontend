@@ -1,11 +1,9 @@
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { isMatching, match } from 'ts-pattern';
-import { Reservation, Reservations, ReservationsPattern } from './reservation';
+import { Reservations, ReservationsPattern } from './reservation';
 import { P } from 'ts-pattern/dist';
-import { Observable } from 'rxjs';
-import { GetReservation } from './get-reservation';
 
-export enum ReservationRefugeAndUserError {
+export enum ReservationsError {
   USER_OR_REFUGE_NOT_FOUND = 'USER_OR_REFUGE_NOT_FOUND',
   NOT_ALLOWED_RESERVATION_FOR_USER = 'NOT_ALLOWED_RESERVATION_FOR_USER',
   SERVER_ERROR = 'SERVER_DATA_ERROR',
@@ -13,69 +11,54 @@ export enum ReservationRefugeAndUserError {
   UNKNOWN_ERROR = 'UNKNOWN_ERROR',
 }
 
-export namespace ReservationRefugeAndUserError {
-  export function from(
-    error: HttpErrorResponse,
-  ): ReservationRefugeAndUserError | never {
+export namespace ReservationsError {
+  export function from(error: HttpErrorResponse): ReservationsError | never {
     return match(error.status)
       .with(0, () => {
         throw new Error('You are offline or the server is down.');
       })
       .with(
         HttpStatusCode.Unauthorized,
-        () => ReservationRefugeAndUserError.NOT_AUTHENTICATED,
+        () => ReservationsError.NOT_AUTHENTICATED,
       )
       .with(
         HttpStatusCode.NotFound,
-        () => ReservationRefugeAndUserError.USER_OR_REFUGE_NOT_FOUND,
+        () => ReservationsError.USER_OR_REFUGE_NOT_FOUND,
       )
       .with(
         HttpStatusCode.Forbidden,
-        () => ReservationRefugeAndUserError.NOT_ALLOWED_RESERVATION_FOR_USER,
+        () => ReservationsError.NOT_ALLOWED_RESERVATION_FOR_USER,
       )
-      .otherwise(() => ReservationRefugeAndUserError.UNKNOWN_ERROR);
+      .otherwise(() => ReservationsError.UNKNOWN_ERROR);
   }
 }
 
-export type CorrectRefugeAndUserReservation = {
+export type CorrectGetReservations = {
   status: 'ok';
   reservations: Reservations;
 };
 
-export const CorrectRefugeAndUserReservationPattern: P.Pattern<CorrectRefugeAndUserReservation> =
+export const CorrectGetReservationsPattern: P.Pattern<CorrectGetReservations> =
   {};
 
-export type ErrorRefugeAndUserReservation = {
+export type ErrorGetReservations = {
   status: 'error';
-  error: ReservationRefugeAndUserError;
+  error: ReservationsError;
 };
 
-export type GetReservationsRefugeAndUser =
-  | CorrectRefugeAndUserReservation
-  | ErrorRefugeAndUserReservation;
+export const ErrorGetReservationsPattern: P.Pattern<ErrorGetReservations> = {};
 
-export function fromResponse(response: any): GetReservationsRefugeAndUser {
+export type GetReservations = CorrectGetReservations | ErrorGetReservations;
+
+export function fromResponse(response: any): GetReservations {
   if (isMatching(ReservationsPattern, response))
     return { status: 'ok', reservations: response };
-  return { status: 'error', error: ReservationRefugeAndUserError.SERVER_ERROR };
+  return { status: 'error', error: ReservationsError.SERVER_ERROR };
 }
 
-export function fromError(
-  error: HttpErrorResponse,
-): GetReservationsRefugeAndUser | never {
+export function fromError(error: HttpErrorResponse): GetReservations | never {
   return {
     status: 'error',
-    error: ReservationRefugeAndUserError.from(error),
+    error: ReservationsError.from(error),
   };
 }
-
-// What the observable returns
-
-export type CorrectGetReservationsRefugeAndUser = {
-  status: 'ok';
-  reservation: Observable<GetReservation>[];
-};
-
-export type GetReservations =
-  | CorrectGetReservationsRefugeAndUser
-  | ReservationRefugeAndUserError;

@@ -53,7 +53,7 @@ export class MapService {
       element: mapRef.nativeElement,
       forceCreate: environment.MAPS_FORCE_CREATE,
       config: config,
-    }).then()
+    }).then();
   }
 
   async enableClustering() {
