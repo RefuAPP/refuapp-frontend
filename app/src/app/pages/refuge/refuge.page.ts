@@ -18,6 +18,10 @@ import {
 import { Refuge } from '../../schemas/refuge/refuge';
 import { createChart } from 'lightweight-charts';
 import { getChartConfiguration } from './chart-configuration';
+import {
+  OccupationService,
+  WeeklyOccupation,
+} from '../../services/occupation/occupation.service';
 
 @Component({
   selector: 'app-refuge',
@@ -32,6 +36,7 @@ export class RefugePage implements OnInit, AfterViewInit {
     private router: Router,
     private route: ActivatedRoute,
     private refugeService: RefugeService,
+    private occupationService: OccupationService,
     private alertController: AlertController,
     private changeDetectorRef: ChangeDetectorRef,
   ) {}
@@ -99,20 +104,40 @@ export class RefugePage implements OnInit, AfterViewInit {
         this.getBackgroundColorFromCss(),
       ),
     );
+    chart.applyOptions({
+      timeScale: {
+        fixLeftEdge: true,
+        rightBarStaysOnScroll: true,
+      },
+    });
     // Create chart adjusting the size to the current div size
     const lineSeries = chart.addLineSeries();
-    lineSeries.setData([
-      { time: '2019-04-11', value: 80.01 },
-      { time: '2019-04-12', value: 96.63 },
-      { time: '2019-04-13', value: 76.64 },
-      { time: '2019-04-14', value: 81.89 },
-      { time: '2019-04-15', value: 74.43 },
-      { time: '2019-04-16', value: 80.01 },
-      { time: '2019-04-17', value: 96.63 },
-      { time: '2019-04-18', value: 76.64 },
-      { time: '2019-04-19', value: 81.89 },
-      { time: '2019-04-20', value: 74.43 },
-    ]);
+    this.occupationService.getWeeklyOccupationMock(refuge.id).subscribe({
+      next: (response) => {
+        // TODO check for errors here
+        const occupation = response as WeeklyOccupation;
+        const data = occupation.weekly_data
+          .map((dayData) => {
+            return {
+              time: `${dayData.date.getFullYear()}-${
+                dayData.date.getMonth() + 1
+              }-${dayData.date.getDate()}`,
+              value: dayData.count,
+            };
+          })
+          .reverse();
+        lineSeries.setData(data);
+        this.occupationService.getTodayOccupationMock().subscribe({
+          next: (response) => {
+            const time = new Date();
+            const timeString = `${time.getFullYear()}-${
+              time.getMonth() + 1
+            }-${time.getDate()}`;
+            lineSeries.update({ time: timeString, value: response });
+          },
+        });
+      },
+    });
     chart.timeScale().fitContent();
   }
 

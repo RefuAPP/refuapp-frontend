@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { catchError, map, Observable, of, repeat } from 'rxjs';
+import { catchError, map, Observable, of, repeat, share, timer } from 'rxjs';
 import { P } from 'ts-pattern/dist';
-import { isMatching, Pattern } from 'ts-pattern';
-import { UserCreated } from '../../schemas/user/user';
-import { fromError } from '../../schemas/user/create/create-user-response';
+import { isMatching } from 'ts-pattern';
 import { environment } from '../../../environments/environment';
+import * as moment from 'moment';
 
 export type DayData = {
   date: Date;
@@ -37,6 +36,36 @@ export const WeeklyOccupationResponsePattern: P.Pattern<WeeklyOccupationAPIRespo
 })
 export class OccupationService {
   constructor(private http: HttpClient) {}
+
+  getWeeklyOccupationMock(
+    refugeId: string,
+  ): Observable<WeeklyOccupationResponse> {
+    const dates = [];
+    for (let i = 1; i <= 7; i++) {
+      const d = new Date();
+      d.setDate(d.getDate() - i);
+      dates.push(d);
+    }
+    const weeklyOccupations = dates.map((date) => {
+      return {
+        date: date,
+        count: Math.floor(Math.random() * 10),
+      };
+    });
+    return of({
+      weekly_data: weeklyOccupations,
+    });
+  }
+
+  getTodayOccupationMock(): Observable<number> {
+    return timer(0, 3_000)
+      .pipe(
+        map((counter) => {
+          return Math.floor(Math.random() * 10);
+        }),
+      )
+      .pipe(share());
+  }
 
   getWeeklyOccupation(refugeId: string): Observable<WeeklyOccupationResponse> {
     const url = this.getSensorsUrlFor(refugeId);
