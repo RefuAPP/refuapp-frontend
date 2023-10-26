@@ -49,9 +49,55 @@
         </ion-label>
       </ion-item>
     </ion-list>
-  </div>
-  <h3 class="ion-padding-top ion-padding-start">Historial:</h3>
-  <div class="graphic-info">
-    <div #chart></div>
+    <ion-grid *ngIf="!platformIsMobile()">
+      <ion-row>
+        <ion-col>
+          <ion-row>
+            <h3 class="ion-padding-top ion-padding-start">Fes una reserva</h3>
+          </ion-row>
+          <ion-row style="padding-left: 5%">
+            <ion-col>
+              <ion-datetime presentation="date"></ion-datetime>
+            </ion-col>
+            <ion-col>
+              <ion-button (click)="onBookClick()" style="margin-left: 5%">
+                Reservar
+                <ion-icon style="margin-left: 5%" name="folder"></ion-icon>
+              </ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-col>
+        <ion-col size="8">
+          <h3 style="margin-bottom: 1%" class="ion-padding-top ion-padding-start">Historial d'ocupació</h3>
+          <div class="graphic-info">
+            <div #chart></div>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    <ion-grid *ngIf="platformIsMobile()">
+      <ion-col>
+        <ion-row>
+          <h3 class="ion-padding-top ion-padding-start">Fes una reserva</h3>
+        </ion-row>
+        <ion-row style="padding-left: 5%">
+          <ion-col>
+            <ion-datetime presentation="date"></ion-datetime>
+          </ion-col>
+          <ion-col>
+            <ion-button (click)="onBookClick()" style="margin-left: 5%">
+              Reservar
+              <ion-icon style="margin-left: 5%" name="folder"></ion-icon>
+            </ion-button>
+          </ion-col>
+        </ion-row>
+        <ion-col>
+          <h3 class="ion-padding-top ion-padding-start">Historial d'ocupació</h3>
+          <div class="graphic-info">
+            <div #chart></div>
+          </div>
+        </ion-col>
+      </ion-col>
+    </ion-grid>
   </div>
 </ion-content>

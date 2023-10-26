@@ -7,7 +7,7 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { AlertController } from '@ionic/angular';
+import {AlertController, Platform} from '@ionic/angular';
 import { match } from 'ts-pattern';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RefugeService } from '../../services/refuge/refuge.service';
@@ -39,11 +39,22 @@ export class RefugePage implements OnInit, AfterViewInit {
     private occupationService: OccupationService,
     private alertController: AlertController,
     private changeDetectorRef: ChangeDetectorRef,
+    private platform: Platform,
   ) {}
 
   getImageUrl(): string | undefined {
     if (this.refuge == undefined) return undefined;
     return this.refugeService.getImageUrlFor(this.refuge);
+  }
+
+  platformIsMobile(): boolean {
+    return this.platform.is('mobile');
+  }
+
+
+  onBookClick() {
+    alert('En desenvolupament: les reserves estaràn disponibles en breu.');
+    console.log(this.platform.platforms())
   }
 
   clickButton() {
