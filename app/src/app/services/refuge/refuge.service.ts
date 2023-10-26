@@ -1,9 +1,18 @@
 import { Injectable } from '@angular/core';
-import { catchError, map, Observable, ObservableInput, of, retry } from 'rxjs';
+import {
+  catchError,
+  filter,
+  map,
+  Observable,
+  ObservableInput,
+  of,
+  retry,
+} from 'rxjs';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { isMatching } from 'ts-pattern';
 import {
+  CorrectGetRefugeResponse,
   GetRefugeFromIdErrors,
   GetRefugeResponse,
 } from '../../schemas/refuge/get-refuge-schema';
@@ -30,6 +39,16 @@ export class RefugeService {
         error: GetRefugeFromIdErrors.CLIENT_SEND_DATA_ERROR,
       });
     return this.getRefugeFromApi(id);
+  }
+
+  getRefugeIgnoringErrorsFrom(id: string): Observable<Refuge> {
+    return this.getRefugeFrom(id).pipe(
+      filter(
+        (response): response is CorrectGetRefugeResponse =>
+          response.status === 'correct',
+      ),
+      map((response) => response.data),
+    );
   }
 
   getImageUrlFor(refuge: Refuge): string {

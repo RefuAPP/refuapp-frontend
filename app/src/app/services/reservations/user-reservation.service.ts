@@ -3,7 +3,9 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import {
   catchError,
   distinctUntilChanged,
+  forkJoin,
   map,
+  mergeAll,
   mergeMap,
   Observable,
   of,
@@ -21,14 +23,37 @@ import {
   GetReservations,
 } from '../../schemas/reservations/get-reservations-refuge-user';
 import { toReservations } from './common';
+import { Refuge } from '../../schemas/refuge/refuge';
+import { RefugeService } from '../refuge/refuge.service';
+import {
+  getRelationFromSortedReservations,
+  orderByRefugeId,
+  RefugeReservationsRelations,
+  ReservationsSortedByRefugeId,
+} from './refuge-reservation-relation';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserReservationService {
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private refugeService: RefugeService,
+  ) {}
 
-  getReservationsForUserContinuous(
+  getReservationsSortedByRefuge(
+    userId: string,
+  ): Observable<RefugeReservationsRelations> {
+    return this.getReservationsForUserContinuous(userId).pipe(
+      map((reservations: Reservations) => orderByRefugeId(reservations)),
+      map((sorted: ReservationsSortedByRefugeId) =>
+        getRelationFromSortedReservations(this.refugeService, sorted),
+      ),
+      mergeAll(),
+    );
+  }
+
+  private getReservationsForUserContinuous(
     userId: string,
     millisecondsToUpdate: number = 3000,
   ): Observable<Reservations> {
@@ -44,18 +69,11 @@ export class UserReservationService {
     const reservationsWithErrors = this.getReservationsWithErrorsFor(userId);
     const reservations = toReservations(reservationsWithErrors);
     const night = nightFromDate(new Date());
-    console.log('NIGHT', JSON.stringify(night));
     return reservations.pipe(
-      tap((reservations) =>
-        console.log(`RESPONSE 1 ${JSON.stringify(reservations)}`),
-      ),
       map((reservations) =>
         reservations.filter((reservation) =>
           isFurtherAway(reservation.night, night),
         ),
-      ),
-      tap((reservations) =>
-        console.log('RESPONSE 2', JSON.stringify(reservations)),
       ),
     );
   }
@@ -66,9 +84,6 @@ export class UserReservationService {
     const uri = this.getUriForUser(userId);
     return this.http.get<Reservations>(uri).pipe(
       map((reservations) => fromReservationsResponse(reservations)),
-      tap((reservations) =>
-        console.log('HTTP GET', JSON.stringify(reservations)),
-      ),
       catchError((err: HttpErrorResponse) => of(fromReservationsError(err))),
       retry(3),
     );
