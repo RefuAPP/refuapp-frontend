@@ -13,8 +13,8 @@ import { ReservationsPage } from './reservations.page';
     CommonModule,
     FormsModule,
     IonicModule,
-    ReservationsPageRoutingModule
+    ReservationsPageRoutingModule,
   ],
-  declarations: [ReservationsPage]
+  declarations: [ReservationsPage],
 })
 export class ReservationsPageModule {}

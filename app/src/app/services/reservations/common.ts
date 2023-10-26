@@ -1,19 +1,24 @@
 import { map, Observable } from 'rxjs';
 import {
   CorrectGetReservations,
+  CorrectGetReservationsPattern,
   ErrorGetReservationsPattern,
   GetReservations,
 } from '../../schemas/reservations/get-reservations-refuge-user';
 import { Reservations } from '../../schemas/reservations/reservation';
-import { isMatching } from 'ts-pattern/dist';
+import { isMatching } from 'ts-pattern';
 
 export function toReservations(
   getReservations: Observable<GetReservations>,
 ): Observable<Reservations> {
   return getReservations.pipe(
     map((reservations) => {
-      if (isMatching(ErrorGetReservationsPattern, reservations)) return [];
-      return (reservations as CorrectGetReservations).reservations;
+      // TODO: Search about pattern matching with arrays!
+      if (isMatching(CorrectGetReservationsPattern, reservations)) {
+        return (reservations as CorrectGetReservations).reservations;
+      }
+      console.log('ERRORRRRR');
+      return [];
     }),
   );
 }

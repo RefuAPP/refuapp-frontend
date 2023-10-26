@@ -3,33 +3,30 @@
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <ion-searchbar
-      [(ngModel)]="searchTerm"
-      (ionInput)="searchByName()"
-      [debounce]="250"
-      placeholder="Search for a reservation"
-    ></ion-searchbar>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-list #scheduleList style="padding-block: 0px;">
-    <ion-item-group *ngFor="let group of groups">
+<ion-content [fullscreen]="true" *ngIf="reservations !== undefined">
+  <ion-list style="padding-block: 0px">
+    <ion-item-group *ngFor="let res of reservations | async">
       <ion-item-divider sticky>
-        <ion-label>
-          {{group.day}}
-        </ion-label>
+        <ion-label> {{ res.refuge.name }} </ion-label>
       </ion-item-divider>
-      <ion-item href="javascript:;" *ngFor="let reservation of group.reservations">
-        <ion-label routerLink="/home/{{reservation.id}}">
-          <h3>{{reservation.name}}</h3>
+      <ion-item *ngFor="let reservation of res.reservations">
+        <ion-label routerLink="/home/{{reservation.refuge_id}}">
+          <h3>Dia {{reservation.night.day}}</h3>
           <p>
-            {{reservation.timeStart}} &mdash; {{reservation.timeEnd}}: {{reservation.location}}
+            La nit del dia: {{reservation.night.day}}, del mes:
+            {{reservation.night.month}}, de l'any: {{reservation.night.year}}
           </p>
         </ion-label>
-        <ion-button slot="end" color="danger" (click)="onRemoveReservation(reservation)">
+        <ion-button
+          slot="end"
+          color="danger"
+          (click)="onRemoveReservation(reservation)"
+        >
           <ion-icon slot="end" name="trash"></ion-icon>
-          Remove
+          Elimina
         </ion-button>
       </ion-item>
     </ion-item-group>

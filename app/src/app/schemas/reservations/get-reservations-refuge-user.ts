@@ -1,6 +1,6 @@
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { isMatching, match } from 'ts-pattern';
-import { Reservations, ReservationsPattern } from './reservation';
+import { ReservationPattern, Reservations } from './reservation';
 import { P } from 'ts-pattern/dist';
 
 export enum ReservationsError {
@@ -51,7 +51,10 @@ export const ErrorGetReservationsPattern: P.Pattern<ErrorGetReservations> = {};
 export type GetReservations = CorrectGetReservations | ErrorGetReservations;
 
 export function fromResponse(response: any): GetReservations {
-  if (isMatching(ReservationsPattern, response))
+  if (
+    Array.isArray(response) &&
+    response.every((reservation) => isMatching(ReservationPattern, reservation))
+  )
     return { status: 'ok', reservations: response };
   return { status: 'error', error: ReservationsError.SERVER_ERROR };
 }

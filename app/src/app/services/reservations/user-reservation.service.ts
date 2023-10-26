@@ -9,6 +9,7 @@ import {
   of,
   retry,
   share,
+  tap,
   timer,
 } from 'rxjs';
 import { Reservations } from '../../schemas/reservations/reservation';
@@ -43,11 +44,18 @@ export class UserReservationService {
     const reservationsWithErrors = this.getReservationsWithErrorsFor(userId);
     const reservations = toReservations(reservationsWithErrors);
     const night = nightFromDate(new Date());
+    console.log('NIGHT', JSON.stringify(night));
     return reservations.pipe(
+      tap((reservations) =>
+        console.log(`RESPONSE 1 ${JSON.stringify(reservations)}`),
+      ),
       map((reservations) =>
         reservations.filter((reservation) =>
           isFurtherAway(reservation.night, night),
         ),
+      ),
+      tap((reservations) =>
+        console.log('RESPONSE 2', JSON.stringify(reservations)),
       ),
     );
   }
@@ -58,6 +66,9 @@ export class UserReservationService {
     const uri = this.getUriForUser(userId);
     return this.http.get<Reservations>(uri).pipe(
       map((reservations) => fromReservationsResponse(reservations)),
+      tap((reservations) =>
+        console.log('HTTP GET', JSON.stringify(reservations)),
+      ),
       catchError((err: HttpErrorResponse) => of(fromReservationsError(err))),
       retry(3),
     );

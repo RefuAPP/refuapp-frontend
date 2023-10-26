@@ -1,19 +1,29 @@
-import {Component, OnInit} from '@angular/core';
-import {BehaviorSubject, Observable, Subject} from "rxjs";
+import { Component, OnInit } from '@angular/core';
+import {
+  distinctUntilChanged,
+  filter,
+  forkJoin,
+  map,
+  mergeMap,
+  Observable,
+  scan,
+} from 'rxjs';
+import {
+  Reservation,
+  Reservations,
+  ReservationWithId,
+} from '../../schemas/reservations/reservation';
+import { Router } from '@angular/router';
+import { UserReservationService } from '../../services/reservations/user-reservation.service';
+import { AuthService } from '../../services/auth/auth.service';
+import { Refuge } from '../../schemas/refuge/refuge';
+import { RefugeService } from '../../services/refuge/refuge.service';
+import { CorrectGetRefugeResponse } from '../../schemas/refuge/get-refuge-schema';
 
-export type Group = {
-  name: string;
-  day: string;
-  reservations: Reservation[];
-}
-
-export type Reservation = {
-  timeStart: string;
-  timeEnd: string;
-  location: string;
-  name: string;
-  id: string;
-}
+export type A = {
+  refuge: Refuge;
+  reservations: Reservations;
+};
 
 @Component({
   selector: 'app-reservations',
@@ -21,71 +31,86 @@ export type Reservation = {
   styleUrls: ['./reservations.page.scss'],
 })
 export class ReservationsPage implements OnInit {
-  searchTerm: string = '';
-  reservations: Observable<Reservation[]> = new Observable<Reservation[]>();
-  private search: Subject<String>
+  reservations?: Observable<{ refuge: Refuge; reservations: Reservations }[]>;
 
-  groups: Group[] = [];
   onReservationClick(session: Reservation) {
-    console.log('Reservation clicked', session);
+    this.router.navigate([`/home`, session.refuge_id]).then();
   }
 
   onRemoveReservation(session: Reservation) {
     console.log('Remove reservation', session);
   }
 
-  searchByName() {
-    this.search.next(this.searchTerm);
-  }
-
   constructor(
+    private reservationService: UserReservationService,
+    private refugeService: RefugeService,
+    private authService: AuthService,
+    private router: Router,
   ) {
-    this.search = new BehaviorSubject<String>("");
-    this.groups = [
-      {
-        name: 'Group 1',
-        day: 'Day 1',
-        reservations: [
-          {
-            id: '1',
-            name: 'Session 1',
-            timeStart: '10:00',
-            timeEnd: '11:00',
-            location: 'Location 1'
-          },
-          {
-            id: '2',
-            name: 'Session 2',
-            timeStart: '11:00',
-            timeEnd: '12:00',
-            location: 'Location 2'
-          }
-        ]
-      },
-      {
-        name: 'Group 2',
-        day: 'Day 2',
-        reservations: [
-          {
-            id: '3',
-            name: 'Session 3',
-            timeStart: '10:00',
-            timeEnd: '11:00',
-            location: 'Location 3'
-          },
-          {
-            id: '4',
-            name: 'Session 4',
-            timeStart: '11:00',
-            timeEnd: '12:00',
-            location: 'Location 4'
-          }
-        ]
+    this.authService.getUserId().then((userId) => {
+      if (userId == null) {
+        console.log('TODO: handle user not logged in');
+        return;
       }
-    ];
+      this.reservations = this.getReservationSortedByRefuge(userId);
+      this.reservations.subscribe((reservations) => console.log(reservations));
+    });
   }
 
-  ngOnInit() {
+  private getReservationWithRefuge(
+    userId: string,
+  ): Observable<{ refuge: Refuge; reservation: ReservationWithId }[]> {
+    return this.reservationService
+      .getReservationsForUserContinuous(userId)
+      .pipe(
+        mergeMap((reservations: Reservations) => {
+          const reservationsWithRefuge = reservations.map((reservation) =>
+            this.refugeService.getRefugeFrom(reservation.refuge_id).pipe(
+              filter(
+                (response): response is CorrectGetRefugeResponse =>
+                  response.status === 'correct',
+              ),
+              map((response) => ({
+                refuge: response.data,
+                reservation: reservation,
+              })),
+            ),
+          );
+          return forkJoin(reservationsWithRefuge);
+        }),
+      );
   }
 
+  private getReservationSortedByRefuge(userId: string): Observable<
+    {
+      refuge: Refuge;
+      reservations: ReservationWithId[];
+    }[]
+  > {
+    return this.getReservationWithRefuge(userId).pipe(
+      mergeMap((data) => data), // Flatten the array
+      scan((acc, curr) => {
+        const { refuge, reservation } = curr;
+        const refugeId = refuge.id;
+        if (!acc.has(refugeId)) {
+          acc.set(refugeId, { refuge, reservations: [] });
+          // @ts-ignore
+        } else if (
+          acc
+            .get(refugeId)
+            .reservations?.find((r) => r.id === reservation.id) !== undefined
+        ) {
+          console.log('Reservation already exists');
+        } else {
+          // @ts-ignore
+          acc.get(refugeId).reservations.push(reservation);
+        }
+        return acc;
+      }, new Map<string, { refuge: Refuge; reservations: ReservationWithId[] }>()),
+      map((reservationsMap) => Array.from(reservationsMap.values())),
+      distinctUntilChanged(), // Ensures that only distinct arrays are emitted
+    );
+  }
+
+  ngOnInit() {}
 }

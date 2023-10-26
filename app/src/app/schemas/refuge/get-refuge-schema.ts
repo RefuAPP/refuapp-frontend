@@ -10,15 +10,19 @@ export enum GetRefugeFromIdErrors {
   SERVER_INCORRECT_DATA_FORMAT_ERROR = 'SERVER_INCORRECT_DATA_FORMAT_ERROR',
 }
 
+export type CorrectGetRefugeResponse = {
+  status: 'correct';
+  data: Refuge;
+};
+
+export type ErrorGetRefugeResponse = {
+  status: 'error';
+  error: GetRefugeFromIdErrors;
+};
+
 export type GetRefugeResponse =
-  | {
-      status: 'correct';
-      data: Refuge;
-    }
-  | {
-      status: 'error';
-      error: GetRefugeFromIdErrors;
-    };
+  | CorrectGetRefugeResponse
+  | ErrorGetRefugeResponse;
 
 export namespace GetRefugeFromIdErrors {
   export function from(err: HttpErrorResponse): GetRefugeFromIdErrors | never {
