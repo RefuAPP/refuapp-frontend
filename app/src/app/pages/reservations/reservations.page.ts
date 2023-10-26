@@ -88,26 +88,19 @@ export class ReservationsPage implements OnInit {
     }[]
   > {
     return this.getReservationWithRefuge(userId).pipe(
-      mergeMap((data) => data), // Flatten the array
-      scan((acc, curr) => {
-        const { refuge, reservation } = curr;
-        const refugeId = refuge.id;
-        if (!acc.has(refugeId)) {
-          acc.set(refugeId, { refuge, reservations: [] });
-          // @ts-ignore
-        } else if (
-          acc
-            .get(refugeId)
-            .reservations?.find((r) => r.id === reservation.id) !== undefined
-        ) {
-          console.log('Reservation already exists');
-        } else {
-          // @ts-ignore
-          acc.get(refugeId).reservations.push(reservation);
-        }
-        return acc;
-      }, new Map<string, { refuge: Refuge; reservations: ReservationWithId[] }>()),
-      map((reservationsMap) => Array.from(reservationsMap.values())),
+      map((reservations) => {
+        const map = new Map<
+          string,
+          { refuge: Refuge; reservations: ReservationWithId[] }
+        >();
+        reservations.forEach((reservation) => {
+          const refugeId = reservation.refuge.id;
+          if (!map.has(refugeId))
+            map.set(refugeId, { refuge: reservation.refuge, reservations: [] });
+          map.get(refugeId)?.reservations.push(reservation.reservation);
+        });
+        return Array.from(map.values());
+      }),
       distinctUntilChanged(), // Ensures that only distinct arrays are emitted
     );
   }
