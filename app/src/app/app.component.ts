@@ -21,7 +21,6 @@ const bottomPages: Page[] = [
   { title: 'Login', url: '/login', icon: 'log-in' },
 ];
 
-
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',

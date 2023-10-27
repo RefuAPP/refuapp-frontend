@@ -22,7 +22,10 @@ import {
 } from '../../schemas/reservations/get-reservations-refuge-user';
 import { toReservations } from './common';
 import { RefugeService } from '../refuge/refuge.service';
-import { orderByRefuge, RefugeReservationsRelations } from "./grouped-by/refuge";
+import {
+  orderByRefuge,
+  RefugeReservationsRelations,
+} from './grouped-by/refuge';
 
 @Injectable({
   providedIn: 'root',
@@ -36,10 +39,13 @@ export class UserReservationService {
   getReservationsGroupedByRefugeForUser(
     userId: string,
   ): Observable<RefugeReservationsRelations> {
-    const reservationFactory = (refugeId: string) => this.refugeService.getRefugeIgnoringErrorsFrom(refugeId);
+    const reservationFactory = (refugeId: string) =>
+      this.refugeService.getRefugeIgnoringErrorsFrom(refugeId);
     return this.getStreamOfReservationsForUser(userId).pipe(
-      map((reservations: Reservations) => orderByRefuge(reservations, reservationFactory)),
-      mergeAll()
+      map((reservations: Reservations) =>
+        orderByRefuge(reservations, reservationFactory),
+      ),
+      mergeAll(),
     );
   }
 
@@ -55,7 +61,9 @@ export class UserReservationService {
       .pipe(share());
   }
 
-  private getReservationsForUserFromCurrentDate(userId: string): Observable<Reservations> {
+  private getReservationsForUserFromCurrentDate(
+    userId: string,
+  ): Observable<Reservations> {
     const reservationsWithErrors = this.getReservationsWithErrorsFor(userId);
     const reservations = toReservations(reservationsWithErrors);
     const night = nightFromDate(new Date());

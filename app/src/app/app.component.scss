@@ -124,7 +124,9 @@ ion-item.selected {
   box-shadow: none;
 }
 
-
-:host ::ng-deep ion-menu.md[_ngcontent-ng-c286623390]   ion-list[_ngcontent-ng-c286623390] {
+:host
+  ::ng-deep
+  ion-menu.md[_ngcontent-ng-c286623390]
+  ion-list[_ngcontent-ng-c286623390] {
   background: var(--ion-item-background) !important;
 }

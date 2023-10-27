@@ -12,19 +12,25 @@ import { UserCreated } from 'src/app/schemas/user/user';
 export class ProfilePage implements OnInit {
   user?: UserCreated;
 
-  constructor(private authService: AuthService, private http: HttpClient) { }
+  constructor(
+    private authService: AuthService,
+    private http: HttpClient,
+  ) {}
 
   ngOnInit() {
-    this.authService.getUserId().then((userId: string | null) => {
-      if (userId === null) throw new Error("No se ha encontrado el id del usuario");
-      this.http.get<UserCreated>(`${environment.API}/users/${userId}`).subscribe({
-        next: (userData: UserCreated) => {
-          this.user = userData;
-        },
-        error: (error: any) => {
-          console.error("Error obteniendo datos del usuario: ", error);
-        }
-      });
-      })
+    this.authService.getUserId().then((userId: string | null) => {
+      if (userId === null)
+        throw new Error('No se ha encontrado el id del usuario');
+      this.http
+        .get<UserCreated>(`${environment.API}/users/${userId}`)
+        .subscribe({
+          next: (userData: UserCreated) => {
+            this.user = userData;
+          },
+          error: (error: any) => {
+            console.error('Error obteniendo datos del usuario: ', error);
+          },
+        });
+    });
   }
 }

@@ -7,7 +7,7 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import {AlertController, Platform} from '@ionic/angular';
+import { AlertController, Platform } from '@ionic/angular';
 import { match } from 'ts-pattern';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RefugeService } from '../../services/refuge/refuge.service';
@@ -51,10 +51,9 @@ export class RefugePage implements OnInit, AfterViewInit {
     return this.platform.is('mobile');
   }
 
-
   onBookClick() {
     alert('En desenvolupament: les reserves estaràn disponibles en breu.');
-    console.log(this.platform.platforms())
+    console.log(this.platform.platforms());
   }
 
   clickButton() {

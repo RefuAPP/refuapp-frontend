@@ -15,7 +15,9 @@ const routes: Routes = [
   {
     path: 'reservations',
     loadChildren: () =>
-      import('./pages/reservations/reservations.module').then((m) => m.ReservationsPageModule),
+      import('./pages/reservations/reservations.module').then(
+        (m) => m.ReservationsPageModule,
+      ),
   },
   {
     path: 'login',
@@ -60,7 +62,8 @@ const routes: Routes = [
   },
   {
     path: 'profile',
-    loadChildren: () => import('./pages/profile/profile.module').then( m => m.ProfilePageModule)
+    loadChildren: () =>
+      import('./pages/profile/profile.module').then((m) => m.ProfilePageModule),
   },
 ];
 
