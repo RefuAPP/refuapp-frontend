@@ -3,7 +3,6 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import {
   catchError,
   distinctUntilChanged,
-  forkJoin,
   map,
   mergeAll,
   mergeMap,
@@ -11,7 +10,6 @@ import {
   of,
   retry,
   share,
-  tap,
   timer,
 } from 'rxjs';
 import { Reservations } from '../../schemas/reservations/reservation';
@@ -23,14 +21,8 @@ import {
   GetReservations,
 } from '../../schemas/reservations/get-reservations-refuge-user';
 import { toReservations } from './common';
-import { Refuge } from '../../schemas/refuge/refuge';
 import { RefugeService } from '../refuge/refuge.service';
-import {
-  getRelationFromSortedReservations,
-  orderByRefugeId,
-  RefugeReservationsRelations,
-  ReservationsSortedByRefugeId,
-} from './refuge-reservation-relation';
+import { orderByRefuge, RefugeReservationsRelations } from "./grouped-by/refuge";
 
 @Injectable({
   providedIn: 'root',
@@ -41,31 +33,29 @@ export class UserReservationService {
     private refugeService: RefugeService,
   ) {}
 
-  getReservationsSortedByRefuge(
+  getReservationsGroupedByRefugeForUser(
     userId: string,
   ): Observable<RefugeReservationsRelations> {
-    return this.getReservationsForUserContinuous(userId).pipe(
-      map((reservations: Reservations) => orderByRefugeId(reservations)),
-      map((sorted: ReservationsSortedByRefugeId) =>
-        getRelationFromSortedReservations(this.refugeService, sorted),
-      ),
-      mergeAll(),
+    const reservationFactory = (refugeId: string) => this.refugeService.getRefugeIgnoringErrorsFrom(refugeId);
+    return this.getStreamOfReservationsForUser(userId).pipe(
+      map((reservations: Reservations) => orderByRefuge(reservations, reservationFactory)),
+      mergeAll()
     );
   }
 
-  private getReservationsForUserContinuous(
+  private getStreamOfReservationsForUser(
     userId: string,
-    millisecondsToUpdate: number = 3000,
+    secondsFetchData: number = 3000,
   ): Observable<Reservations> {
-    return timer(0, millisecondsToUpdate)
+    return timer(0, secondsFetchData)
       .pipe(
-        mergeMap(() => this.getReservationsForUser(userId)),
+        mergeMap(() => this.getReservationsForUserFromCurrentDate(userId)),
         distinctUntilChanged((a, b) => JSON.stringify(a) === JSON.stringify(b)),
       )
       .pipe(share());
   }
 
-  private getReservationsForUser(userId: string): Observable<Reservations> {
+  private getReservationsForUserFromCurrentDate(userId: string): Observable<Reservations> {
     const reservationsWithErrors = this.getReservationsWithErrorsFor(userId);
     const reservations = toReservations(reservationsWithErrors);
     const night = nightFromDate(new Date());

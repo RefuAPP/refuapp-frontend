@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { Reservation } from '../../schemas/reservations/reservation';
 import { UserReservationService } from '../../services/reservations/user-reservation.service';
 import { AuthService } from '../../services/auth/auth.service';
-import { RefugeReservationsRelations } from '../../services/reservations/refuge-reservation-relation';
+import { RefugeReservationsRelations } from '../../services/reservations/grouped-by/refuge';
 
 @Component({
   selector: 'app-reservations',
@@ -27,7 +27,7 @@ export class ReservationsPage implements OnInit {
         return;
       }
       this.reservations =
-        reservationService.getReservationsSortedByRefuge(userId);
+        reservationService.getReservationsGroupedByRefugeForUser(userId);
     });
   }
 
