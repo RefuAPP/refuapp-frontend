@@ -8,6 +8,11 @@ import {
   fromResponse as fromReservationResponse,
   GetReservation,
 } from '../../schemas/reservations/get-reservation';
+import {
+  DeleteReservation,
+  fromError as fromDeleteError,
+  fromResponse as fromDeleteResponse,
+} from '../../schemas/reservations/delete-reservation';
 
 @Injectable({
   providedIn: 'root',
@@ -20,6 +25,15 @@ export class ReservationsService {
     return this.http.get<Reservation>(reservationUri).pipe(
       map((reservation) => fromReservationResponse(reservation)),
       catchError((err: HttpErrorResponse) => of(fromReservationError(err))),
+      retry(3),
+    );
+  }
+
+  deleteReservation(reservationId: string): Observable<DeleteReservation> {
+    const reservationUri = this.getUriForReservation(reservationId);
+    return this.http.delete<Reservation>(reservationUri).pipe(
+      map((reservation) => fromDeleteResponse(reservation)),
+      catchError((err: HttpErrorResponse) => of(fromDeleteError(err))),
       retry(3),
     );
   }
