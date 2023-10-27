@@ -9,6 +9,7 @@ export function getModalConfigurationFrom(refuge: Refuge): ModalOptions {
     componentProps: {
       refuge: refuge,
     },
+    keyboardClose: true,
     breakpoints: [0, 0.3, 1],
     initialBreakpoint: 0.3,
   };

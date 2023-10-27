@@ -7,7 +7,7 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { AlertController, Platform } from '@ionic/angular';
+import { AlertController, ModalController, Platform } from '@ionic/angular';
 import { match } from 'ts-pattern';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RefugeService } from '../../services/refuge/refuge.service';
@@ -31,6 +31,7 @@ import {
 export class RefugePage implements OnInit, AfterViewInit {
   @Input() refuge?: Refuge;
   @ViewChild('chart', { static: false }) chart?: ElementRef;
+  modal: HTMLIonModalElement | undefined;
 
   constructor(
     private router: Router,
@@ -39,6 +40,7 @@ export class RefugePage implements OnInit, AfterViewInit {
     private occupationService: OccupationService,
     private alertController: AlertController,
     private changeDetectorRef: ChangeDetectorRef,
+    private modalController: ModalController,
     private platform: Platform,
   ) {}
 
@@ -62,7 +64,18 @@ export class RefugePage implements OnInit, AfterViewInit {
 
   ngOnInit() {}
 
+  openFullModal() {
+    if (this.modal == undefined) return;
+    this.modal.getCurrentBreakpoint().then((breakpoint) => {
+      if (breakpoint == 1) this.modal!.setCurrentBreakpoint(0.3).then();
+      if (breakpoint == 0.3) this.modal!.setCurrentBreakpoint(1).then();
+    });
+  }
+
   ngAfterViewInit() {
+    this.modalController.getTop().then((modal) => {
+      this.modal = modal;
+    });
     if (this.refuge) {
       this.onRefugeLoaded(this.refuge);
       return;

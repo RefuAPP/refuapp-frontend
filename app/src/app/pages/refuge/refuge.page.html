@@ -1,4 +1,8 @@
-<ion-header class="ion-no-border" *ngIf="refuge !== undefined">
+<ion-header
+  class="ion-no-border"
+  *ngIf="refuge !== undefined"
+  (click)="openFullModal()"
+>
   <ion-toolbar>
     <ion-buttons slot="end">
       <ion-button (click)="clickButton()">
@@ -12,7 +16,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content *ngIf="refuge !== undefined">
+<ion-content *ngIf="refuge !== undefined" (click)="openFullModal()">
   <div class="about-header">
     <!-- Instead of loading an image each time the select changes, use opacity to transition them -->
     <div
