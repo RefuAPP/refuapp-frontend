@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Device } from '@capacitor/device';
-import { map, mergeMap, Observable, timer } from 'rxjs';
+import { distinctUntilChanged, map, mergeMap, Observable, timer } from 'rxjs';
 import { fromPromise } from 'rxjs/internal/observable/innerFrom';
 import { StorageService } from '../storage/storage.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -19,7 +19,7 @@ export class DeviceLanguageService {
   async getCurrentLanguageCode(): Promise<string> {
     const languageCode = await this.storageService.get(LANGUAGE_KEY);
     if (languageCode) return languageCode;
-    return Device.getLanguageTag().then((languageTag) => languageTag.value);
+    return Device.getLanguageCode().then((languageTag) => languageTag.value);
   }
 
   /**
@@ -31,6 +31,7 @@ export class DeviceLanguageService {
   getLanguageCode(): Observable<string> {
     return timer(0, 3_000).pipe(
       mergeMap(() => fromPromise(this.getCurrentLanguageCode())),
+      distinctUntilChanged(),
     );
   }
 

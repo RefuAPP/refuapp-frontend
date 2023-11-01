@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from './services/auth/auth.service';
-import { combineLatest, map, Observable, Subject } from 'rxjs';
+import { combineLatest, map, Observable, ReplaySubject, Subject } from 'rxjs';
 import { get } from 'scriptjs';
 import { secretEnvironment } from '../environments/environment.secret';
 import { DeviceLanguageService } from './services/translate/device-language.service';
@@ -19,8 +19,8 @@ export interface Page {
 })
 export class AppComponent implements OnInit {
   googleMapsLoaded = false;
-  private topPages: Subject<Page[]> = new Subject<Page[]>();
-  private bottomPages: Subject<Page[]> = new Subject<Page[]>();
+  private topPages: Subject<Page[]> = new ReplaySubject<Page[]>(1);
+  private bottomPages: Subject<Page[]> = new ReplaySubject<Page[]>(1);
   private topPagesComplete$: Observable<Page[]> = this.topPages.asObservable();
   private bottomPagesComplete$: Observable<Page[]> =
     this.bottomPages.asObservable();
