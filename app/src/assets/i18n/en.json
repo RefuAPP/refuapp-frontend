@@ -116,5 +116,12 @@
     "USER_NAME": "User Name: {{username}}",
     "PHONE_NUMBER": "Phone Number: {{phoneNumber}}",
     "EMERGENCY_PHONE_NUMBER": "Emergency Phone Number: {{emergencyPhoneNumber}}"
+  },
+  "MENU": {
+    "HOME": "Home",
+    "RESERVATIONS": "Reservations",
+    "PROFILE": "Profile",
+    "LOGOUT": "LogOut",
+    "LOGIN": "LogIn"
   }
 }

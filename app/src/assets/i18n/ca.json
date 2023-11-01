@@ -116,5 +116,12 @@
     "USER_NAME": "Nom d'Usuari: {{username}}",
     "PHONE_NUMBER": "Número de Telèfon: {{phoneNumber}}",
     "EMERGENCY_PHONE_NUMBER": "Número de Telèfon d'Emergència: {{emergencyPhoneNumber}}"
+  },
+  "MENU": {
+    "HOME": "Inici",
+    "RESERVATIONS": "Reserves",
+    "PROFILE": "Perfil",
+    "LOGOUT": "Tanca Sessió",
+    "LOGIN": "Inicia Sessió"
   }
 }

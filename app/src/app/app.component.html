@@ -7,7 +7,7 @@
 
         <ion-menu-toggle
           auto-hide="false"
-          *ngFor="let p of topPages | async; let i = index"
+          *ngFor="let p of topPages$ | async; let i = index"
         >
           <ion-item
             routerDirection="root"
@@ -31,7 +31,7 @@
       <ion-footer class="bar-stable" id="bottom-menu-item-container">
         <ion-menu-toggle
           auto-hide="false"
-          *ngFor="let p of bottomPages | async; let i = index"
+          *ngFor="let p of bottomPages$ | async; let i = index"
         >
           <ion-item
             routerDirection="root"
