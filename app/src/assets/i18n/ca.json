@@ -1,0 +1,120 @@
+{
+  "HOME": {
+    "CLIENT_ERROR": {
+      "HEADER": "Alerta!",
+      "SUBHEADER": "El teu dispositiu està fallant!",
+      "MESSAGE": "El teu dispositiu té accés a Internet? Potser és culpa nostra i els nostres servidors estan fora de servei",
+      "OKAY_BUTTON": "D'acord"
+    },
+    "RENDER_MAP_ERROR": {
+      "HEADER": "Error",
+      "MESSAGE": "Hem tingut un error carregant el mapa. Si us plau, torna-ho a provar",
+      "OKAY_BUTTON": "D'acord"
+    },
+    "SEARCH_PLACES_BAR": "Cerca un lloc"
+  },
+  "INTERNAL_ERROR": {
+    "HEADER": "Error Intern",
+    "MESSAGE": "Ho sentim, estem experimentant problemes interns. Torna-ho a provar més tard",
+    "EXIT_BUTTON": "Torna a la Pàgina Principal"
+  },
+  "NOT_FOUND_ERROR": {
+    "HEADER": "Recurs no trobat",
+    "MESSAGE": "La pàgina que estàs buscant no existeix. Potser estàs fent alguna cosa malament o bé és culpa nostra.",
+    "EXIT_BUTTON": "Torna a la Pàgina Principal"
+  },
+  "PROGRAMMING_ERROR": {
+    "HEADER": "Error de Programació",
+    "MESSAGE": "Som ineficients, el nostre codi té un error de programació i no l'hem detectat. Envian's un correu electrònic!",
+    "EXIT_BUTTON": "Torna a la Pàgina Principal"
+  },
+  "LOGIN": {
+    "HEADER": "Inicia Sessió",
+    "USERNAME": {
+      "FIELD": "Nom d'Usuari",
+      "ERROR_REQUIRED": "El nom d'usuari és obligatori",
+      "ERROR_FORMATTED": "El número de telèfon no és correcte",
+      "ERROR_DOESNT_EXIST": "L'usuari no existeix"
+    },
+    "PASSWORD": {
+      "FIELD": "Contrasenya",
+      "ERROR_REQUIRED": "La contrasenya és obligatòria",
+      "ERROR_INCORRECT_PASSWORD": "La contrasenya no és correcta"
+    },
+    "BUTTON": "Inicia Sessió",
+    "LOADING": "Iniciant la sessió..."
+  },
+  "SIGNUP": {
+    "HEADER": "Registre",
+    "USERNAME": {
+      "FIELD": "Nom d'Usuari",
+      "ERROR": "El nom d'usuari és obligatori"
+    },
+    "PHONE_NUMBER": {
+      "FIELD": "Número de Telèfon",
+      "ERROR": "El número de telèfon és obligatori",
+      "INCORRECT_PHONE_NUMBER": "El número de telèfon no és correcte"
+    },
+    "EMERGENCY_NUMBER": {
+      "FIELD": "Número d'Emergència",
+      "ERROR": "El número d'Emergència és obligatori",
+      "INCORRECT_PHONE_NUMBER": "El número d'Emergència no és correcte"
+    },
+    "PASSWORD": {
+      "FIELD": "Contrasenya",
+      "ERROR": "La contrasenya és obligatòria"
+    },
+    "REPEATED_PASSWORD": {
+      "FIELD": "Repeteix la Contrasenya",
+      "ERROR": "Cal repetir la contrasenya"
+    },
+    "PASSWORDS_DONT_MATCH": "Les contrasenyes no coincideixen",
+    "ALREADY_EXISTING_USER": "L'usuari ja existeix amb aquest número de telèfon",
+    "BUTTON": "Registre",
+    "LOADING": "Creant l'usuari..."
+  },
+  "LOGOUT": {
+    "HEADER": "Tanca la Sessió"
+  },
+  "REFUGE": {
+    "INFORMATION": {
+      "REGION": "Regió",
+      "ALTITUDE": "Altitud",
+      "ALTITUDE_UNITY": "{{altitude}} metres",
+      "WINTER_CAPACITY": "Capacitat a l'Hivern",
+      "SUMMER_CAPACITY": "Capacitat a l'Estiu",
+      "CAPACITY_UNITY": "{{capacity}} persones"
+    },
+    "RESERVATIONS": {
+      "HEADER": "Fes una Reserva",
+      "BUTTON": "Reserva"
+    },
+    "OCCUPATION": {
+      "HISTORIAL": "Històric d'Ocupació"
+    }
+  },
+  "RESERVATIONS": {
+    "HEADER": "Reserves",
+    "DELETE_ALERT": {
+      "HEADER": "Alerta!",
+      "SUBHEADER": "Vols eliminar la teva reserva?",
+      "MESSAGE": "Vols eliminar la teva reserva per al dia {{day}}?",
+      "BUTTON": "Sí"
+    },
+    "DELETE_OPERATION": {
+      "CORRECT": "Reserva eliminada",
+      "NOT_FOUND": "La reserva no existeix, potser ja ha estat eliminada?"
+    },
+    "DELETE_BUTTON": "Elimina",
+    "DETAILS": {
+      "HEADER": "Dia {{day}}",
+      "MESSAGE": "El dia {{day}} del mes {{month}} de l'any: {{year}}"
+    }
+  },
+  "PROFILE": {
+    "HEADER": "Perfil",
+    "USER_NAME": "Nom d'Usuari: {{username}}",
+    "PHONE_NUMBER": "Número de Telèfon: {{phoneNumber}}",
+    "EMERGENCY_PHONE_NUMBER": "Número de Telèfon d'Emergència: {{emergencyPhoneNumber}}"
+  }
+}

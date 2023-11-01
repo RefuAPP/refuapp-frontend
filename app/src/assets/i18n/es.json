@@ -1,0 +1,120 @@
+{
+  "HOME": {
+    "CLIENT_ERROR": {
+      "HEADER": "¡Alerta!",
+      "SUBHEADER": "¡Tu dispositivo está fallando!",
+      "MESSAGE": "¿Tu dispositivo tiene acceso a internet? Tal vez sea nuestra culpa y nuestros servidores estén caídos",
+      "OKAY_BUTTON": "Aceptar"
+    },
+    "RENDER_MAP_ERROR": {
+      "HEADER": "Error",
+      "MESSAGE": "Hemos tenido un error cargando el mapa, por favor inténtalo de nuevo",
+      "OKAY_BUTTON": "Aceptar"
+    },
+    "SEARCH_PLACES_BAR": "Buscar un lugar"
+  },
+  "INTERNAL_ERROR": {
+    "HEADER": "Error Interno",
+    "MESSAGE": "Lo sentimos, estamos experimentando problemas internos. Inténtalo de nuevo más tarde",
+    "EXIT_BUTTON": "Volver a la Página Principal"
+  },
+  "NOT_FOUND_ERROR": {
+    "HEADER": "Recurso no encontrado",
+    "MESSAGE": "La página que estás buscando no existe. Puede que estés haciendo algo incorrecto o sea nuestra culpa.",
+    "EXIT_BUTTON": "Volver a la Página Principal"
+  },
+  "PROGRAMMING_ERROR": {
+    "HEADER": "Error de Programación",
+    "MESSAGE": "Somos malos, nuestro código tiene un error de programación y no lo notamos. ¡Envíanos un correo electrónico!",
+    "EXIT_BUTTON": "Volver a la Página Principal"
+  },
+  "LOGIN": {
+    "HEADER": "Iniciar Sesión",
+    "USERNAME": {
+      "FIELD": "Nombre de Usuario",
+      "ERROR_REQUIRED": "El nombre de usuario es obligatorio",
+      "ERROR_FORMATTED": "El número de teléfono no es correcto",
+      "ERROR_DOESNT_EXIST": "El usuario no existe"
+    },
+    "PASSWORD": {
+      "FIELD": "Contraseña",
+      "ERROR_REQUIRED": "La contraseña es obligatoria",
+      "ERROR_INCORRECT_PASSWORD": "La contraseña es incorrecta"
+    },
+    "BUTTON": "Iniciar Sesión",
+    "LOADING": "Iniciando sesión..."
+  },
+  "SIGNUP": {
+    "HEADER": "Registro",
+    "USERNAME": {
+      "FIELD": "Nombre de Usuario",
+      "ERROR": "El nombre de usuario es obligatorio"
+    },
+    "PHONE_NUMBER": {
+      "FIELD": "Número de Teléfono",
+      "ERROR": "El número de teléfono es obligatorio",
+      "INCORRECT_PHONE_NUMBER": "El número de teléfono no es correcto"
+    },
+    "EMERGENCY_NUMBER": {
+      "FIELD": "Número de Emergencia",
+      "ERROR": "El número de emergencia es obligatorio",
+      "INCORRECT_PHONE_NUMBER": "El número de emergencia no es correcto"
+    },
+    "PASSWORD": {
+      "FIELD": "Contraseña",
+      "ERROR": "La contraseña es obligatoria"
+    },
+    "REPEATED_PASSWORD": {
+      "FIELD": "Repetir Contraseña",
+      "ERROR": "Es obligatorio repetir la contraseña"
+    },
+    "PASSWORDS_DONT_MATCH": "Las contraseñas no coinciden",
+    "ALREADY_EXISTING_USER": "El usuario ya existe con este número de teléfono",
+    "BUTTON": "Registro",
+    "LOADING": "Creando el usuario..."
+  },
+  "LOGOUT": {
+    "HEADER": "Cerrar Sesión"
+  },
+  "REFUGE": {
+    "INFORMATION": {
+      "REGION": "Región",
+      "ALTITUDE": "Altitud",
+      "ALTITUDE_UNITY": "{{altitude}} metros",
+      "WINTER_CAPACITY": "Capacidad en Invierno",
+      "SUMMER_CAPACITY": "Capacidad en Verano",
+      "CAPACITY_UNITY": "{{capacity}} personas"
+    },
+    "RESERVATIONS": {
+      "HEADER": "Hacer una Reserva",
+      "BUTTON": "Reservar"
+    },
+    "OCCUPATION": {
+      "HISTORIAL": "Histórico de Ocupación"
+    }
+  },
+  "RESERVATIONS": {
+    "HEADER": "Reservas",
+    "DELETE_ALERT": {
+      "HEADER": "¡Alerta!",
+      "SUBHEADER": "¿Deseas eliminar tu reserva?",
+      "MESSAGE": "¿Quieres eliminar tu reserva para el día {{day}}?",
+      "BUTTON": "Sí"
+    },
+    "DELETE_OPERATION": {
+      "CORRECT": "Reserva eliminada",
+      "NOT_FOUND": "La reserva no existe, ¿tal vez ya fue eliminada?"
+    },
+    "DELETE_BUTTON": "Eliminar",
+    "DETAILS": {
+      "HEADER": "Día {{day}}",
+      "MESSAGE": "El día {{day}} del mes {{month}} del año: {{year}}"
+    }
+  },
+  "PROFILE": {
+    "HEADER": "Perfil",
+    "USER_NAME": "Nombre de Usuario: {{username}}",
+    "PHONE_NUMBER": "Número de Teléfono: {{phoneNumber}}",
+    "EMERGENCY_PHONE_NUMBER": "Número de Teléfono de Emergencia: {{emergencyPhoneNumber}}"
+  }
+}
