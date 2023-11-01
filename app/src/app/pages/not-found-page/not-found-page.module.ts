@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { NotFoundPagePageRoutingModule } from './not-found-page-routing.module';
 
 import { NotFoundPagePage } from './not-found-page.page';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   imports: [
@@ -14,6 +15,7 @@ import { NotFoundPagePage } from './not-found-page.page';
     FormsModule,
     IonicModule,
     NotFoundPagePageRoutingModule,
+    TranslateModule,
   ],
   declarations: [NotFoundPagePage],
 })

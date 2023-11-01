@@ -6,7 +6,7 @@
     <ion-searchbar
       [(ngModel)]="search"
       (ionInput)="onSearchChange()"
-      placeholder="Search for a place"
+      placeholder="{{ 'HOME.SEARCH_PLACES_BAR' | translate }}"
       (keyup.enter)="selectFirstSearchResult()"
     ></ion-searchbar>
     <ion-title></ion-title>

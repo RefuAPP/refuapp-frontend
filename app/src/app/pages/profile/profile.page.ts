@@ -20,7 +20,7 @@ export class ProfilePage implements OnInit {
   ngOnInit() {
     this.authService.getUserId().then((userId: string | null) => {
       if (userId === null)
-        throw new Error('No se ha encontrado el id del usuario');
+        throw new Error('Not logged in, impossible to get user data');
       this.http
         .get<UserCreated>(`${environment.API}/users/${userId}`)
         .subscribe({
@@ -28,7 +28,7 @@ export class ProfilePage implements OnInit {
             this.user = userData;
           },
           error: (error: any) => {
-            console.error('Error obteniendo datos del usuario: ', error);
+            console.error('Error fetching user info from api', error);
           },
         });
     });

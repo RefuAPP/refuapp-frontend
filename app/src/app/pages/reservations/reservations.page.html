@@ -3,7 +3,7 @@
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <ion-title>Reserves</ion-title>
+    <ion-title>{{'RESERVATIONS.HEADER' | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -15,10 +15,14 @@
       </ion-item-divider>
       <ion-item *ngFor="let reservation of res.reservations">
         <ion-label routerLink="/home/{{reservation.refuge_id}}">
-          <h3>Dia {{reservation.night.day}}</h3>
+          <h3>
+            {{'RESERVATIONS.DETAILS.HEADER' | translate: {day:
+            reservation.night.day} }}
+          </h3>
           <p>
-            La nit del dia: {{reservation.night.day}}, del mes:
-            {{reservation.night.month}}, de l'any: {{reservation.night.year}}
+            {{'RESERVATIONS.DETAILS.MESSAGE' | translate: {month:
+            reservation.night.month, year: reservation.night.year, day:
+            reservation.night.day} }}
           </p>
         </ion-label>
         <ion-button
@@ -27,7 +31,7 @@
           (click)="onRemoveReservation(reservation)"
         >
           <ion-icon slot="end" name="trash"></ion-icon>
-          Elimina
+          {{ 'RESERVATIONS.DELETE_BUTTON' | translate }}
         </ion-button>
       </ion-item>
     </ion-item-group>

@@ -4,7 +4,7 @@
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
 
-    <ion-title>Sign up</ion-title>
+    <ion-title>{{'SIGNUP.HEADER' | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -19,19 +19,19 @@
   <div class="login-form">
     <form #singUpForm="ngForm" novalidate>
       <ion-input
-        label="Username"
+        label="{{'SIGNUP.USERNAME.FIELD' | translate }}"
         labelPlacement="stacked"
         fill="outline"
         [(ngModel)]="form.username"
         name="username"
         type="text"
-        errorText="Username is required"
+        errorText="{{'SIGNUP.USERNAME.ERROR' | translate }}"
         required="true"
       >
       </ion-input>
 
       <ion-input
-        label="Phone number"
+        label="{{'SIGNUP.PHONE_NUMBER.FIELD' | translate }}"
         labelPlacement="stacked"
         [clearInput]="true"
         placeholder="(+34) xxx xxx xxx"
@@ -39,7 +39,7 @@
         fill="outline"
         [(ngModel)]="form.phone_number"
         name="phone_number"
-        errorText="Phone number is required"
+        errorText="{{'SIGNUP.PHONE_NUMBER.ERROR' | translate }}"
         required="true"
         [maskito]="phoneMask"
         [maskitoElement]="maskPredicate"
@@ -47,7 +47,7 @@
       </ion-input>
 
       <ion-input
-        label="Emergency phone number"
+        label="{{'SIGNUP.EMERGENCY_NUMBER.FIELD' | translate }}"
         labelPlacement="stacked"
         [clearInput]="true"
         placeholder="(+34) xxx xxx xxx"
@@ -55,32 +55,32 @@
         fill="outline"
         [(ngModel)]="form.emergency_number"
         name="emergency_number"
-        errorText="Emergency phone number is required"
+        errorText="{{'SIGNUP.EMERGENCY_NUMBER.ERROR' | translate }}"
         required="true"
         [maskito]="phoneMask"
         [maskitoElement]="maskPredicate"
       >
       </ion-input>
       <ion-input
-        label="Password"
+        label="{{'SIGNUP.PASSWORD.FIELD' | translate }}"
         labelPlacement="stacked"
         fill="outline"
         [(ngModel)]="form.password"
         name="password"
         type="password"
-        errorText="Password is required"
-        required="Password is required"
+        errorText="{{'SIGNUP.PASSWORD.ERROR' | translate }}"
+        required="true"
       >
       </ion-input>
       <ion-input
-        label="Repeat password"
+        label="{{'SIGNUP.REPEAT_PASSWORD.FIELD' | translate }}"
         labelPlacement="stacked"
         fill="outline"
         [(ngModel)]="form.repeatPassword"
         name="password"
         type="password"
-        errorText="Repeating the password is required"
-        required="Repeating the password is required"
+        errorText="{{'SIGNUP.REPEAT_PASSWORD.ERROR' | translate }}"
+        required="true"
       >
       </ion-input>
       <ion-note color="danger" *ngIf="hasError"> {{errorMessage}} </ion-note>
@@ -91,7 +91,8 @@
             (click)="onSignUp(singUpForm)"
             type="submit"
             expand="block"
-            >Sign up
+          >
+            {{'SIGNUP.BUTTON' | translate}}
           </ion-button>
         </ion-col>
       </ion-row>

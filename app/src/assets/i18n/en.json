@@ -1,0 +1,120 @@
+{
+  "HOME": {
+    "CLIENT_ERROR": {
+      "HEADER": "Alert!",
+      "SUBHEADER": "Your device is failing!",
+      "MESSAGE": "Does your device have internet access? Maybe is our fault and our servers are down",
+      "OKAY_BUTTON": "Okey"
+    },
+    "RENDER_MAP_ERROR": {
+      "HEADER": "Error",
+      "MESSAGE": "We had an error loading the map, please try again",
+      "OKAY_BUTTON": "Okey"
+    },
+    "SEARCH_PLACES_BAR": "Search for a place"
+  },
+  "INTERNAL_ERROR": {
+    "HEADER": "Internal Error",
+    "MESSAGE": "Sorry, we are having internal issues. Try again later",
+    "EXIT_BUTTON": "Return to Home"
+  },
+  "NOT_FOUND_ERROR": {
+    "HEADER": "Resource not found",
+    "MESSAGE": "The page you are searching doesn't exist. You are being a bad guy or it's our fault.",
+    "EXIT_BUTTON": "Return to Home"
+  },
+  "PROGRAMMING_ERROR": {
+    "HEADER": "Programming Error",
+    "MESSAGE": "We suck, our code had a programming error and we didn't notice it. Send us an email!",
+    "EXIT_BUTTON": "Return to Home"
+  },
+  "LOGIN": {
+    "HEADER": "Login",
+    "USERNAME": {
+      "FIELD": "Username",
+      "ERROR_REQUIRED": "Username is required",
+      "ERROR_FORMATTED": "The phone number isn't correct",
+      "ERROR_DOESNT_EXIST": "The user doesn't exist"
+    },
+    "PASSWORD": {
+      "FIELD": "Password",
+      "ERROR_REQUIRED": "Password is required",
+      "ERROR_INCORRECT_PASSWORD": "Password is incorrect"
+    },
+    "BUTTON": "Login",
+    "LOADING": "Signing in...."
+  },
+  "SIGNUP": {
+    "HEADER": "Signup",
+    "USERNAME": {
+      "FIELD": "Username",
+      "ERROR": "Username is required"
+    },
+    "PHONE_NUMBER": {
+      "FIELD": "Phone number",
+      "ERROR": "Phone number is required",
+      "INCORRECT_PHONE_NUMBER": "The phone number isn't correct"
+    },
+    "EMERGENCY_NUMBER": {
+      "FIELD": "Emergency Number",
+      "ERROR": "Emergency phone number is required",
+      "INCORRECT_PHONE_NUMBER": "The emergency phone number isn't correct"
+    },
+    "PASSWORD": {
+      "FIELD": "Password",
+      "ERROR": "Password is required"
+    },
+    "REPEATED_PASSWORD": {
+      "FIELD": "Repeated password",
+      "ERROR": "Repeating the password is required"
+    },
+    "PASSWORDS_DONT_MATCH": "Passwords don't match",
+    "ALREADY_EXISTING_USER": "User already exists with this phone number",
+    "BUTTON": "Signup",
+    "LOADING": "Creating the user...."
+  },
+  "LOGOUT": {
+    "HEADER": "Logout"
+  },
+  "REFUGE": {
+    "INFORMATION": {
+      "REGION": "Region",
+      "ALTITUDE": "Altitude",
+      "ALTITUDE_UNITY": "{{altitude}} meters",
+      "WINTER_CAPACITY": "Winter capacity",
+      "SUMMER_CAPACITY": "Summer capacity",
+      "CAPACITY_UNITY": "{{capacity}} people"
+    },
+    "RESERVATIONS": {
+      "HEADER": "Make a reservation",
+      "BUTTON": "Reservate"
+    },
+    "OCCUPATION": {
+      "HISTORIAL": "Occupation historic"
+    }
+  },
+  "RESERVATIONS": {
+    "HEADER": "Reservations",
+    "DELETE_ALERT": {
+      "HEADER": "Alert!",
+      "SUBHEADER": "Do you want to delete your reservation?",
+      "MESSAGE": "Do you want to delete your reservation for the day {{day}}?",
+      "BUTTON": "Yes"
+    },
+    "DELETE_OPERATION": {
+      "CORRECT": "Reservation deleted!",
+      "NOT_FOUND": "Reservation doesn't exists, maybe it was already deleted?"
+    },
+    "DELETE_BUTTON": "Delete",
+    "DETAILS": {
+      "HEADER": "Day {{day}}",
+      "MESSAGE": "The day {{day}} of month {{month}} of year: {{year}}"
+    }
+  },
+  "PROFILE": {
+    "HEADER": "Profile",
+    "USER_NAME": "User Name: {{username}}",
+    "PHONE_NUMBER": "Phone Number: {{phoneNumber}}",
+    "EMERGENCY_PHONE_NUMBER": "Emergency Phone Number: {{emergencyPhoneNumber}}"
+  }
+}

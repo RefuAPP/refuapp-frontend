@@ -4,7 +4,7 @@
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
 
-    <ion-title>Profile</ion-title>
+    <ion-title> {{ 'PROFILE.HEADER' | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -13,12 +13,20 @@
     <ion-card-header>
       <div class="header-container">
         <div class="user-info">
-          <ion-card-title
-            ><h1>User Name: {{ user.username }}</h1></ion-card-title
-          >
+          <ion-card-title>
+            <h1>
+              {{'PROFILE.USER_NAME' | translate: {username: user.username} }}
+            </h1>
+          </ion-card-title>
           <div class="details">
-            <h1>Phone Number: {{ user.phone_number }}</h1>
-            <h1>Emergency Number: {{ user.emergency_number }}</h1>
+            <h1>
+              {{'PROFILE.PHONE_NUMBER' | translate: {phoneNumber:
+              user?.phone_number} }}
+            </h1>
+            <h1>
+              {{ 'PROFILE.EMERGENCY_PHONE_NUMBER' | translate:
+              {emergencyPhoneNumber: user?.emergency_number} }}
+            </h1>
           </div>
         </div>
         <img

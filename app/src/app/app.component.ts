@@ -3,6 +3,8 @@ import { AuthService } from './services/auth/auth.service';
 import { map, Observable } from 'rxjs';
 import { get } from 'scriptjs';
 import { secretEnvironment } from '../environments/environment.secret';
+import { DeviceLanguageService } from './services/translate/device-language.service';
+import { TranslateService } from '@ngx-translate/core';
 
 export interface Page {
   title: string;
@@ -43,7 +45,16 @@ export class AppComponent implements OnInit {
     }),
   );
 
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private translateService: TranslateService,
+    private deviceLanguageService: DeviceLanguageService,
+  ) {
+    this.translateService.setDefaultLang('en');
+    this.deviceLanguageService.getLanguageCode().subscribe((languageCode) => {
+      this.translateService.use(languageCode);
+    });
+  }
 
   ngOnInit(): void {
     get(

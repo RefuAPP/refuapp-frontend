@@ -22,6 +22,7 @@ import {
   OccupationService,
   WeeklyOccupation,
 } from '../../services/occupation/occupation.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-refuge',
@@ -41,6 +42,7 @@ export class RefugePage implements OnInit, AfterViewInit {
     private alertController: AlertController,
     private changeDetectorRef: ChangeDetectorRef,
     private modalController: ModalController,
+    private transateService: TranslateService,
     private platform: Platform,
   ) {}
 
@@ -197,13 +199,12 @@ export class RefugePage implements OnInit, AfterViewInit {
 
   private async handleClientError() {
     const alert = await this.alertController.create({
-      header: 'Alert',
-      subHeader: 'The client is failing',
-      message:
-        'Is your internet connection working? Maybe is our fault and our server is down.',
+      header: this.transateService.instant('HOME.CLIENT_ERROR.HEADER'),
+      subHeader: this.transateService.instant('HOME.CLIENT_ERROR.SUBHEADER'),
+      message: this.transateService.instant('HOME.CLIENT_ERROR.MESSAGE'),
       buttons: [
         {
-          text: 'OK',
+          text: this.transateService.instant('HOME.CLIENT_ERROR.OKAY_BUTTON'),
           handler: () => {
             this.alertController.dismiss().then();
             this.fetchRefuge(this.getRefugeIdFromUrl());

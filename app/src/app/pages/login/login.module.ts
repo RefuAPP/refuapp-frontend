@@ -8,6 +8,7 @@ import { LoginPageRoutingModule } from './login-routing.module';
 
 import { LoginPage } from './login.page';
 import { MaskitoModule } from '@maskito/angular';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   imports: [
@@ -16,6 +17,7 @@ import { MaskitoModule } from '@maskito/angular';
     MaskitoModule,
     IonicModule,
     LoginPageRoutingModule,
+    TranslateModule,
   ],
   declarations: [LoginPage],
 })

@@ -20,6 +20,7 @@ import {
   CredentialsError,
   parseCredentials,
 } from '../../schemas/auth/validate/forms';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-login',
@@ -43,6 +44,7 @@ export class LoginPage implements OnInit {
     private authService: AuthService,
     private alertController: AlertController,
     private loadingController: LoadingController,
+    private translateService: TranslateService,
   ) {}
 
   ngOnInit() {}
@@ -75,7 +77,9 @@ export class LoginPage implements OnInit {
   private handleCredentialsError(credentialsError: CredentialsError) {
     match(credentialsError)
       .with(CredentialsError.INCORRECT_PHONE_NUMBER, () =>
-        this.showError('Format del número de telèfon incorrecte'),
+        this.showError(
+          this.translateService.instant('LOGIN.USERNAME.ERROR_FORMATTED'),
+        ),
       )
       .exhaustive();
   }
@@ -97,13 +101,12 @@ export class LoginPage implements OnInit {
 
   private async handleClientError() {
     const alert = await this.alertController.create({
-      header: 'Alerta',
-      subHeader: 'El teu dispositiu està fallant',
-      message:
-        'Funciona la connexió a Internet? Potser és culpa nostra i el nostre servidor està caigut.',
+      header: this.translateService.instant('HOME.CLIENT_ERROR.HEADER'),
+      subHeader: this.translateService.instant('HOME.CLIENT_ERROR.SUBHEADER'),
+      message: this.translateService.instant('HOME.CLIENT_ERROR.MESSAGE'),
       buttons: [
         {
-          text: "Ves a l'inici",
+          text: this.translateService.instant('HOME.CLIENT_ERROR.OKAY_BUTTON'),
           handler: () => {
             this.alertController.dismiss().then();
             this.router.navigate(['/home']).then();
@@ -126,11 +129,15 @@ export class LoginPage implements OnInit {
       })
       .with(UserErrors.INCORRECT_PASSWORD, () => {
         this.showErrorAndFinishLoadingAnimation(
-          'Contrasenya incorrecta',
+          this.translateService.instant(
+            'LOGIN.PASSWORD.ERROR_INCORRECT_PASSWORD',
+          ),
         ).then();
       })
       .with(UserErrors.USER_NOT_FOUND, () => {
-        this.showErrorAndFinishLoadingAnimation("L'usuari no existeix").then();
+        this.showErrorAndFinishLoadingAnimation(
+          this.translateService.instant('LOGIN.USERNAME.ERROR_DOESNT_EXIST'),
+        ).then();
       })
       .exhaustive();
   }
@@ -153,7 +160,7 @@ export class LoginPage implements OnInit {
 
   private async startLoadingAnimation(): Promise<void> {
     const loading = await this.loadingController.create({
-      message: 'Iniciant Sessió...',
+      message: this.translateService.instant('LOGIN.LOADING'),
       translucent: true,
     });
     return await loading.present();

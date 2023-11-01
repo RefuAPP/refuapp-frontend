@@ -13,6 +13,7 @@ import {
 } from '../../schemas/reservations/delete-reservation';
 import { match } from 'ts-pattern';
 import { Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-reservations',
@@ -35,6 +36,7 @@ export class ReservationsPage implements OnInit {
     private router: Router,
     private alertController: AlertController,
     private toastController: ToastController,
+    private translateService: TranslateService,
   ) {
     this.authService.getUserId().then((userId) => {
       if (userId == null) {
@@ -80,13 +82,12 @@ export class ReservationsPage implements OnInit {
 
   private async handleConnectionOrServerDown() {
     const alert = await this.alertController.create({
-      header: 'Alert',
-      subHeader: 'The client is failing',
-      message:
-        'Is your internet connection working? Maybe is our fault and our server is down.',
+      header: this.translateService.instant('HOME.CLIENT_ERROR.HEADER'),
+      subHeader: this.translateService.instant('HOME.CLIENT_ERROR.SUBHEADER'),
+      message: this.translateService.instant('HOME.CLIENT_ERROR.MESSAGE'),
       buttons: [
         {
-          text: 'OK',
+          text: this.translateService.instant('HOME.CLIENT_ERROR.OKAY_BUTTON'),
           handler: () => {
             this.alertController.dismiss().then();
           },
@@ -101,12 +102,19 @@ export class ReservationsPage implements OnInit {
     onClick: () => void,
   ) {
     const alert = await this.alertController.create({
-      header: 'Alerta',
-      subHeader: 'Vols eliminar la reserva?',
-      message: `Vols eliminar la reserva per al dia ${reservation.night.day}?`,
+      header: this.translateService.instant('RESERVATIONS.DELETE_ALERT.HEADER'),
+      subHeader: this.translateService.instant(
+        'RESERVATIONS.DELETE_ALERT.SUBHEADER',
+      ),
+      message: this.translateService.instant(
+        'RESERVATIONS.DELETE_ALERT.MESSAGE',
+        { day: reservation.night.day },
+      ),
       buttons: [
         {
-          text: 'Sí',
+          text: this.translateService.instant(
+            'RESERVATIONS.DELETE_ALERT.BUTTON',
+          ),
           handler: () => {
             this.alertController.dismiss().then();
             onClick();
@@ -120,7 +128,9 @@ export class ReservationsPage implements OnInit {
   private showReservationDeletedMessage() {
     this.toastController
       .create({
-        message: 'Reserva eliminada',
+        message: this.translateService.instant(
+          'RESERVATIONS.DELETE_OPERATION.CORRECT',
+        ),
         duration: 2000,
         color: 'success',
       })
@@ -130,7 +140,9 @@ export class ReservationsPage implements OnInit {
   private handleReservationNotFound() {
     this.toastController
       .create({
-        message: 'La Reserva no existeix, potser ja ha estat eliminada',
+        message: this.translateService.instant(
+          'RESERVATIONS.DELETE_OPERATION.NOT_FOUND',
+        ),
         duration: 2000,
         color: 'danger',
       })

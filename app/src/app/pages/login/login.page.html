@@ -4,7 +4,7 @@
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
 
-    <ion-title>Login</ion-title>
+    <ion-title> {{ 'LOGIN.HEADER' | translate }} </ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -19,7 +19,7 @@
   <div class="login-form">
     <form #loginForm="ngForm" novalidate>
       <ion-input
-        label="Username"
+        label="{{'LOGIN.USERNAME.FIELD' | translate }}"
         labelPlacement="stacked"
         [clearInput]="true"
         placeholder="(+34) xxx xxx xxx"
@@ -27,7 +27,7 @@
         fill="outline"
         [(ngModel)]="credentials.phone_number"
         name="username"
-        errorText="Username is required"
+        errorText="{{'LOGIN.USERNAME.ERROR_REQUIRED' | translate }}"
         required="true"
         [maskito]="phoneMask"
         [maskitoElement]="maskPredicate"
@@ -35,27 +35,27 @@
       </ion-input>
 
       <ion-input
-        label="Password"
+        label="{{'LOGIN.PASSWORD.FIELD' | translate }}"
         labelPlacement="stacked"
         fill="outline"
         [(ngModel)]="credentials.password"
         name="password"
         type="password"
-        errorText="Password is required"
-        required="Password is required"
+        errorText="{{'LOGIN.PASSWORD.ERROR_REQUIRED' | translate }}"
+        required="true"
       >
       </ion-input>
       <ion-note color="danger" *ngIf="hasError"> {{errorMessage}} </ion-note>
 
       <ion-row>
         <ion-col>
-          <ion-button (click)="onLogin(loginForm)" type="submit" expand="block"
-            >Login
+          <ion-button (click)="onLogin(loginForm)" type="submit" expand="block">
+            {{'LOGIN.BUTTON' | translate }}
           </ion-button>
         </ion-col>
         <ion-col>
-          <ion-button (click)="onSignup()" color="light" expand="block"
-            >Signup
+          <ion-button (click)="onSignup()" color="light" expand="block">
+            {{'SIGNUP.BUTTON' | translate }}
           </ion-button>
         </ion-col>
       </ion-row>

@@ -18,7 +18,7 @@ import {
   GetRefugeFromIdErrors,
   GetRefugeResponse,
 } from '../../schemas/refuge/get-refuge-schema';
-import { createChart } from 'lightweight-charts';
+import { TranslateService } from '@ngx-translate/core';
 
 type AutocompletePrediction = google.maps.places.AutocompletePrediction;
 
@@ -42,6 +42,7 @@ export class HomePage implements AfterViewInit {
     private location: Location,
     private alertController: AlertController,
     private modalController: ModalController,
+    private translateService: TranslateService,
   ) {
     this.searchResults = this.searchService.getPredictions();
     this.refugeId = this.route.snapshot.paramMap.get('id')?.toString();
@@ -191,13 +192,12 @@ export class HomePage implements AfterViewInit {
 
   private async handleClientError() {
     const alert = await this.alertController.create({
-      header: 'Alerta',
-      subHeader: 'El client està fallant',
-      message:
-        'Tens connexió a internet? Potser és culpa nostra i el servidor no està operatiu.',
+      header: this.translateService.instant('HOME.CLIENT_ERROR.HEADER'),
+      subHeader: this.translateService.instant('HOME.CLIENT_ERROR.SUBHEADER'),
+      message: this.translateService.instant('HOME.CLIENT_ERROR.MESSAGE'),
       buttons: [
         {
-          text: "D'acord",
+          text: this.translateService.instant('HOME.CLIENT_ERROR.OKAY_BUTTON'),
           handler: () => {
             this.alertController.dismiss().then();
             this.fetchRefuges();
@@ -227,12 +227,13 @@ export class HomePage implements AfterViewInit {
   private renderMapError() {
     this.alertController
       .create({
-        header: 'Error',
-        message:
-          'Hi ha hagut un error carregant el mapa, si us plau, torna-ho a intentar.',
+        header: this.translateService.instant('HOME.RENDER_MAP_ERROR.HEADER'),
+        message: this.translateService.instant('HOME.RENDER_MAP_ERROR.MESSAGE'),
         buttons: [
           {
-            text: 'Ok',
+            text: this.translateService.instant(
+              'HOME.RENDER_MAP_ERROR.OKAY_BUTTON',
+            ),
             handler: () => {
               this.alertController.dismiss().then();
             },

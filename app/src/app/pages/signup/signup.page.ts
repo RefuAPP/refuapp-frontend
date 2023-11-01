@@ -17,6 +17,7 @@ import {
 } from '../../schemas/user/create/create-user-error';
 import { phoneMaskPredicate, spainPhoneMask } from '../../schemas/phone/phone';
 import { parseForm, UserFormError } from '../../schemas/user/validate/form';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-signup',
@@ -42,13 +43,14 @@ export class SignupPage implements OnInit {
     private userService: UserService,
     private loadingController: LoadingController,
     private alertController: AlertController,
+    private translateService: TranslateService,
   ) {}
 
   ngOnInit() {}
 
   async signupLoading(): Promise<void> {
     const loading = await this.loadingController.create({
-      message: 'Creant usuari...',
+      message: this.translateService.instant('SIGNUP.LOADING'),
       translucent: true,
     });
     return await loading.present();
@@ -78,14 +80,22 @@ export class SignupPage implements OnInit {
   private showFormError(formError: UserFormError) {
     match(formError)
       .with(UserFormError.PASSWORDS_DO_NOT_MATCH, () => {
-        this.showErrorMessage('Les contrasenyes no coincideixen').then();
+        this.showErrorMessage(
+          this.translateService.instant('SIGNUP.PASSWORDS_DONT_MATCH'),
+        ).then();
       })
       .with(UserFormError.INCORRECT_PHONE_NUMBER, () => {
-        this.showErrorMessage('El número de telèfon és incorrecte').then();
+        this.showErrorMessage(
+          this.translateService.instant(
+            'SIGNUP.PHONE_NUMBER.INCORRECT_PHONE_NUMBER',
+          ),
+        ).then();
       })
       .with(UserFormError.INCORRECT_EMERGENCY_NUMBER, () => {
         this.showErrorMessage(
-          "El número de telèfon d'emergència és incorrecte",
+          this.translateService.instant(
+            'SIGNUP.EMERGENCY_NUMBER.INCORRECT_PHONE_NUMBER',
+          ),
         ).then();
       })
       .exhaustive();
@@ -103,7 +113,6 @@ export class SignupPage implements OnInit {
   }
 
   private handleCorrectSignup(data: UserCreated) {
-    console.log(`Correct signup! ${JSON.stringify(data)}`);
     this.loadingController
       .dismiss()
       .then(() => this.router.navigate(['/login']).then());
@@ -128,13 +137,12 @@ export class SignupPage implements OnInit {
 
   private async handleClientError() {
     const alert = await this.alertController.create({
-      header: 'Alerta',
-      subHeader: 'El teu dispositiu està fallant',
-      message:
-        'Funciona la connexió a Internet? Potser és culpa nostra i el nostre servidor està caigut.',
+      header: this.translateService.instant('HOME.CLIENT_ERROR.HEADER'),
+      subHeader: this.translateService.instant('HOME.CLIENT_ERROR.SUBHEADER'),
+      message: this.translateService.instant('HOME.CLIENT_ERROR.MESSAGE'),
       buttons: [
         {
-          text: "Ves a l'inici",
+          text: this.translateService.instant('HOME.CLIENT_ERROR.OKAY_BUTTON'),
           handler: () => {
             this.alertController.dismiss().then();
             this.router.navigate(['/home']).then();
@@ -147,7 +155,7 @@ export class SignupPage implements OnInit {
 
   private async handleAlreadyExistingPhone() {
     await this.showErrorMessage(
-      'Ja existeix un usuari amb aquest número de telèfon',
+      this.translateService.instant('SIGNUP.ALREADY_EXISTING_USER'),
     );
   }
 
