@@ -59,38 +59,6 @@ export class AppComponent implements OnInit {
       }),
     );
     this.translateService.setDefaultLang('en');
-    this.deviceLanguageService.getLanguageCode().subscribe((languageCode) => {
-      this.translateService.use(languageCode);
-      this.topPages.next([
-        {
-          title: translateService.instant('MENU.HOME'),
-          url: '/home',
-          icon: 'home',
-        },
-        {
-          title: translateService.instant('MENU.RESERVATIONS'),
-          url: '/reservations',
-          icon: 'folder',
-        },
-      ]);
-      this.bottomPages.next([
-        {
-          title: translateService.instant('MENU.PROFILE'),
-          url: '/profile',
-          icon: 'person',
-        },
-        {
-          title: translateService.instant('MENU.LOGOUT'),
-          url: '/logout',
-          icon: 'log-out',
-        },
-        {
-          title: translateService.instant('MENU.LOGIN'),
-          url: '/login',
-          icon: 'log-in',
-        },
-      ]);
-    });
   }
 
   ngOnInit(): void {
@@ -100,5 +68,37 @@ export class AppComponent implements OnInit {
         this.googleMapsLoaded = true;
       },
     );
+    this.deviceLanguageService.getLanguageCode().subscribe((languageCode) => {
+      this.translateService.use(languageCode);
+      this.topPages.next([
+        {
+          title: this.translateService.instant('MENU.HOME'),
+          url: '/home',
+          icon: 'home',
+        },
+        {
+          title: this.translateService.instant('MENU.RESERVATIONS'),
+          url: '/reservations',
+          icon: 'folder',
+        },
+      ]);
+      this.bottomPages.next([
+        {
+          title: this.translateService.instant('MENU.PROFILE'),
+          url: '/profile',
+          icon: 'person',
+        },
+        {
+          title: this.translateService.instant('MENU.LOGOUT'),
+          url: '/logout',
+          icon: 'log-out',
+        },
+        {
+          title: this.translateService.instant('MENU.LOGIN'),
+          url: '/login',
+          icon: 'log-in',
+        },
+      ]);
+    });
   }
 }
