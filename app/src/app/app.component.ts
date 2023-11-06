@@ -1,6 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from './services/auth/auth.service';
-import { combineLatest, map, Observable, ReplaySubject, Subject } from 'rxjs';
+import {
+  combineLatest,
+  map,
+  Observable,
+  ReplaySubject,
+  Subject,
+  take,
+} from 'rxjs';
 import { get } from 'scriptjs';
 import { secretEnvironment } from '../environments/environment.secret';
 import { DeviceLanguageService } from './services/translate/device-language.service';
@@ -46,7 +53,6 @@ export class AppComponent implements OnInit {
         else return pages.slice(2, 3);
       }),
     );
-
     this.topPages$ = combineLatest([
       this.topPagesComplete$,
       this.isAuthenticated$,
@@ -58,7 +64,6 @@ export class AppComponent implements OnInit {
         else return pages.slice(0, 1);
       }),
     );
-    this.translateService.setDefaultLang('en');
   }
 
   ngOnInit(): void {
@@ -69,36 +74,40 @@ export class AppComponent implements OnInit {
       },
     );
     this.deviceLanguageService.getLanguageCode().subscribe((languageCode) => {
-      this.translateService.use(languageCode);
-      this.topPages.next([
-        {
-          title: this.translateService.instant('MENU.HOME'),
-          url: '/home',
-          icon: 'home',
-        },
-        {
-          title: this.translateService.instant('MENU.RESERVATIONS'),
-          url: '/reservations',
-          icon: 'folder',
-        },
-      ]);
-      this.bottomPages.next([
-        {
-          title: this.translateService.instant('MENU.PROFILE'),
-          url: '/profile',
-          icon: 'person',
-        },
-        {
-          title: this.translateService.instant('MENU.LOGOUT'),
-          url: '/logout',
-          icon: 'log-out',
-        },
-        {
-          title: this.translateService.instant('MENU.LOGIN'),
-          url: '/login',
-          icon: 'log-in',
-        },
-      ]);
+      this.translateService
+        .use(languageCode)
+        .pipe(take(1))
+        .subscribe(() => {
+          this.topPages.next([
+            {
+              title: this.translateService.instant('MENU.HOME'),
+              url: '/home',
+              icon: 'home',
+            },
+            {
+              title: this.translateService.instant('MENU.RESERVATIONS'),
+              url: '/reservations',
+              icon: 'folder',
+            },
+          ]);
+          this.bottomPages.next([
+            {
+              title: this.translateService.instant('MENU.PROFILE'),
+              url: '/profile',
+              icon: 'person',
+            },
+            {
+              title: this.translateService.instant('MENU.LOGOUT'),
+              url: '/logout',
+              icon: 'log-out',
+            },
+            {
+              title: this.translateService.instant('MENU.LOGIN'),
+              url: '/login',
+              icon: 'log-in',
+            },
+          ]);
+        });
     });
   }
 }
