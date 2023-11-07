@@ -105,6 +105,14 @@
       "CORRECT": "Reservation deleted!",
       "NOT_FOUND": "Reservation doesn't exists, maybe it was already deleted?"
     },
+    "CREATE_OPERATION": {
+      "CORRECT": "Reservation on day {{day}} created!",
+      "NOT_AUTHENTICATED_OR_INVALID_DATE": "The selected date is invalid! Or you are doing something weird",
+      "NOT_ALLOWED_CREATION_FOR_USER": "You can't create a reservation for another user",
+      "SERVER_ERROR": "Server error, try again later",
+      "REFUGE_OR_USER_NOT_FOUND": "Refuge or user has been deleted, refresh the page",
+      "PROGRAMMING_ERROR": "We suck, our code had a programming error and we didn't notice it. Send us an email!"
+    },
     "DELETE_BUTTON": "Delete",
     "DETAILS": {
       "HEADER": "Day {{day}}",

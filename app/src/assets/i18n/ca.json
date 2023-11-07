@@ -105,6 +105,14 @@
       "CORRECT": "Reserva eliminada",
       "NOT_FOUND": "La reserva no existeix, potser ja ha estat eliminada?"
     },
+    "CREATE_OPERATION": {
+      "CORRECT": "Reserva pel dia {{day}} creada!",
+      "NOT_AUTHENTICATED_OR_INVALID_DATE": "La data seleccionada no és vàlida! O esteu fent alguna cosa estranya",
+      "NOT_ALLOWED_CREATION_FOR_USER": "No podeu crear una reserva per a un altre usuari",
+      "SERVER_ERROR": "Error del servidor, torneu-ho a intentar més tard",
+      "REFUGE_OR_USER_NOT_FOUND": "Refugi o usuari ha estat eliminat, actualitzeu la pàgina",
+      "PROGRAMMING_ERROR": "Som incompetents, el nostre codi ha tingut un error de programació i no ens hem adonat. Envieu-nos un correu electrònic!"
+    },
     "DELETE_BUTTON": "Elimina",
     "DETAILS": {
       "HEADER": "Dia {{day}}",

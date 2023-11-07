@@ -109,6 +109,14 @@
     "DETAILS": {
       "HEADER": "Día {{day}}",
       "MESSAGE": "El día {{day}} del mes {{month}} del año: {{year}}"
+    },
+    "CREATE_OPERATION": {
+      "CORRECT": "¡Reserva en el día {{day}} creada!",
+      "NOT_AUTHENTICATED_OR_INVALID_DATE": "¡La fecha seleccionada no es válida! O estás haciendo algo extraño",
+      "NOT_ALLOWED_CREATION_FOR_USER": "No puedes crear una reserva para otro usuario",
+      "SERVER_ERROR": "Error del servidor, inténtalo de nuevo más tarde",
+      "REFUGE_OR_USER_NOT_FOUND": "Refugio o usuario ha sido eliminado, actualiza la página",
+      "PROGRAMMING_ERROR": "Somos incompetentes, nuestro código tuvo un error de programación y no nos dimos cuenta. ¡Envíanos un correo electrónico!"
     }
   },
   "PROFILE": {

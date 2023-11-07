@@ -23,6 +23,11 @@ export function isEqual(night1: Night, night2: Night): boolean {
   );
 }
 
+export function fromISOString(isoString: string): Night {
+  const date = new Date(isoString);
+  return nightFromDate(date);
+}
+
 export function nightFromDate(date: Date): Night {
   return {
     day: date.getDate(),

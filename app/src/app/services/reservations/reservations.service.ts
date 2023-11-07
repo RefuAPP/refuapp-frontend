@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
 import { catchError, map, Observable, of, retry } from 'rxjs';
-import { Reservation } from '../../schemas/reservations/reservation';
+import {
+  Reservation,
+  ReservationWithId,
+} from '../../schemas/reservations/reservation';
 import { environment } from '../../../environments/environment';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import {
@@ -13,6 +16,12 @@ import {
   fromError as fromDeleteError,
   fromResponse as fromDeleteResponse,
 } from '../../schemas/reservations/delete-reservation';
+import { Night } from '../../schemas/night/night';
+import {
+  CreateReservation,
+  fromResponse as fromCreateResponse,
+  fromError as fromCreateError,
+} from '../../schemas/reservations/create-reservation';
 
 @Injectable({
   providedIn: 'root',
@@ -38,7 +47,31 @@ export class ReservationsService {
     );
   }
 
+  createReservation(
+    userId: string,
+    refugeId: string,
+    night: Night,
+  ): Observable<CreateReservation> {
+    const reservation: Reservation = {
+      user_id: userId,
+      refuge_id: refugeId,
+      night,
+    };
+    const createReservation = this.getReservationsUri();
+    return this.http
+      .post<ReservationWithId>(createReservation, reservation)
+      .pipe(
+        map((reservation) => fromCreateResponse(reservation)),
+        catchError((err: HttpErrorResponse) => of(fromCreateError(err))),
+        retry(3),
+      );
+  }
+
+  private getReservationsUri() {
+    return `${environment.API}/reservations/`;
+  }
+
   private getUriForReservation(reservationId: string) {
-    return `${environment.API}/reservations/${reservationId}`;
+    return `${this.getReservationsUri()}${reservationId}`;
   }
 }

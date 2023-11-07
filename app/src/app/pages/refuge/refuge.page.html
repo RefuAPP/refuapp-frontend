@@ -72,7 +72,11 @@
           </ion-row>
           <ion-row style="padding-left: 5%">
             <ion-col>
-              <ion-datetime presentation="date"></ion-datetime>
+              <ion-datetime
+                presentation="date"
+                [(ngModel)]="date"
+                min="{{getCurrentDate()}}"
+              ></ion-datetime>
             </ion-col>
             <ion-col>
               <ion-button (click)="onBookClick()" style="margin-left: 5%">
@@ -104,7 +108,11 @@
         </ion-row>
         <ion-row style="padding-left: 5%">
           <ion-col>
-            <ion-datetime presentation="date"></ion-datetime>
+            <ion-datetime
+              presentation="date"
+              [(ngModel)]="date"
+              min="{{getCurrentDate()}}"
+            ></ion-datetime>
           </ion-col>
           <ion-col>
             <ion-button (click)="onBookClick()" style="margin-left: 5%">
