@@ -32,16 +32,18 @@
   <ion-card class="language-card">
     <ion-card-header>
       <ion-card-title>
-        {{ 'Configuracion de idioma' | translate }}
+        {{ 'Configuraciones' | translate }}
       </ion-card-title>
     </ion-card-header>
-    <ion-card-content>
-      <ion-list>
-        <ion-item>
-          <ion-label>{{ 'Español' | translate }}</ion-label>
-        </ion-item>
-   
-      </ion-list>
-    </ion-card-content>
+    <ion-list>
+      <ion-item>
+        <ion-select label="Idioma" placeholder="Seleccionar" (ionChange)="changeLanguage($event)">
+          <ion-select-option value="es">Español</ion-select-option>
+          <ion-select-option value="ca">Catalán</ion-select-option>
+          <ion-select-option value="en">Inglés</ion-select-option>
+        </ion-select>
+        
+      </ion-item>      
+    </ion-list>
   </ion-card>
 </ion-content>

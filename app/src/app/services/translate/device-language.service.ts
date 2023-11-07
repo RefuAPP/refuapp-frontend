@@ -35,14 +35,12 @@ export class DeviceLanguageService {
     );
   }
 
-  async setLanguageCode(languageCode: string): Promise<void | never> {
-    const languageCodes = await this.getLanguagesCodes();
-    if (!languageCodes.includes(languageCode))
-      throw new Error(`Language code ${languageCode} not supported`);
+  async setLanguageCode(languageCode: string): Promise<void> {
     await this.storageService.set(LANGUAGE_KEY, languageCode);
   }
+  
 
-  async getLanguagesCodes(): Promise<string[]> {
+   getLanguagesCodes(): Array<string> {
     return this.translateService.getLangs();
   }
 }

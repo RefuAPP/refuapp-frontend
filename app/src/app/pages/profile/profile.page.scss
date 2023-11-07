@@ -15,7 +15,9 @@ ion-content {
   padding: $margin-gap;
   overflow-y: auto;
 }
-
+.profile-card {
+  margin-top: 100px;
+}
 .profile-card,
 .language-card {
   width: 100%;
