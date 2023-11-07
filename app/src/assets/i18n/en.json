@@ -121,7 +121,7 @@
   },
   "PROFILE": {
     "HEADER": "Profile",
-    "USER_NAME": "User Name: {{username}}",
+    "USER_NAME": "Hello, {{username}}",
     "PHONE_NUMBER": "Phone Number: {{phoneNumber}}",
     "EMERGENCY_PHONE_NUMBER": "Emergency Phone Number: {{emergencyPhoneNumber}}"
   },
