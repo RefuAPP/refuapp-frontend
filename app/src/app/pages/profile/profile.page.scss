@@ -1,38 +1,67 @@
+$border-radius: 10px;
+$box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+$margin-gap: 20px;
+$padding-container: 20px;
+$profile-image-size: 100px;
+$color-border: #dedede;
+$color-text: #ffffff;
+
 ion-content {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
   flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  height: 100%;
+  padding: $margin-gap;
+  overflow-y: auto;
+}
+
+.profile-card,
+.language-card {
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: $padding-container;
+  box-shadow: $box-shadow;
+  border-radius: $border-radius;
+  margin-bottom: $margin-gap;
+  margin-left: auto; 
+  margin-right: auto;
 }
 
 .header-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-direction: column;
   width: 100%;
   text-align: center;
-  margin-bottom: auto;
-  margin-top: auto;
+  margin-bottom: $margin-gap; 
 }
 
-.user-info {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 16px;
+.user-name {
+  font-size: 1.5em;
+  margin-bottom: $margin-gap; 
+  color: $color-text;
+  font-weight: bold;
 }
 
-.details {
-  font-size: 14px;
-  line-height: 1.5;
-  margin-top: 8px;
+.details p {
+  font-size: 1em;
+  margin: 8px 0;
+  color: $color-text;
 }
 
 .profile-image {
-  width: 50px;
-  height: 50px;
+  width: $profile-image-size;
+  height: $profile-image-size;
   border-radius: 50%;
+  border: 3px solid $color-border;
+  margin-bottom: $margin-gap; 
+  object-fit: cover;
+}
+
+.language-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: $margin-gap;
 }

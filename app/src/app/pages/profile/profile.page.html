@@ -4,37 +4,44 @@
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
 
-    <ion-title> {{ 'PROFILE.HEADER' | translate }}</ion-title>
+    <ion-title>{{ 'PROFILE.HEADER' | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content *ngIf="user !== undefined">
-  <ion-card>
+  <ion-card class="profile-card">
     <ion-card-header>
       <div class="header-container">
-        <div class="user-info">
-          <ion-card-title>
-            <h1>
-              {{'PROFILE.USER_NAME' | translate: {username: user.username} }}
-            </h1>
-          </ion-card-title>
-          <div class="details">
-            <h1>
-              {{'PROFILE.PHONE_NUMBER' | translate: {phoneNumber:
-              user?.phone_number} }}
-            </h1>
-            <h1>
-              {{ 'PROFILE.EMERGENCY_PHONE_NUMBER' | translate:
-              {emergencyPhoneNumber: user?.emergency_number} }}
-            </h1>
-          </div>
-        </div>
         <img
-          class="profile-image"
-          src="assets/img/perfil.jpg"
-          alt="Profile photo"
-        />
+        class="profile-image"
+        [src]="'assets/img/perfil' + avatarNumber + '.png'"
+        alt="Profile photo"
+      />      
+        <ion-card-title class="user-name">
+          {{'PROFILE.USER_NAME' | translate: {username: user.username} }}
+        </ion-card-title>
+        <div class="details">
+          <p>{{'PROFILE.PHONE_NUMBER' | translate: {phoneNumber:
+            user?.phone_number} }}</p>
+          <p>{{ 'PROFILE.EMERGENCY_PHONE_NUMBER' | translate:
+            {emergencyPhoneNumber: user?.emergency_number} }}</p>
+        </div>
       </div>
     </ion-card-header>
+  </ion-card>
+  <ion-card class="language-card">
+    <ion-card-header>
+      <ion-card-title>
+        {{ 'Configuracion de idioma' | translate }}
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list>
+        <ion-item>
+          <ion-label>{{ 'Español' | translate }}</ion-label>
+        </ion-item>
+   
+      </ion-list>
+    </ion-card-content>
   </ion-card>
 </ion-content>

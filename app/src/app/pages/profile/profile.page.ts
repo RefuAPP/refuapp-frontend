@@ -11,6 +11,7 @@ import { UserCreated } from 'src/app/schemas/user/user';
 })
 export class ProfilePage implements OnInit {
   user?: UserCreated;
+  avatarNumber: number = 1; 
 
   constructor(
     private authService: AuthService,
@@ -18,9 +19,12 @@ export class ProfilePage implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.setRandomAvatar(); // Set a random avatar on initialization
+
     this.authService.getUserId().then((userId: string | null) => {
-      if (userId === null)
+      if (userId === null) {
         throw new Error('Not logged in, impossible to get user data');
+      }
       this.http
         .get<UserCreated>(`${environment.API}/users/${userId}`)
         .subscribe({
@@ -32,5 +36,9 @@ export class ProfilePage implements OnInit {
           },
         });
     });
+  }
+
+  setRandomAvatar() {
+    this.avatarNumber = Math.floor(Math.random() * 8) + 1;
   }
 }
