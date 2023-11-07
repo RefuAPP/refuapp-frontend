@@ -1,12 +1,4 @@
-import {
-  AfterViewInit,
-  ChangeDetectorRef,
-  Component,
-  ElementRef,
-  Input,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
+import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
 import { AlertController, ModalController, Platform } from '@ionic/angular';
 import { match } from 'ts-pattern';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -16,12 +8,6 @@ import {
   GetRefugeResponse,
 } from '../../schemas/refuge/get-refuge-schema';
 import { Refuge } from '../../schemas/refuge/refuge';
-import { createChart } from 'lightweight-charts';
-import { getChartConfiguration } from './chart-configuration';
-import {
-  OccupationService,
-  WeeklyOccupation,
-} from '../../services/occupation/occupation.service';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -31,17 +17,13 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class RefugePage implements OnInit, AfterViewInit {
   @Input() refuge?: Refuge;
-  @ViewChild('chart', { static: false }) chart?: ElementRef;
   modal: HTMLIonModalElement | undefined;
-  date = '';
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private refugeService: RefugeService,
-    private occupationService: OccupationService,
     private alertController: AlertController,
-    private changeDetectorRef: ChangeDetectorRef,
     private modalController: ModalController,
     private translateService: TranslateService,
     private platform: Platform,
@@ -74,10 +56,7 @@ export class RefugePage implements OnInit, AfterViewInit {
     this.modalController.getTop().then((modal) => {
       this.modal = modal;
     });
-    if (this.refuge) {
-      this.onRefugeLoaded(this.refuge);
-      return;
-    }
+    if (this.refuge) return;
     const refugeId = this.getRefugeIdFromUrl();
     this.fetchRefuge(refugeId);
   }
@@ -103,79 +82,13 @@ export class RefugePage implements OnInit, AfterViewInit {
 
   private handleGetRefugeResponse(response: GetRefugeResponse) {
     match(response)
-      .with({ status: 'correct' }, (response) =>
-        this.onRefugeLoaded(response.data),
-      )
+      .with({ status: 'correct' }, (response) => {
+        this.refuge = response.data;
+      })
       .with({ status: 'error' }, (response) => {
         this.handleError(response.error);
       })
       .exhaustive();
-  }
-
-  private onRefugeLoaded(refuge: Refuge) {
-    this.refuge = refuge;
-    this.changeDetectorRef.detectChanges();
-    if (this.chart === undefined) {
-      console.log('chart undefined');
-      return;
-    }
-    const chartElement = this.chart.nativeElement;
-    const chart = createChart(
-      chartElement,
-      getChartConfiguration(
-        this.getTextColorFromCss(),
-        this.getBackgroundColorFromCss(),
-      ),
-    );
-    chart.applyOptions({
-      timeScale: {
-        fixLeftEdge: true,
-        rightBarStaysOnScroll: true,
-      },
-    });
-    // Create chart adjusting the size to the current div size
-    const lineSeries = chart.addLineSeries();
-    this.occupationService.getWeeklyOccupationMock(refuge.id).subscribe({
-      next: (response) => {
-        // TODO check for errors here
-        const occupation = response as WeeklyOccupation;
-        const data = occupation.weekly_data
-          .map((dayData) => {
-            return {
-              time: `${dayData.date.getFullYear()}-${
-                dayData.date.getMonth() + 1
-              }-${dayData.date.getDate()}`,
-              value: dayData.count,
-            };
-          })
-          .reverse();
-        lineSeries.setData(data);
-        this.occupationService.getTodayOccupationMock().subscribe({
-          next: (response) => {
-            const time = new Date();
-            const timeString = `${time.getFullYear()}-${
-              time.getMonth() + 1
-            }-${time.getDate()}`;
-            lineSeries.update({ time: timeString, value: response });
-          },
-        });
-      },
-    });
-    chart.timeScale().fitContent();
-  }
-
-  private getBackgroundColorFromCss(): string {
-    const element = document.querySelector('ion-content');
-    if (element == null) return 'white';
-    const style = window.getComputedStyle(element);
-    return style.backgroundColor;
-  }
-
-  private getTextColorFromCss(): string {
-    const element = document.querySelector('ion-content');
-    if (element == null) return 'black';
-    const style = window.getComputedStyle(element);
-    return style.color;
   }
 
   private handleError(error: GetRefugeFromIdErrors) {

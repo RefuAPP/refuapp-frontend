@@ -9,6 +9,7 @@ import { RefugePageRoutingModule } from './refuge-routing.module';
 import { RefugePage } from './refuge.page';
 import { TranslateModule } from '@ngx-translate/core';
 import { ReservationPickerComponent } from '../../components/reservation-picker/reservation-picker.component';
+import { ReservationsChartComponent } from '../../components/reservations-chart/reservations-chart.component';
 
 @NgModule({
   imports: [
@@ -18,6 +19,10 @@ import { ReservationPickerComponent } from '../../components/reservation-picker/
     RefugePageRoutingModule,
     TranslateModule,
   ],
-  declarations: [RefugePage, ReservationPickerComponent],
+  declarations: [
+    RefugePage,
+    ReservationPickerComponent,
+    ReservationsChartComponent,
+  ],
 })
 export class RefugePageModule {}
