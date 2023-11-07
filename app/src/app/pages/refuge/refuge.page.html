@@ -70,20 +70,8 @@
               {{'REFUGE.RESERVATIONS.HEADER' | translate }}
             </h3>
           </ion-row>
-          <ion-row style="padding-left: 5%">
-            <ion-col>
-              <ion-datetime
-                presentation="date"
-                [(ngModel)]="date"
-                min="{{getCurrentDate()}}"
-              ></ion-datetime>
-            </ion-col>
-            <ion-col>
-              <ion-button (click)="onBookClick()" style="margin-left: 5%">
-                {{'REFUGE.RESERVATIONS.BUTTON' | translate }}
-                <ion-icon style="margin-left: 5%" name="folder"></ion-icon>
-              </ion-button>
-            </ion-col>
+          <ion-row>
+            <app-reservation-picker [refuge]="refuge!"></app-reservation-picker>
           </ion-row>
         </ion-col>
         <ion-col size="8">
@@ -106,20 +94,8 @@
             {{'REFUGE.RESERVATIONS.HEADER' | translate }}
           </h3>
         </ion-row>
-        <ion-row style="padding-left: 5%">
-          <ion-col>
-            <ion-datetime
-              presentation="date"
-              [(ngModel)]="date"
-              min="{{getCurrentDate()}}"
-            ></ion-datetime>
-          </ion-col>
-          <ion-col>
-            <ion-button (click)="onBookClick()" style="margin-left: 5%">
-              {{'REFUGE.RESERVATIONS.BUTTON' | translate }}
-              <ion-icon style="margin-left: 5%" name="folder"></ion-icon>
-            </ion-button>
-          </ion-col>
+        <ion-row>
+          <app-reservation-picker [refuge]="refuge!"></app-reservation-picker>
         </ion-row>
         <ion-col>
           <h3 class="ion-padding-top ion-padding-start">

@@ -1,0 +1,15 @@
+<ion-grid>
+  <ion-col>
+    <ion-datetime
+      presentation="date"
+      [(ngModel)]="date"
+      min="{{ getCurrentDate() }}"
+    ></ion-datetime>
+  </ion-col>
+  <ion-col>
+    <ion-button (click)="onBookClick()" style="margin-left: 5%">
+      {{ "REFUGE.RESERVATIONS.BUTTON" | translate }}
+      <ion-icon style="margin-left: 5%" name="folder"></ion-icon>
+    </ion-button>
+  </ion-col>
+</ion-grid>
