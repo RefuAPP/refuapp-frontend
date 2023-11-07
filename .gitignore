@@ -53,8 +53,6 @@ temp/
 .tmp/
 hooks/
 
-android/
-ios/
 
 # Ionic 3 plugins files
 platforms/
