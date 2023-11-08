@@ -119,12 +119,20 @@
       "MESSAGE": "El dia {{day}} del mes {{month}} de l'any: {{year}}"
     }
   },
-  "PROFILE": {
-    "HEADER": "Perfil",
-    "USER_NAME": "Bones, {{username}}",
-    "PHONE_NUMBER": "Número de Telèfon: {{phoneNumber}}",
-    "EMERGENCY_PHONE_NUMBER": "Número de Telèfon d'Emergència: {{emergencyPhoneNumber}}"
-  },
+    "PROFILE": {
+      "HEADER": "Perfil",
+      "USER_NAME": "Hola, {{username}}",
+      "PHONE_NUMBER": "Número de Telèfon: {{phoneNumber}}",
+      "EMERGENCY_PHONE_NUMBER": "Número de Telèfon d'Emergència: {{emergencyPhoneNumber}}",
+      "SETTINGS": "Configuracions"
+    },
+    "SETTINGS": {
+      "LANGUAGE": "Idioma",
+      "SELECT": "Selecciona",
+      "SPANISH": "Espanyol",
+      "CATALAN": "Català",
+      "ENGLISH": "Anglès"
+    },
   "MENU": {
     "HOME": "Inici",
     "RESERVATIONS": "Reserves",

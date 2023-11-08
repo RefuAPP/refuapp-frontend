@@ -123,7 +123,15 @@
     "HEADER": "Perfil",
     "USER_NAME": "Hola, {{username}}",
     "PHONE_NUMBER": "Número de Teléfono: {{phoneNumber}}",
-    "EMERGENCY_PHONE_NUMBER": "Número de Teléfono de Emergencia: {{emergencyPhoneNumber}}"
+    "EMERGENCY_PHONE_NUMBER": "Número de Teléfono de Emergencia: {{emergencyPhoneNumber}}",
+    "SETTINGS": "Configuraciones"
+  },
+  "SETTINGS": {
+    "LANGUAGE": "Idioma",
+    "SELECT": "Seleccionar",
+    "SPANISH": "Español",
+    "CATALAN": "Catalán",
+    "ENGLISH": "Inglés"
   },
   "MENU": {
     "HOME": "Inicio",
