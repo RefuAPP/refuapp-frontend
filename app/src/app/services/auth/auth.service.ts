@@ -1,16 +1,18 @@
 import { Injectable } from '@angular/core';
 import { StorageService } from '../storage/storage.service';
-import { catchError, map, Observable, of, ReplaySubject, retry } from 'rxjs';
+import { catchError, map, Observable, of, retry } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { UserCredentials } from '../../schemas/user/user';
 import {
   AuthenticationResponse,
+  clientError,
   fromError,
   fromResponse,
 } from '../../schemas/auth/authenticate';
 import { Token } from '../../schemas/auth/token';
 import jwtDecode from 'jwt-decode';
+import { AuthenticationErrors, UserErrors } from '../../schemas/auth/errors';
 
 const authUri = `${environment.API}/login/`;
 
@@ -25,41 +27,25 @@ const tokenStorageKey = 'token';
   providedIn: 'root',
 })
 export class AuthService {
-  private authenticatedChannel: ReplaySubject<boolean> =
-    new ReplaySubject<boolean>(1);
-
   constructor(
     private storageService: StorageService,
     private http: HttpClient,
-  ) {
-    this.isAuthenticatedPromise().then((auth) => {
-      this.authenticatedChannel.next(auth);
-    });
-  }
+  ) {}
 
   getToken(credentials: UserCredentials): Observable<AuthenticationResponse> {
     const data = this.getFormDataFrom(credentials);
-    return this.getTokenFromApi(data);
+    return this.getTokenFromApi(data).pipe(
+      catchError((err: HttpErrorResponse) => of(clientError())),
+    );
   }
 
-  authenticate(token: Token) {
-    this.storageService
-      .set(tokenStorageKey, token.access_token)
-      .then(() => this.authenticatedChannel.next(true));
+  async authenticate(token: Token): Promise<void> {
+    await this.storageService.set(tokenStorageKey, token.access_token);
   }
 
-  deauthenticate() {
-    this.isAuthenticatedPromise().then((auth) => {
-      if (auth) {
-        this.storageService
-          .remove(tokenStorageKey)
-          .then(() => this.authenticatedChannel.next(false));
-      }
-    });
-  }
-
-  isAuthenticated(): Observable<boolean> {
-    return this.authenticatedChannel.asObservable();
+  async deauthenticate() {
+    const hasToken = await this.isAuthenticatedPromise();
+    if (hasToken) await this.storageService.remove(tokenStorageKey);
   }
 
   async getUserId(): Promise<string | null> {

@@ -7,11 +7,11 @@
 
         <ion-menu-toggle
           auto-hide="false"
-          *ngFor="let p of topPages$ | async; let i = index"
+          *ngFor="let topMenuItem of topMenuItems$ | async"
         >
           <ion-item
             routerDirection="root"
-            [routerLink]="[p.url]"
+            [routerLink]="[topMenuItem.url]"
             lines="none"
             detail="false"
             routerLinkActive="selected"
@@ -19,10 +19,10 @@
             <ion-icon
               aria-hidden="true"
               slot="start"
-              [ios]="p.icon + '-outline'"
-              [md]="p.icon + '-sharp'"
+              [ios]="topMenuItem.icon + '-outline'"
+              [md]="topMenuItem.icon + '-sharp'"
             ></ion-icon>
-            <ion-label>{{ p.title }}</ion-label>
+            <ion-label>{{ topMenuItem.title }}</ion-label>
           </ion-item>
         </ion-menu-toggle>
       </ion-list>
@@ -31,11 +31,11 @@
       <ion-footer class="bar-stable" id="bottom-menu-item-container">
         <ion-menu-toggle
           auto-hide="false"
-          *ngFor="let p of bottomPages$ | async; let i = index"
+          *ngFor="let topMenuBottom of bottomMenuItems$ | async"
         >
           <ion-item
             routerDirection="root"
-            [routerLink]="p.url"
+            [routerLink]="topMenuBottom.url"
             lines="none"
             detail="false"
             routerLinkActive="selected"
@@ -43,10 +43,10 @@
             <ion-icon
               aria-hidden="true"
               slot="start"
-              [ios]="p.icon + '-outline'"
-              [md]="p.icon + '-sharp'"
+              [ios]="topMenuBottom.icon + '-outline'"
+              [md]="topMenuBottom.icon + '-sharp'"
             ></ion-icon>
-            <ion-label>{{ p.title }}</ion-label>
+            <ion-label>{{ topMenuBottom.title }}</ion-label>
           </ion-item>
         </ion-menu-toggle>
       </ion-footer>

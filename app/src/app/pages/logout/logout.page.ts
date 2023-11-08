@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../../services/auth/auth.service';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { AppState } from '@capacitor/app';
+import { logOutRequest } from '../../state/auth/auth.actions';
 
 @Component({
   selector: 'app-logout',
@@ -9,10 +11,10 @@ import { Router } from '@angular/router';
 })
 export class LogoutPage implements OnInit {
   constructor(
-    private authService: AuthService,
+    private store: Store<AppState>,
     private router: Router,
   ) {
-    this.authService.deauthenticate();
+    this.store.dispatch(logOutRequest());
     this.router.navigate(['/home']).then();
   }
 

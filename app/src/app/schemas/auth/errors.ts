@@ -11,6 +11,7 @@ export enum ServerErrors {
 export enum UserErrors {
   INCORRECT_PASSWORD = 'INCORRECT_PASSWORD',
   USER_NOT_FOUND = 'USER_NOT_FOUND',
+  NOT_CONNECTED = 'NOT_CONNECTED',
 }
 
 export namespace AuthenticationErrors {
