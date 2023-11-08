@@ -38,9 +38,8 @@ export class DeviceLanguageService {
   async setLanguageCode(languageCode: string): Promise<void> {
     await this.storageService.set(LANGUAGE_KEY, languageCode);
   }
-  
 
-   getLanguagesCodes(): Array<string> {
+  getLanguagesCodes(): Array<string> {
     return this.translateService.getLangs();
   }
 }

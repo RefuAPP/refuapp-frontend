@@ -29,19 +29,19 @@ ion-content {
   box-shadow: $box-shadow;
   border-radius: $border-radius;
   margin-bottom: $margin-gap;
-  margin-left: auto; 
+  margin-left: auto;
   margin-right: auto;
 }
 
 .header-container {
   width: 100%;
   text-align: center;
-  margin-bottom: $margin-gap; 
+  margin-bottom: $margin-gap;
 }
 
 .user-name {
   font-size: 1.5em;
-  margin-bottom: $margin-gap; 
+  margin-bottom: $margin-gap;
   color: $color-text;
   font-weight: bold;
 }
@@ -57,7 +57,7 @@ ion-content {
   height: $profile-image-size;
   border-radius: 50%;
   border: 3px solid $color-border;
-  margin-bottom: $margin-gap; 
+  margin-bottom: $margin-gap;
   object-fit: cover;
 }
 

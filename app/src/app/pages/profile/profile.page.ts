@@ -28,14 +28,16 @@ export class ProfilePage implements OnInit {
       if (userId === null) {
         throw new Error('Not logged in, impossible to get user data');
       }
-      this.http.get<UserCreated>(`${environment.API}/users/${userId}`).subscribe({
-        next: (userData: UserCreated) => {
-          this.user = userData;
-        },
-        error: (error: any) => {
-          console.error('Error fetching user info from API', error);
-        },
-      });
+      this.http
+        .get<UserCreated>(`${environment.API}/users/${userId}`)
+        .subscribe({
+          next: (userData: UserCreated) => {
+            this.user = userData;
+          },
+          error: (error: any) => {
+            console.error('Error fetching user info from API', error);
+          },
+        });
     });
   }
 
@@ -43,9 +45,12 @@ export class ProfilePage implements OnInit {
     this.avatarNumber = Math.floor(Math.random() * 8) + 1;
   }
   async changeLanguage(event: any) {
-    const languageCode = (event as CustomEvent).detail.value; 
+    const languageCode = (event as CustomEvent).detail.value;
     try {
-      console.log("Language code supported are: ", this.deviceLanguageService.getLanguagesCodes());
+      console.log(
+        'Language code supported are: ',
+        this.deviceLanguageService.getLanguagesCodes(),
+      );
       await this.deviceLanguageService.setLanguageCode(languageCode);
       this.translateService.use(languageCode);
     } catch (error) {

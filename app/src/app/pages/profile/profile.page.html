@@ -17,30 +17,43 @@
           alt="Profile photo"
         />
         <ion-card-title class="user-name">
-          {{ 'PROFILE.USER_NAME' | translate: { username: user.username } }}
+          {{ 'PROFILE.USER_NAME' | translate: { username: user?.username } }}
         </ion-card-title>
         <div class="details">
-          <p>{{ 'PROFILE.PHONE_NUMBER' | translate: { phoneNumber: user?.phone_number } }}</p>
-          <p>{{ 'PROFILE.EMERGENCY_PHONE_NUMBER' | translate: { emergencyPhoneNumber: user?.emergency_number } }}</p>
+          <p>
+            {{ 'PROFILE.PHONE_NUMBER' | translate: { phoneNumber:
+            user?.phone_number } }}
+          </p>
+          <p>
+            {{ 'PROFILE.EMERGENCY_PHONE_NUMBER' | translate: {
+            emergencyPhoneNumber: user?.emergency_number } }}
+          </p>
         </div>
       </div>
     </ion-card-header>
   </ion-card>
   <ion-card class="language-card">
     <ion-card-header>
-      <ion-card-title>
-        {{ 'PROFILE.SETTINGS' | translate }}
-      </ion-card-title>
+      <ion-card-title> {{ 'PROFILE.SETTINGS' | translate }} </ion-card-title>
     </ion-card-header>
     <ion-list>
       <ion-item>
         <ion-label>{{ 'SETTINGS.LANGUAGE' | translate }}</ion-label>
-        <ion-select placeholder="{{ 'SETTINGS.SELECT' | translate }}" (ionChange)="changeLanguage($event)">
-          <ion-select-option value="es">{{ 'SETTINGS.SPANISH' | translate }}</ion-select-option>
-          <ion-select-option value="ca">{{ 'SETTINGS.CATALAN' | translate }}</ion-select-option>
-          <ion-select-option value="en">{{ 'SETTINGS.ENGLISH' | translate }}</ion-select-option>
+        <ion-select
+          placeholder="{{ 'SETTINGS.SELECT' | translate }}"
+          (ionChange)="changeLanguage($event)"
+        >
+          <ion-select-option value="es"
+            >{{ 'SETTINGS.SPANISH' | translate }}</ion-select-option
+          >
+          <ion-select-option value="ca"
+            >{{ 'SETTINGS.CATALAN' | translate }}</ion-select-option
+          >
+          <ion-select-option value="en"
+            >{{ 'SETTINGS.ENGLISH' | translate }}</ion-select-option
+          >
         </ion-select>
-      </ion-item>      
+      </ion-item>
     </ion-list>
   </ion-card>
 </ion-content>
