@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { User, UserCreated, UserForm } from '../../schemas/user/user';
+import { User, UserForm } from '../../schemas/user/user';
 import { RepeatedData } from '../../schemas/user/create/create-user-error';
 import { UserFormError } from '../../schemas/user/validate/form';
 import { ServerErrors } from '../../schemas/errors/server';
@@ -26,7 +26,7 @@ export const createUserDeviceError = createAction(
 );
 
 export const createUserCorrect = createAction(
-  '[Auth] Device Error When Login',
+  '[User] Create User Correct',
   props<{
     credentials: User;
   }>(),

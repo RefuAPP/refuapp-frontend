@@ -7,7 +7,7 @@ import { Store } from '@ngrx/store';
 import { loginRequest } from '../../state/auth/auth.actions';
 import {
   getCurrentCredentials,
-  getLoginErrors,
+  getLoginDeviceErrors,
   getLoginFormErrorMessages,
   isAuthenticated,
 } from '../../state/auth/auth.selectors';
@@ -34,7 +34,7 @@ export class LoginPage implements OnInit {
   formErrors$ = this.store.select(getLoginFormErrorMessages);
   credentials$ = this.store.select(getCurrentCredentials);
   deviceErrors$: Observable<NonUserFormErrors> = this.store
-    .select(getLoginErrors)
+    .select(getLoginDeviceErrors)
     .pipe(
       filter((errors) => errors !== null) as OperatorFunction<
         NonUserFormErrors | null,

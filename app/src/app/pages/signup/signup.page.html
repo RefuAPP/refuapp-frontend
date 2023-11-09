@@ -17,12 +17,17 @@
   </div>
 
   <div class="login-form">
-    <form #singUpForm="ngForm" novalidate>
+    <form
+      [formGroup]="form"
+      *ngIf="formData$ | async as d"
+      #singUpForm="ngForm"
+      novalidate
+    >
       <ion-input
         label="{{'SIGNUP.USERNAME.FIELD' | translate }}"
         labelPlacement="stacked"
         fill="outline"
-        [(ngModel)]="form.username"
+        [(ngModel)]="d.username"
         name="username"
         type="text"
         errorText="{{'SIGNUP.USERNAME.ERROR' | translate }}"
@@ -37,7 +42,7 @@
         placeholder="(+34) xxx xxx xxx"
         type="tel"
         fill="outline"
-        [(ngModel)]="form.phone_number"
+        [(ngModel)]="d.phone_number"
         name="phone_number"
         errorText="{{'SIGNUP.PHONE_NUMBER.ERROR' | translate }}"
         required="true"
@@ -53,7 +58,7 @@
         placeholder="(+34) xxx xxx xxx"
         type="tel"
         fill="outline"
-        [(ngModel)]="form.emergency_number"
+        [(ngModel)]="d.emergency_number"
         name="emergency_number"
         errorText="{{'SIGNUP.EMERGENCY_NUMBER.ERROR' | translate }}"
         required="true"
@@ -65,7 +70,7 @@
         label="{{'SIGNUP.PASSWORD.FIELD' | translate }}"
         labelPlacement="stacked"
         fill="outline"
-        [(ngModel)]="form.password"
+        [(ngModel)]="d.password"
         name="password"
         type="password"
         errorText="{{'SIGNUP.PASSWORD.ERROR' | translate }}"
@@ -76,8 +81,8 @@
         label="{{'SIGNUP.REPEATED_PASSWORD.FIELD' | translate }}"
         labelPlacement="stacked"
         fill="outline"
-        [(ngModel)]="form.repeatPassword"
-        name="password"
+        [(ngModel)]="d.repeatPassword"
+        name="repeatPassword"
         type="password"
         errorText="{{'SIGNUP.REPEATED_PASSWORD.ERROR' | translate }}"
         required="true"
@@ -89,7 +94,7 @@
 
       <ion-row>
         <ion-col>
-          <ion-button (click)="signUp()" type="submit" expand="block">
+          <ion-button (click)="submit()" type="submit" expand="block">
             {{'SIGNUP.BUTTON' | translate}}
           </ion-button>
         </ion-col>

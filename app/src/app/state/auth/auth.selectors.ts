@@ -21,7 +21,7 @@ export const getLoginFormErrorMessages = createSelector(selectAuth, (auth) => {
     .exhaustive();
 });
 
-export const getLoginErrors = createSelector(selectAuth, (auth) => {
+export const getLoginDeviceErrors = createSelector(selectAuth, (auth) => {
   if (auth.deviceError) return auth.deviceError;
   return null;
 });
