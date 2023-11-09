@@ -1,6 +1,5 @@
 import { createReducer, on } from '@ngrx/store';
 import {
-  httpLoginRequest,
   loginCompleted,
   loginRequest,
   loginResponseCorrect,
@@ -39,9 +38,6 @@ export const authReducer = createReducer(
     ...state,
     isLoading: true,
     userCredentials: action.credentials,
-  })),
-  on(httpLoginRequest, (state, action) => ({
-    ...state,
   })),
   on(loginResponseError, (state, action) => ({
     ...state,

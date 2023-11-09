@@ -9,11 +9,6 @@ export const loginRequest = createAction(
   props<{ credentials: UserCredentials }>(),
 );
 
-export const httpLoginRequest = createAction(
-  '[Auth] HTTP Login Request',
-  props<{ credentials: UserCredentials }>(),
-);
-
 export const loginResponseError = createAction(
   '[Auth] Login Response Failure',
   props<{
