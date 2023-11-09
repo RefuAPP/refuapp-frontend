@@ -13,12 +13,10 @@ import {
   getLoginErrors,
   getLoginFormErrorMessages,
   isAuthenticated,
-  isLoading,
 } from '../../state/auth/auth.selectors';
 import { AppState } from '../../state/app.state';
 import { filter, Observable, OperatorFunction, takeWhile } from 'rxjs';
 import { Router } from '@angular/router';
-import { LoadingController } from '@ionic/angular';
 import {
   DeviceErrors,
   NonUserFormErrors,

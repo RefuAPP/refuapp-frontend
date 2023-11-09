@@ -53,8 +53,10 @@
     </ion-list>
   </ion-menu>
   <ion-router-outlet id="main-content"></ion-router-outlet>
-  <ion-loading
-    isOpen="{{ isLoading$ | async }}"
-    message="Loading..."
-  ></ion-loading>
+  <ng-container *ngIf="isLoading$ | async as loading">
+    <ion-loading
+      isOpen="{{ loading.isLoading }}"
+      message="{{ loading.keyMessage! | translate }}"
+    ></ion-loading>
+  </ng-container>
 </ion-app>
