@@ -6,6 +6,7 @@ import { AppState } from './state/app.state';
 import { Observable } from 'rxjs';
 import { getBottomItems, getTopItems } from './state/menu/menu.selector';
 import { isLoading, LoadingState } from './state/loading/loading.selector';
+import { appIsLoadingLibraries } from './state/init/init.selectors';
 
 @Component({
   selector: 'app-root',
@@ -13,20 +14,12 @@ import { isLoading, LoadingState } from './state/loading/loading.selector';
   styleUrls: ['app.component.scss'],
 })
 export class AppComponent implements OnInit {
-  googleMapsLoaded = false;
-
   topMenuItems$ = this.store.select(getTopItems);
   bottomMenuItems$ = this.store.select(getBottomItems);
   isLoading$: Observable<LoadingState> = this.store.select(isLoading);
+  isLoadingApp$: Observable<boolean> = this.store.select(appIsLoadingLibraries);
 
   constructor(private store: Store<AppState>) {}
 
-  ngOnInit(): void {
-    get(
-      `https://maps.googleapis.com/maps/api/js?key=${secretEnvironment.mapsKey}&libraries=places&language=ca`,
-      () => {
-        this.googleMapsLoaded = true;
-      },
-    );
-  }
+  ngOnInit(): void {}
 }
