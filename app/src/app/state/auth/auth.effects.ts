@@ -10,8 +10,8 @@ import {
   loginCompleted,
   loginRequest,
   loginResponseCorrect,
-  loginResponseDeviceError,
-  loginResponseError,
+  loginDeviceError,
+  loginDataError,
   logOutCompleted,
   logOutRequest,
 } from './auth.actions';
@@ -67,7 +67,7 @@ export class AuthEffects {
     if (isMatching(UserCredentialsPattern, userCredentialsOrError))
       return this.fetchNewStateFromAuthApi(loginData);
     return of(
-      loginResponseError({
+      loginDataError({
         error: userCredentialsOrError as CredentialsError,
         credentials: loginData.credentials,
       }),
@@ -83,7 +83,7 @@ export class AuthEffects {
       switchMap(() => this.authService.getUserId()),
       map((userId) => {
         if (userId) return loginCompleted({ userId });
-        return loginResponseDeviceError({
+        return loginDeviceError({
           error: DeviceErrors.COULDN_T_SAVE_USER_DATA,
         });
       }),
@@ -135,7 +135,7 @@ export class AuthEffects {
         ServerErrors.UNKNOWN_ERROR,
         ServerErrors.INCORRECT_DATA_FORMAT,
         DeviceErrors.NOT_CONNECTED,
-        (err) => loginResponseDeviceError({ error: err }),
+        (err) => loginDeviceError({ error: err }),
       )
       .with(DeviceErrors.COULDN_T_SAVE_USER_DATA, () => {
         throw new Error('Impossible');
@@ -144,7 +144,7 @@ export class AuthEffects {
         UserFormErrors.USER_NOT_FOUND,
         UserFormErrors.INCORRECT_PASSWORD,
         (err) =>
-          loginResponseError({
+          loginDataError({
             error: err,
             credentials: loginData.credentials,
           }),

@@ -3,8 +3,8 @@ import {
   loginCompleted,
   loginRequest,
   loginResponseCorrect,
-  loginResponseDeviceError,
-  loginResponseError,
+  loginDeviceError,
+  loginDataError,
   logOutCompleted,
   logOutRequest,
 } from './auth.actions';
@@ -39,12 +39,12 @@ export const authReducer = createReducer(
     isLoading: true,
     userCredentials: action.credentials,
   })),
-  on(loginResponseError, (state, action) => ({
+  on(loginDataError, (state, action) => ({
     ...state,
     isLoading: false,
     loginFormError: action.error,
   })),
-  on(loginResponseDeviceError, (state, action) => ({
+  on(loginDeviceError, (state, action) => ({
     ...state,
     isLoading: false,
     deviceError: action.error,

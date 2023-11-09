@@ -9,16 +9,16 @@ export const loginRequest = createAction(
   props<{ credentials: UserCredentials }>(),
 );
 
-export const loginResponseError = createAction(
-  '[Auth] Login Response Failure',
+export const loginDataError = createAction(
+  '[Auth] Login Data Is Incorrect',
   props<{
     error: UserFormErrors | CredentialsError;
     credentials: UserCredentials;
   }>(),
 );
 
-export const loginResponseDeviceError = createAction(
-  '[Auth] Login Response Device Failure',
+export const loginDeviceError = createAction(
+  '[Auth] Device Error When Login',
   props<{
     error: NonUserFormErrors;
   }>(),
