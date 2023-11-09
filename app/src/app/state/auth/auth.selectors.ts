@@ -21,16 +21,18 @@ export const getLoginFormErrorMessages = createSelector(selectAuth, (auth) => {
     .exhaustive();
 });
 
-export const getLoginDeviceErrors = createSelector(selectAuth, (auth) => {
-  if (auth.deviceError) return auth.deviceError;
-  return null;
-});
-
-export const isAuthenticated = createSelector(selectAuth, (auth) => {
-  return auth.isAuthenticated;
-});
+// export const getLoginDeviceErrors = createSelector(selectAuth, (auth) => {
+//   if (auth.deviceError) return auth.deviceError;
+//   return null;
+// });
+//
+// export const isAuthenticated = createSelector(selectAuth, (auth) => {
+//   return auth.isAuthenticated;
+// });
 
 export const getCurrentCredentials = createSelector(selectAuth, (auth) => {
-  if (auth.userCredentials) return auth.userCredentials;
+  if (auth.userCredentials) {
+    return auth.userCredentials;
+  }
   return null;
 });

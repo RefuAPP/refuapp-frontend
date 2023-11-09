@@ -17,17 +17,12 @@
   </div>
 
   <div class="login-form">
-    <form
-      [formGroup]="form"
-      *ngIf="formData$ | async as d"
-      #singUpForm="ngForm"
-      novalidate
-    >
+    <form [formGroup]="form" #singUpForm="ngForm" novalidate>
       <ion-input
         label="{{'SIGNUP.USERNAME.FIELD' | translate }}"
         labelPlacement="stacked"
         fill="outline"
-        [(ngModel)]="d.username"
+        formControlName="username"
         name="username"
         type="text"
         errorText="{{'SIGNUP.USERNAME.ERROR' | translate }}"
@@ -42,7 +37,7 @@
         placeholder="(+34) xxx xxx xxx"
         type="tel"
         fill="outline"
-        [(ngModel)]="d.phone_number"
+        formControlName="phone_number"
         name="phone_number"
         errorText="{{'SIGNUP.PHONE_NUMBER.ERROR' | translate }}"
         required="true"
@@ -58,7 +53,7 @@
         placeholder="(+34) xxx xxx xxx"
         type="tel"
         fill="outline"
-        [(ngModel)]="d.emergency_number"
+        formControlName="emergency_number"
         name="emergency_number"
         errorText="{{'SIGNUP.EMERGENCY_NUMBER.ERROR' | translate }}"
         required="true"
@@ -70,7 +65,7 @@
         label="{{'SIGNUP.PASSWORD.FIELD' | translate }}"
         labelPlacement="stacked"
         fill="outline"
-        [(ngModel)]="d.password"
+        formControlName="password"
         name="password"
         type="password"
         errorText="{{'SIGNUP.PASSWORD.ERROR' | translate }}"
@@ -81,7 +76,7 @@
         label="{{'SIGNUP.REPEATED_PASSWORD.FIELD' | translate }}"
         labelPlacement="stacked"
         fill="outline"
-        [(ngModel)]="d.repeatPassword"
+        formControlName="repeatPassword"
         name="repeatPassword"
         type="password"
         errorText="{{'SIGNUP.REPEATED_PASSWORD.ERROR' | translate }}"

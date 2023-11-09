@@ -1,7 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { UserForm } from '../../schemas/user/user';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { phoneMaskPredicate, spainPhoneMask } from '../../schemas/phone/phone';
-import { filter, OperatorFunction } from 'rxjs';
+import { Subscription, tap } from 'rxjs';
 import { AppState } from '../../state/app.state';
 import { Store } from '@ngrx/store';
 import {
@@ -16,20 +15,14 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   templateUrl: './signup.page.html',
   styleUrls: ['./signup.page.scss'],
 })
-export class SignupPage implements OnInit {
+export class SignupPage implements OnInit, OnDestroy {
   phoneMask = spainPhoneMask;
   maskPredicate = phoneMaskPredicate;
 
   form: FormGroup;
   formErrors$ = this.store.select(getCreateUserFormErrors);
-  formData$ = this.store
-    .select(getCreateUserForm)
-    .pipe(
-      filter((form) => form !== null) as OperatorFunction<
-        UserForm | null,
-        UserForm
-      >,
-    );
+  formData$ = this.store.select(getCreateUserForm);
+  formDataSubscription?: Subscription;
 
   constructor(
     private store: Store<AppState>,
@@ -49,5 +42,17 @@ export class SignupPage implements OnInit {
       this.store.dispatch(createUserRequest({ credentials: this.form.value }));
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.formDataSubscription = this.formData$
+      .pipe(
+        tap((formData) => {
+          if (formData) this.form.patchValue(formData);
+        }),
+      )
+      .subscribe();
+  }
+
+  ngOnDestroy() {
+    this.formDataSubscription?.unsubscribe();
+  }
 }

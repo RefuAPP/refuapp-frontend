@@ -17,7 +17,7 @@
   </div>
 
   <div class="login-form">
-    <form #loginForm="ngForm" novalidate>
+    <form [formGroup]="form" #loginForm="ngForm" novalidate>
       <ion-input
         label="{{'LOGIN.USERNAME.FIELD' | translate }}"
         labelPlacement="stacked"
@@ -25,8 +25,8 @@
         placeholder="(+34) xxx xxx xxx"
         type="tel"
         fill="outline"
-        [(ngModel)]="credentials.phone_number"
-        name="username"
+        formControlName="phone_number"
+        name="phone_number"
         errorText="{{'LOGIN.USERNAME.ERROR_REQUIRED' | translate }}"
         required="true"
         [maskito]="phoneMask"
@@ -38,7 +38,7 @@
         label="{{'LOGIN.PASSWORD.FIELD' | translate }}"
         labelPlacement="stacked"
         fill="outline"
-        [(ngModel)]="credentials.password"
+        formControlName="password"
         name="password"
         type="password"
         errorText="{{'LOGIN.PASSWORD.ERROR_REQUIRED' | translate }}"
@@ -51,7 +51,7 @@
 
       <ion-row>
         <ion-col>
-          <ion-button (click)="onLogin(loginForm)" type="submit" expand="block">
+          <ion-button (click)="submit()" type="submit" expand="block">
             {{'LOGIN.BUTTON' | translate }}
           </ion-button>
         </ion-col>

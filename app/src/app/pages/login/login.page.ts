@@ -1,89 +1,58 @@
-import { Component, OnInit } from '@angular/core';
-import { NgForm } from '@angular/forms';
-import { match } from 'ts-pattern';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { phoneMaskPredicate, spainPhoneMask } from '../../schemas/phone/phone';
-import { UserCredentials } from '../../schemas/user/user';
 import { Store } from '@ngrx/store';
 import { loginRequest } from '../../state/auth/auth.actions';
 import {
   getCurrentCredentials,
-  getLoginDeviceErrors,
   getLoginFormErrorMessages,
-  isAuthenticated,
 } from '../../state/auth/auth.selectors';
 import { AppState } from '../../state/app.state';
-import { filter, Observable, OperatorFunction, takeWhile } from 'rxjs';
-import { Router } from '@angular/router';
-import { DeviceErrors, NonUserFormErrors } from '../../schemas/auth/errors';
-import { ServerErrors } from '../../schemas/errors/server';
+import { Subscription, tap } from 'rxjs';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
 })
-export class LoginPage implements OnInit {
-  credentials: UserCredentials = {
-    phone_number: '',
-    password: '',
-  };
-
+export class LoginPage implements OnInit, OnDestroy {
   phoneMask = spainPhoneMask;
   maskPredicate = phoneMaskPredicate;
 
+  form: FormGroup;
+
   formErrors$ = this.store.select(getLoginFormErrorMessages);
   credentials$ = this.store.select(getCurrentCredentials);
-  deviceErrors$: Observable<NonUserFormErrors> = this.store
-    .select(getLoginDeviceErrors)
-    .pipe(
-      filter((errors) => errors !== null) as OperatorFunction<
-        NonUserFormErrors | null,
-        NonUserFormErrors
-      >,
-    );
-  isAuthenticated$: Observable<boolean> = this.store.select(isAuthenticated);
+  credentialsSubscription?: Subscription;
 
   constructor(
     private store: Store<AppState>,
-    private router: Router,
-  ) {}
-
-  ngOnInit() {
-    const errors = this.deviceErrors$.subscribe((errors) => {
-      match(errors)
-        .with(DeviceErrors.NOT_CONNECTED, () => {
-          console.log('NOT_CONNECTED');
-        })
-        .with(DeviceErrors.COULDN_T_SAVE_USER_DATA, () => {
-          console.log('COULDN"T SAVE DATA INSIDE PHONE');
-        })
-        .with(ServerErrors.INCORRECT_DATA_FORMAT, () => {
-          console.log('SERVER HAS INCORRECT DATA');
-        })
-        .with(ServerErrors.UNKNOWN_ERROR, () => {
-          console.log('UNKNOWN ERROR');
-        })
-        .exhaustive();
+    private formBuilder: FormBuilder,
+  ) {
+    this.form = this.formBuilder.group({
+      phone_number: ['', Validators.required],
+      password: ['', Validators.required],
     });
-    this.credentials$
-      .pipe(takeWhile((credentials) => credentials !== null))
-      .subscribe({
-        next: (credentials) => {
-          this.credentials = credentials!;
-        },
-      });
-    this.isAuthenticated$
-      .pipe(takeWhile((isAuthenticated) => !isAuthenticated))
-      .subscribe({
-        complete: () => {
-          errors.unsubscribe();
-          this.router.navigate(['/home']).then();
-        },
-      });
   }
 
-  onLogin(form: NgForm) {
-    if (form.invalid) return;
-    this.store.dispatch(loginRequest({ credentials: this.credentials }));
+  ngOnInit() {
+    this.credentialsSubscription = this.credentials$
+      .pipe(
+        tap((hasCredentials) => {
+          if (hasCredentials) {
+            this.form.patchValue(hasCredentials);
+          }
+        }),
+      )
+      .subscribe();
+  }
+
+  ngOnDestroy() {
+    this.credentialsSubscription?.unsubscribe();
+  }
+
+  submit() {
+    if (this.form.invalid) return;
+    this.store.dispatch(loginRequest({ credentials: this.form.value }));
   }
 }
