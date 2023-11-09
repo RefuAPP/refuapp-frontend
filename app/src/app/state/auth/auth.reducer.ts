@@ -1,5 +1,6 @@
 import { createReducer, on } from '@ngrx/store';
 import {
+  httpLoginRequest,
   loginCompleted,
   loginRequest,
   loginResponseCorrect,
@@ -11,9 +12,10 @@ import {
 import { UserCredentials } from '../../schemas/user/user';
 import { Token } from '../../schemas/auth/token';
 import { NonUserFormErrors, UserFormErrors } from '../../schemas/auth/errors';
+import { CredentialsError } from '../../schemas/auth/validate/forms';
 
 export type AuthState = {
-  loginFormError?: UserFormErrors;
+  loginFormError?: UserFormErrors | CredentialsError;
   deviceError?: NonUserFormErrors;
   userToken?: Token;
   userCredentials?: UserCredentials;
@@ -25,6 +27,10 @@ export type AuthState = {
 export const notLoggedInState = {
   isLoading: false,
   isAuthenticated: false,
+  userCredentials: {
+    phone_number: '',
+    password: '',
+  },
 } as AuthState;
 
 export const authReducer = createReducer(
@@ -33,6 +39,9 @@ export const authReducer = createReducer(
     ...state,
     isLoading: true,
     userCredentials: action.credentials,
+  })),
+  on(httpLoginRequest, (state, action) => ({
+    ...state,
   })),
   on(loginResponseError, (state, action) => ({
     ...state,
@@ -58,6 +67,11 @@ export const authReducer = createReducer(
     isLoading: true,
   })),
   on(logOutCompleted, (state) => ({
-    ...notLoggedInState,
+    isLoading: false,
+    isAuthenticated: false,
+    userCredentials: {
+      phone_number: '',
+      password: '',
+    },
   })),
 );

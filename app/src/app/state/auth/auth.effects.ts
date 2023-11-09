@@ -7,6 +7,7 @@ import {
 } from '@ngrx/effects';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import {
+  httpLoginRequest,
   loginCompleted,
   loginRequest,
   loginResponseCorrect,
@@ -16,13 +17,21 @@ import {
   logOutRequest,
 } from './auth.actions';
 import { map, switchMap } from 'rxjs';
-import { match } from 'ts-pattern';
+import { isMatching, match } from 'ts-pattern';
 import { fromPromise } from 'rxjs/internal/observable/innerFrom';
 import {
   DeviceErrors,
   ServerErrors,
   UserFormErrors,
 } from '../../schemas/auth/errors';
+import {
+  CredentialsError,
+  parseCredentials,
+} from '../../schemas/auth/validate/forms';
+import {
+  UserCredentials,
+  UserCredentialsPattern,
+} from '../../schemas/user/user';
 
 @Injectable()
 export class AuthEffects {
@@ -45,35 +54,60 @@ export class AuthEffects {
     ),
   );
 
-  sendLoginRequest$ = createEffect(() =>
+  parseLoginRequest$ = createEffect(() =>
     this.actions$.pipe(
       ofType(loginRequest),
-      switchMap((request) => this.authService.getToken(request.credentials)),
       map((action) => {
-        return match(action)
-          .with({ status: 'error' }, (errorResponse) =>
-            match(errorResponse.error)
-              .with(
-                ServerErrors.UNKNOWN_ERROR,
-                ServerErrors.INCORRECT_DATA_FORMAT,
-                DeviceErrors.NOT_CONNECTED,
-                (err) => loginResponseDeviceError({ error: err }),
-              )
-              .with(DeviceErrors.COULDN_T_SAVE_USER_DATA, () => {
-                throw new Error('Impossible');
-              })
-              .with(
-                UserFormErrors.USER_NOT_FOUND,
-                UserFormErrors.INCORRECT_PASSWORD,
-                (err) => loginResponseError({ error: err }),
-              )
-              .exhaustive(),
-          )
-          .with({ status: 'authenticated' }, (correctResponse) =>
-            loginResponseCorrect({ token: correctResponse.data }),
-          )
-          .exhaustive();
+        const credentials = parseCredentials(action.credentials);
+        if (isMatching(UserCredentialsPattern, credentials))
+          return httpLoginRequest({ credentials: action.credentials });
+        else
+          return loginResponseError({
+            error: credentials as CredentialsError,
+            credentials: action.credentials,
+          });
       }),
+    ),
+  );
+
+  sendLoginRequest$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(httpLoginRequest),
+      switchMap((request) =>
+        this.authService
+          .getToken(parseCredentials(request.credentials) as UserCredentials)
+          .pipe(
+            map((response) => {
+              return match(response)
+                .with({ status: 'error' }, (errorResponse) =>
+                  match(errorResponse.error)
+                    .with(
+                      ServerErrors.UNKNOWN_ERROR,
+                      ServerErrors.INCORRECT_DATA_FORMAT,
+                      DeviceErrors.NOT_CONNECTED,
+                      (err) => loginResponseDeviceError({ error: err }),
+                    )
+                    .with(DeviceErrors.COULDN_T_SAVE_USER_DATA, () => {
+                      throw new Error('Impossible');
+                    })
+                    .with(
+                      UserFormErrors.USER_NOT_FOUND,
+                      UserFormErrors.INCORRECT_PASSWORD,
+                      (err) =>
+                        loginResponseError({
+                          error: err,
+                          credentials: request.credentials,
+                        }),
+                    )
+                    .exhaustive(),
+                )
+                .with({ status: 'authenticated' }, (correctResponse) =>
+                  loginResponseCorrect({ token: correctResponse.data }),
+                )
+                .exhaustive();
+            }),
+          ),
+      ),
     ),
   );
 

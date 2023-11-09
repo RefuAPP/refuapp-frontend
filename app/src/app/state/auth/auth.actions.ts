@@ -2,16 +2,23 @@ import { createAction, props } from '@ngrx/store';
 import { Token } from '../../schemas/auth/token';
 import { UserCredentials } from '../../schemas/user/user';
 import { NonUserFormErrors, UserFormErrors } from '../../schemas/auth/errors';
+import { CredentialsError } from '../../schemas/auth/validate/forms';
 
 export const loginRequest = createAction(
-  '[Auth] Login Request',
+  '[Auth] User Login Request',
+  props<{ credentials: UserCredentials }>(),
+);
+
+export const httpLoginRequest = createAction(
+  '[Auth] HTTP Login Request',
   props<{ credentials: UserCredentials }>(),
 );
 
 export const loginResponseError = createAction(
   '[Auth] Login Response Failure',
   props<{
-    error: UserFormErrors;
+    error: UserFormErrors | CredentialsError;
+    credentials: UserCredentials;
   }>(),
 );
 

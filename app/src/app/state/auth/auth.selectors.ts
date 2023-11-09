@@ -2,6 +2,7 @@ import { createSelector } from '@ngrx/store';
 import { AppState } from '../app.state';
 import { match } from 'ts-pattern';
 import { UserFormErrors } from '../../schemas/auth/errors';
+import { CredentialsError } from '../../schemas/auth/validate/forms';
 
 export const selectAuth = (state: AppState) => state.auth;
 
@@ -11,6 +12,10 @@ export const getLoginFormErrorMessages = createSelector(selectAuth, (auth) => {
     .with(
       UserFormErrors.INCORRECT_PASSWORD,
       () => 'STRING_OF_INCORRECT_PASSWORD',
+    )
+    .with(
+      CredentialsError.INCORRECT_PHONE_NUMBER,
+      () => 'STRING_OF_INVALID_PHONE_NUMBER',
     )
     .with(undefined, () => null)
     .exhaustive();
@@ -23,4 +28,9 @@ export const getLoginErrors = createSelector(selectAuth, (auth) => {
 
 export const isAuthenticated = createSelector(selectAuth, (auth) => {
   return auth.isAuthenticated;
+});
+
+export const getCurrentCredentials = createSelector(selectAuth, (auth) => {
+  if (auth.userCredentials) return auth.userCredentials;
+  return null;
 });

@@ -1,15 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { isMatching, match } from 'ts-pattern';
+import { match } from 'ts-pattern';
 import { phoneMaskPredicate, spainPhoneMask } from '../../schemas/phone/phone';
-import {
-  UserCredentials,
-  UserCredentialsPattern,
-} from '../../schemas/user/user';
-import { parseCredentials } from '../../schemas/auth/validate/forms';
+import { UserCredentials } from '../../schemas/user/user';
 import { Store } from '@ngrx/store';
 import { loginRequest } from '../../state/auth/auth.actions';
 import {
+  getCurrentCredentials,
   getLoginErrors,
   getLoginFormErrorMessages,
   isAuthenticated,
@@ -38,6 +35,7 @@ export class LoginPage implements OnInit {
   maskPredicate = phoneMaskPredicate;
 
   formErrors$ = this.store.select(getLoginFormErrorMessages);
+  credentials$ = this.store.select(getCurrentCredentials);
   deviceErrors$: Observable<NonUserFormErrors> = this.store
     .select(getLoginErrors)
     .pipe(
@@ -70,6 +68,13 @@ export class LoginPage implements OnInit {
         })
         .exhaustive();
     });
+    this.credentials$
+      .pipe(takeWhile((credentials) => credentials !== null))
+      .subscribe({
+        next: (credentials) => {
+          this.credentials = credentials!;
+        },
+      });
     this.isAuthenticated$
       .pipe(takeWhile((isAuthenticated) => !isAuthenticated))
       .subscribe({
@@ -82,10 +87,6 @@ export class LoginPage implements OnInit {
 
   onLogin(form: NgForm) {
     if (form.invalid) return;
-    const credentials = parseCredentials(this.credentials);
-    if (isMatching(UserCredentialsPattern, credentials))
-      this.store.dispatch(
-        loginRequest({ credentials: credentials as UserCredentials }),
-      );
+    this.store.dispatch(loginRequest({ credentials: this.credentials }));
   }
 }
