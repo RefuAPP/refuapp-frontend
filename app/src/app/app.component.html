@@ -22,7 +22,9 @@
               [ios]="topMenuItem.icon + '-outline'"
               [md]="topMenuItem.icon + '-sharp'"
             ></ion-icon>
-            <ion-label>{{ topMenuItem.title }}</ion-label>
+            <ion-label>{{
+              topMenuItem.titleTranslateKey | translate
+            }}</ion-label>
           </ion-item>
         </ion-menu-toggle>
       </ion-list>
@@ -46,7 +48,9 @@
               [ios]="topMenuBottom.icon + '-outline'"
               [md]="topMenuBottom.icon + '-sharp'"
             ></ion-icon>
-            <ion-label>{{ topMenuBottom.title }}</ion-label>
+            <ion-label>{{
+              topMenuBottom.titleTranslateKey | translate
+            }}</ion-label>
           </ion-item>
         </ion-menu-toggle>
       </ion-footer>

@@ -3,8 +3,9 @@ import { AuthService } from '../../services/auth/auth.service';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { UserCreated } from 'src/app/schemas/user/user';
-import { DeviceLanguageService } from 'src/app/services/translate/device-language.service';
-import { TranslateService } from '@ngx-translate/core';
+import { Store } from '@ngrx/store';
+import { AppState } from '../../state/app.state';
+import { changeLanguageRequest } from '../../state/language/language.actions';
 
 @Component({
   selector: 'app-profile',
@@ -18,8 +19,7 @@ export class ProfilePage implements OnInit {
   constructor(
     private authService: AuthService,
     private http: HttpClient,
-    private deviceLanguageService: DeviceLanguageService,
-    private translateService: TranslateService,
+    private store: Store<AppState>,
   ) {}
 
   ngOnInit() {
@@ -44,17 +44,9 @@ export class ProfilePage implements OnInit {
   setRandomAvatar() {
     this.avatarNumber = Math.floor(Math.random() * 8) + 1;
   }
+
   async changeLanguage(event: any) {
     const languageCode = (event as CustomEvent).detail.value;
-    try {
-      console.log(
-        'Language code supported are: ',
-        this.deviceLanguageService.getLanguagesCodes(),
-      );
-      await this.deviceLanguageService.setLanguageCode(languageCode);
-      this.translateService.use(languageCode);
-    } catch (error) {
-      console.error('Error setting language:', error);
-    }
+    this.store.dispatch(changeLanguageRequest({ languageCode }));
   }
 }

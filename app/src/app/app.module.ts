@@ -21,6 +21,8 @@ import { authReducer } from './state/auth/auth.reducer';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { createUserReducer } from './state/create-user/create-user.reducer';
 import { CreateUserEffects } from './state/create-user/create-user.effects';
+import { LanguageEffects } from './state/language/language.effects';
+import { languageReducer } from './state/language/language.reducer';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -40,7 +42,11 @@ export function createTranslateLoader(http: HttpClient) {
       },
     }),
     AppRoutingModule,
-    StoreModule.forRoot({ auth: authReducer, createUser: createUserReducer }),
+    StoreModule.forRoot({
+      auth: authReducer,
+      createUser: createUserReducer,
+      language: languageReducer,
+    }),
     StoreDevtoolsModule.instrument({
       maxAge: 25, // Retains last 25 states
       logOnly: false, // Restrict extension to log-only mode
@@ -49,7 +55,7 @@ export function createTranslateLoader(http: HttpClient) {
       traceLimit: 75, // maximum stack trace frames to be stored (in case trace option was provided as true)
       connectOutsideZone: true, // If set to true, the connection is established outside the Angular zone for better performance
     }),
-    EffectsModule.forRoot([AuthEffects, CreateUserEffects]),
+    EffectsModule.forRoot([AuthEffects, CreateUserEffects, LanguageEffects]),
   ],
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
