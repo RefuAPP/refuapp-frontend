@@ -10,13 +10,19 @@ import {
   loginCompleted,
   loginRequest,
   loginResponseCorrect,
+  loginResponseDeviceError,
   loginResponseError,
   logOutCompleted,
   logOutRequest,
 } from './auth.actions';
-import { map, switchMap, tap } from 'rxjs';
+import { map, switchMap } from 'rxjs';
 import { match } from 'ts-pattern';
 import { fromPromise } from 'rxjs/internal/observable/innerFrom';
+import {
+  DeviceErrors,
+  ServerErrors,
+  UserFormErrors,
+} from '../../schemas/auth/errors';
 
 @Injectable()
 export class AuthEffects {
@@ -32,7 +38,7 @@ export class AuthEffects {
         fromPromise(this.authService.getUserId()).pipe(
           map((userId) => {
             if (userId == null) return logOutCompleted();
-            else return loginCompleted();
+            else return loginCompleted({ userId });
           }),
         ),
       ),
@@ -42,36 +48,48 @@ export class AuthEffects {
   sendLoginRequest$ = createEffect(() =>
     this.actions$.pipe(
       ofType(loginRequest),
-      switchMap((request) => this.authService.getToken(request)),
+      switchMap((request) => this.authService.getToken(request.credentials)),
       map((action) => {
         return match(action)
           .with({ status: 'error' }, (errorResponse) =>
-            loginResponseError({ error: errorResponse.error }),
+            match(errorResponse.error)
+              .with(
+                ServerErrors.UNKNOWN_ERROR,
+                ServerErrors.INCORRECT_DATA_FORMAT,
+                DeviceErrors.NOT_CONNECTED,
+                (err) => loginResponseDeviceError({ error: err }),
+              )
+              .with(DeviceErrors.COULDN_T_SAVE_USER_DATA, () => {
+                throw new Error('Impossible');
+              })
+              .with(
+                UserFormErrors.USER_NOT_FOUND,
+                UserFormErrors.INCORRECT_PASSWORD,
+                (err) => loginResponseError({ error: err }),
+              )
+              .exhaustive(),
           )
           .with({ status: 'authenticated' }, (correctResponse) =>
-            loginResponseCorrect(correctResponse.data),
+            loginResponseCorrect({ token: correctResponse.data }),
           )
           .exhaustive();
       }),
     ),
   );
 
-  errorLoginRequest$ = createEffect(
-    () =>
-      this.actions$.pipe(
-        ofType(loginResponseError),
-        tap((action) => {
-          console.log(action.error);
-        }),
-      ),
-    { dispatch: false },
-  );
-
   saveJWTWhenLoginResponseIsCorrect$ = createEffect(() =>
     this.actions$.pipe(
       ofType(loginResponseCorrect),
-      switchMap((action) => fromPromise(this.authService.authenticate(action))),
-      map(() => loginCompleted()),
+      switchMap((action) =>
+        fromPromise(this.authService.authenticate(action.token)),
+      ),
+      switchMap(() => this.authService.getUserId()),
+      map((userId) => {
+        if (userId) return loginCompleted({ userId });
+        return loginResponseDeviceError({
+          error: DeviceErrors.COULDN_T_SAVE_USER_DATA,
+        });
+      }),
     ),
   );
 

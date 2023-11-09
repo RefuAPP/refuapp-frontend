@@ -2,8 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { get } from 'scriptjs';
 import { secretEnvironment } from '../environments/environment.secret';
 import { Store } from '@ngrx/store';
-import { getBottomItems, getTopItems } from './state/auth/auth.selectors';
+import {
+  getBottomItems,
+  getTopItems,
+  isLoading,
+} from './state/auth/auth.selectors';
 import { AppState } from './state/app.state';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -15,6 +20,7 @@ export class AppComponent implements OnInit {
 
   topMenuItems$ = this.store.select(getTopItems);
   bottomMenuItems$ = this.store.select(getBottomItems);
+  isLoading$: Observable<boolean> = this.store.select(isLoading);
 
   constructor(private store: Store<AppState>) {}
 

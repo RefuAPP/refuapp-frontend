@@ -3,86 +3,61 @@ import {
   loginCompleted,
   loginRequest,
   loginResponseCorrect,
+  loginResponseDeviceError,
   loginResponseError,
   logOutCompleted,
   logOutRequest,
 } from './auth.actions';
 import { UserCredentials } from '../../schemas/user/user';
 import { Token } from '../../schemas/auth/token';
-import { AuthenticationErrors } from '../../schemas/auth/errors';
+import { NonUserFormErrors, UserFormErrors } from '../../schemas/auth/errors';
 
-export type LoggedOut = {
-  state: 'logged-out';
-  status: 'complete';
+export type AuthState = {
+  loginFormError?: UserFormErrors;
+  deviceError?: NonUserFormErrors;
+  userToken?: Token;
+  userCredentials?: UserCredentials;
+  userId?: string;
+  isLoading: boolean;
+  isAuthenticated: boolean;
 };
 
-interface LoggedIn {
-  state: 'logged-in';
-  status: 'complete';
-}
-
-export type ErrorLoginIn = {
-  error: AuthenticationErrors;
-  state: 'logged-out';
-  status: 'error';
-};
-
-export type LoginRequest = {
-  state: 'logged-out';
-  status: 'pending';
-  userCredentials: UserCredentials;
-};
-
-export type LoginResponse = {
-  state: 'logged-out';
-  status: 'pending';
-  token: Token;
-};
-
-export type LogOutRequest = {
-  state: 'logged-in';
-  status: 'pending';
-};
-
-export type AuthState =
-  | LoggedOut
-  | LoggedIn
-  | ErrorLoginIn
-  | LoginRequest
-  | LoginResponse
-  | LogOutRequest;
-
-export const initialState = {
-  state: 'logged-out',
+export const notLoggedInState = {
+  isLoading: false,
+  isAuthenticated: false,
 } as AuthState;
 
 export const authReducer = createReducer(
-  initialState,
-  on(loginRequest, (_, credentials) => ({
-    state: 'logged-out',
-    status: 'pending',
-    userCredentials: credentials,
+  notLoggedInState,
+  on(loginRequest, (state, action) => ({
+    ...state,
+    isLoading: true,
+    userCredentials: action.credentials,
   })),
-  on(loginResponseError, (_, credentials) => ({
-    state: 'logged-out',
-    status: 'error',
-    error: credentials.error,
+  on(loginResponseError, (state, action) => ({
+    ...state,
+    isLoading: false,
+    loginFormError: action.error,
   })),
-  on(loginResponseCorrect, (_, token) => ({
-    state: 'logged-out',
-    status: 'pending',
-    token,
+  on(loginResponseDeviceError, (state, action) => ({
+    ...state,
+    isLoading: false,
+    deviceError: action.error,
   })),
-  on(loginCompleted, (_) => ({
-    state: 'logged-in',
-    status: 'complete',
+  on(loginResponseCorrect, (state, action) => ({
+    ...state,
+    userToken: action.token,
   })),
-  on(logOutRequest, (_) => ({
-    state: 'logged-in',
-    status: 'pending',
+  on(loginCompleted, (state, action) => ({
+    isLoading: false,
+    userId: action.userId,
+    isAuthenticated: true,
   })),
-  on(logOutCompleted, (_) => ({
-    state: 'logged-out',
-    status: 'complete',
+  on(logOutRequest, (state) => ({
+    ...state,
+    isLoading: true,
+  })),
+  on(logOutCompleted, (state) => ({
+    ...notLoggedInState,
   })),
 );

@@ -12,7 +12,7 @@ import {
 } from '../../schemas/auth/authenticate';
 import { Token } from '../../schemas/auth/token';
 import jwtDecode from 'jwt-decode';
-import { AuthenticationErrors, UserErrors } from '../../schemas/auth/errors';
+import { AuthenticationErrors, DeviceErrors } from '../../schemas/auth/errors';
 
 const authUri = `${environment.API}/login/`;
 
