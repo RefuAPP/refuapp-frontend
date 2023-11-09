@@ -14,11 +14,8 @@ import {
 import { AppState } from '../../state/app.state';
 import { filter, Observable, OperatorFunction, takeWhile } from 'rxjs';
 import { Router } from '@angular/router';
-import {
-  DeviceErrors,
-  NonUserFormErrors,
-  ServerErrors,
-} from '../../schemas/auth/errors';
+import { DeviceErrors, NonUserFormErrors } from '../../schemas/auth/errors';
+import { ServerErrors } from '../../schemas/errors/server';
 
 @Component({
   selector: 'app-login',

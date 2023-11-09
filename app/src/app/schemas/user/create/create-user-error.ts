@@ -1,14 +1,10 @@
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { isMatching, match, P } from 'ts-pattern';
+import { ServerErrors } from '../../errors/server';
 
-export type CreateUserError = ServerError | ClientError;
+export type CreateUserError = ServerErrors | RepeatedData;
 
-export enum ServerError {
-  UNKNOWN_ERROR = 'UNKNOWN_ERROR',
-  INCORRECT_DATA = 'INCORRECT_DATA',
-}
-
-export type ClientError =
+export type RepeatedData =
   | 'PHONE_ALREADY_EXISTS'
   | {
       type: 'INVALID_USER_DATA';
@@ -26,7 +22,7 @@ export namespace CreateUserError {
       .with(HttpStatusCode.UnprocessableEntity, () =>
         getErrorFromUnprocessableEntity(err),
       )
-      .otherwise(() => ServerError.UNKNOWN_ERROR);
+      .otherwise(() => ServerErrors.UNKNOWN_ERROR);
   }
 }
 
@@ -49,5 +45,5 @@ function getErrorFromUnprocessableEntity(
   const errorResponse: UnprocessableEntitySignUp = err.error;
   if (isMatching(UnprocessableEntitySignUpPattern, errorResponse))
     return { type: 'INVALID_USER_DATA', message: errorResponse.detail[0].msg };
-  return ServerError.INCORRECT_DATA;
+  return ServerErrors.INCORRECT_DATA_FORMAT;
 }

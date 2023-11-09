@@ -1,7 +1,8 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { CreateUserError, ServerError } from './create-user-error';
+import { CreateUserError } from './create-user-error';
 import { isMatching } from 'ts-pattern';
 import { UserCreated, UserCreatedPattern } from '../user';
+import { ServerErrors } from '../../errors/server';
 
 export type CreateUserResponse =
   | {
@@ -18,7 +19,7 @@ export function fromResponse(response: any): CreateUserResponse {
     return { status: 'created', data: response };
   return {
     status: 'error',
-    error: ServerError.INCORRECT_DATA,
+    error: ServerErrors.INCORRECT_DATA_FORMAT,
   };
 }
 

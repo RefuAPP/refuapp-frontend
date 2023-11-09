@@ -1,14 +1,10 @@
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { match } from 'ts-pattern';
+import { ServerErrors } from '../errors/server';
 
 export type NonUserFormErrors = ServerErrors | DeviceErrors;
 
 export type AuthenticationErrors = NonUserFormErrors | UserFormErrors;
-
-export enum ServerErrors {
-  UNKNOWN_ERROR = 'UNKNOWN_ERROR',
-  INCORRECT_DATA_FORMAT = 'INCORRECT_DATA_FORMAT',
-}
 
 export enum UserFormErrors {
   INCORRECT_PASSWORD = 'INCORRECT_PASSWORD',

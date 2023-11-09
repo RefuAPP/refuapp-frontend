@@ -8,10 +8,10 @@ import {
 import { AuthService } from 'src/app/services/auth/auth.service';
 import {
   loginCompleted,
+  loginDataError,
+  loginDeviceError,
   loginRequest,
   loginResponseCorrect,
-  loginDeviceError,
-  loginDataError,
   logOutCompleted,
   logOutRequest,
 } from './auth.actions';
@@ -21,7 +21,6 @@ import { fromPromise } from 'rxjs/internal/observable/innerFrom';
 import {
   AuthenticationErrors,
   DeviceErrors,
-  ServerErrors,
   UserFormErrors,
 } from '../../schemas/auth/errors';
 import {
@@ -33,6 +32,7 @@ import {
   UserCredentialsPattern,
 } from '../../schemas/user/user';
 import { AuthenticationResponse } from '../../schemas/auth/authenticate';
+import { ServerErrors } from '../../schemas/errors/server';
 
 @Injectable()
 export class AuthEffects {

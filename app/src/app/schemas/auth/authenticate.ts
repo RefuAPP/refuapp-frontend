@@ -1,7 +1,8 @@
-import { AuthenticationErrors, ServerErrors, DeviceErrors } from './errors';
+import { AuthenticationErrors, DeviceErrors } from './errors';
 import { isMatching } from 'ts-pattern';
 import { Token, TokenPattern } from './token';
 import { HttpErrorResponse } from '@angular/common/http';
+import { ServerErrors } from '../errors/server';
 
 export type AuthenticationResponse =
   | {

@@ -83,15 +83,13 @@
         required="true"
       >
       </ion-input>
-      <ion-note color="danger" *ngIf="hasError"> {{errorMessage}} </ion-note>
+      <ion-note color="danger" *ngIf="formErrors$ | async as errorMessage">
+        {{errorMessage}}
+      </ion-note>
 
       <ion-row>
         <ion-col>
-          <ion-button
-            (click)="onSignUp(singUpForm)"
-            type="submit"
-            expand="block"
-          >
+          <ion-button (click)="signUp()" type="submit" expand="block">
             {{'SIGNUP.BUTTON' | translate}}
           </ion-button>
         </ion-col>

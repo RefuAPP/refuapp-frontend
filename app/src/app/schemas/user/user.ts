@@ -6,7 +6,7 @@ export type UserCredentials = {
   password: string;
 };
 
-type User = {
+export type User = {
   id: string;
   username: string;
   emergency_number: Phone;
