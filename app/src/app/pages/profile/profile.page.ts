@@ -6,6 +6,10 @@ import { UserCreated } from 'src/app/schemas/user/user';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../state/app.state';
 import { changeLanguageRequest } from '../../state/language/language.actions';
+import {
+  getCurrentLanguage,
+  selectLanguage,
+} from '../../state/language/language.selectors';
 
 @Component({
   selector: 'app-profile',
@@ -15,6 +19,8 @@ import { changeLanguageRequest } from '../../state/language/language.actions';
 export class ProfilePage implements OnInit {
   user?: UserCreated;
   avatarNumber: number = 1;
+
+  currentLanguage$ = this.store.select(getCurrentLanguage);
 
   constructor(
     private authService: AuthService,

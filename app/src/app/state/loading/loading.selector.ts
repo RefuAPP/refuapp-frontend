@@ -12,11 +12,11 @@ export const isLoading = createSelector(
   selectCreateUser,
   (auth, create) => {
     if (auth.isLoading)
-      return { isLoading: true, keyMessage: 'LOADING_AUTH' } as LoadingState;
+      return { isLoading: true, keyMessage: 'LOGIN.LOADING' } as LoadingState;
     if (create.isLoading)
       return {
         isLoading: true,
-        keyMessage: 'LOADING_CREATE_USER',
+        keyMessage: 'SIGNUP.LOADING',
       } as LoadingState;
     return { isLoading: false } as LoadingState;
   },

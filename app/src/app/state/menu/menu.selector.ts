@@ -15,12 +15,12 @@ export const getTopItems = createSelector(
     if (auth.isAuthenticated) {
       return [
         {
-          titleTranslateKey: 'Home',
+          titleTranslateKey: 'MENU.HOME',
           url: '/home',
           icon: 'home',
         },
         {
-          titleTranslateKey: 'Reservations',
+          titleTranslateKey: 'MENU.RESERVATIONS',
           url: '/reservations',
           icon: 'folder',
         },
@@ -28,7 +28,7 @@ export const getTopItems = createSelector(
     }
     return [
       {
-        titleTranslateKey: 'Home',
+        titleTranslateKey: 'MENU.HOME',
         url: '/home',
         icon: 'home',
       },
@@ -40,19 +40,19 @@ export const getBottomItems = createSelector(selectAuth, (auth) => {
   if (auth.isAuthenticated)
     return [
       {
-        titleTranslateKey: 'Profile',
+        titleTranslateKey: 'MENU.PROFILE',
         url: '/profile',
         icon: 'person',
       },
       {
-        titleTranslateKey: 'Logout',
+        titleTranslateKey: 'MENU.LOGOUT',
         url: '/logout',
         icon: 'log-out',
       },
     ] as MenuItem[];
   return [
     {
-      titleTranslateKey: 'Login',
+      titleTranslateKey: 'MENU.LOGIN',
       url: '/login',
       icon: 'log-in',
     },
