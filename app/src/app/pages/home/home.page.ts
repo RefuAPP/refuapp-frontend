@@ -22,7 +22,7 @@ import {
   clearSearch,
 } from '../../state/components/search/search.actions';
 import { first } from 'rxjs';
-import { SearchbarCustomEvent } from '@ionic/angular';
+import { IonModal, SearchbarCustomEvent } from '@ionic/angular';
 
 @Component({
   selector: 'app-home',
@@ -76,5 +76,12 @@ export class HomePage implements AfterViewInit, OnDestroy {
 
   ngOnDestroy() {
     this.store.dispatch(destroyMap());
+  }
+
+  changeCurrentModalSize(modal: IonModal) {
+    modal.getCurrentBreakpoint().then((breakpoint) => {
+      if (breakpoint == 1) modal.setCurrentBreakpoint(0.3).then();
+      if (breakpoint == 0.3) modal.setCurrentBreakpoint(1).then();
+    });
   }
 }
