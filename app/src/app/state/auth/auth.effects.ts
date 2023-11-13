@@ -103,7 +103,7 @@ export class AuthEffects {
   loginCompletedGoToHome$ = createEffect(
     () =>
       this.actions$.pipe(
-        ofType(loginCompleted),
+        ofType(loginResponseCorrect),
         tap(() => this.router.navigateByUrl('/home')),
       ),
     { dispatch: false },
