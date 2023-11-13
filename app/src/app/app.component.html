@@ -64,3 +64,6 @@
     ></ion-loading>
   </ng-container>
 </ion-app>
+<ng-container *ngIf="isMapLoading$ | async as loading">
+  <ion-loading isOpen="{{ loading }}"> </ion-loading>
+</ng-container>

@@ -11,6 +11,7 @@ import {
   getBottomItems,
   getTopItems,
 } from './state/components/menu/menu.selector';
+import { isMapLoading } from './state/map/map.selectors';
 
 @Component({
   selector: 'app-root',
@@ -23,6 +24,7 @@ export class AppComponent implements OnInit {
   isLoading$: Observable<LoadingState> = this.store.select(isLoading);
   librariesAreLoaded$: Observable<boolean> =
     this.store.select(areLibrariesLoaded);
+  isMapLoading$: Observable<boolean> = this.store.select(isMapLoading);
 
   constructor(private store: Store<AppState>) {}
 
