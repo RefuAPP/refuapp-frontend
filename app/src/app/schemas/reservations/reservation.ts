@@ -7,6 +7,8 @@ export type Reservation = {
   night: Night;
 };
 
+export type ReservationWithoutUserId = Omit<Reservation, 'user_id'>;
+
 export type ReservationWithId = Reservation & { id: string };
 
 export type Reservations = ReservationWithId[];

@@ -5,6 +5,7 @@ import { InitializerStatus } from './init/init.reducer';
 import { ModalState } from './components/modal/modal.reducer';
 import { MapStatus } from './map/map.reducer';
 import { SearchState } from './components/search/search.reducer';
+import { ReservationsState } from './reservations/reservations.reducer';
 
 export interface AppState {
   auth: AuthState;
@@ -14,4 +15,5 @@ export interface AppState {
   map: MapStatus;
   modal: ModalState;
   searchCompletion: SearchState;
+  reservations: ReservationsState;
 }

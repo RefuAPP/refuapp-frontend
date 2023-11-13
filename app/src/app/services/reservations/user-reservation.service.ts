@@ -61,7 +61,7 @@ export class UserReservationService {
       .pipe(share());
   }
 
-  private getReservationsForUserFromCurrentDate(
+  getReservationsForUserFromCurrentDate(
     userId: string,
   ): Observable<Reservations> {
     const reservationsWithErrors = this.getReservationsWithErrorsFor(userId);

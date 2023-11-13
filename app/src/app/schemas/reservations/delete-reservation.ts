@@ -1,6 +1,10 @@
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { isMatching, match } from 'ts-pattern';
-import { Reservation, ReservationPattern } from './reservation';
+import {
+  Reservation,
+  ReservationPattern,
+  ReservationWithId,
+} from './reservation';
 
 export enum DeleteReservationError {
   RESERVATION_NOT_FOUND = 'RESERVATION_NOT_FOUND',
@@ -41,7 +45,7 @@ export namespace DeleteReservationError {
 
 export type CorrectDeleteReservation = {
   status: 'ok';
-  reservation: Reservation;
+  reservation: ReservationWithId;
 };
 
 export type ErrorDeleteReservation = {

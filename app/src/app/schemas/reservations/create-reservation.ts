@@ -1,6 +1,10 @@
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { isMatching, match } from 'ts-pattern';
-import { Reservation, ReservationPattern } from './reservation';
+import {
+  Reservation,
+  ReservationPattern,
+  ReservationWithId,
+} from './reservation';
 
 export enum CreateReservationError {
   REFUGE_OR_USER_NOT_FOUND = 'REFUGE_OR_USER_NOT_FOUND',
@@ -46,7 +50,7 @@ export namespace CreateReservationError {
 
 export type CorrectCreateReservation = {
   status: 'ok';
-  reservation: Reservation;
+  reservation: ReservationWithId;
 };
 
 export type ErrorCreateReservation = {

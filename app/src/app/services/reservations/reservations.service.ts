@@ -19,8 +19,8 @@ import {
 import { Night } from '../../schemas/night/night';
 import {
   CreateReservation,
-  fromResponse as fromCreateResponse,
   fromError as fromCreateError,
+  fromResponse as fromCreateResponse,
 } from '../../schemas/reservations/create-reservation';
 
 @Injectable({
@@ -47,7 +47,7 @@ export class ReservationsService {
     );
   }
 
-  createReservation(
+  createReservationFromPrimitives(
     userId: string,
     refugeId: string,
     night: Night,
@@ -57,6 +57,10 @@ export class ReservationsService {
       refuge_id: refugeId,
       night,
     };
+    return this.createReservation(reservation);
+  }
+
+  createReservation(reservation: Reservation): Observable<CreateReservation> {
     const createReservation = this.getReservationsUri();
     return this.http
       .post<ReservationWithId>(createReservation, reservation)

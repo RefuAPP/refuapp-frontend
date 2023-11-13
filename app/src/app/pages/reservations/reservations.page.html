@@ -7,7 +7,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" *ngIf="reservations !== undefined">
+<ion-content [fullscreen]="true">
   <ion-list style="padding-block: 0px">
     <ion-item-group *ngFor="let res of reservations | async">
       <ion-item-divider sticky>
@@ -16,13 +16,13 @@
       <ion-item *ngFor="let reservation of res.reservations">
         <ion-label routerLink="/home/{{reservation.refuge_id}}">
           <h3>
-            {{'RESERVATIONS.DETAILS.HEADER' | translate: {day:
-            reservation.night.day} }}
+            {{'RESERVATIONS.DETAILS.HEADER' | translate: { day:
+            reservation.night.day } }}
           </h3>
           <p>
-            {{'RESERVATIONS.DETAILS.MESSAGE' | translate: {month:
+            {{'RESERVATIONS.DETAILS.MESSAGE' | translate: { month:
             reservation.night.month, year: reservation.night.year, day:
-            reservation.night.day} }}
+            reservation.night.day } }}
           </p>
         </ion-label>
         <ion-button
