@@ -66,7 +66,7 @@ export class ReservationsChartComponent implements OnInit, AfterViewInit {
             return {
               time: `${dayData.date.getFullYear()}-${
                 dayData.date.getMonth() + 1
-              }-${dayData.date.getDate()}`,
+              }-${this.getFormattedDayDate(dayData.date)}`,
               value: dayData.count,
             };
           })
@@ -77,13 +77,20 @@ export class ReservationsChartComponent implements OnInit, AfterViewInit {
             const time = new Date();
             const timeString = `${time.getFullYear()}-${
               time.getMonth() + 1
-            }-${time.getDate()}`;
+            }-${this.getFormattedDayDate(time)}`;
             lineSeries.update({ time: timeString, value: response });
           },
         });
       },
     });
     chart.timeScale().fitContent();
+  }
+
+  private getFormattedDayDate(date: Date): string {
+    if (date.getDate() < 10) {
+      return `0${date.getDate()}`;
+    }
+    return `${date.getDate()}`;
   }
 
   private getBackgroundColorFromCss(): string {

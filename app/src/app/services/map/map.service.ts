@@ -7,6 +7,7 @@ import { Refuge } from '../../schemas/refuge/refuge';
 import { Coordinates } from '../search/search.service';
 import { MapRefuge } from './map-refuge';
 import { GoogleMapConfig } from '@capacitor/google-maps/dist/typings/definitions';
+import { cloneDeep } from 'lodash';
 
 @Injectable({
   providedIn: 'root',
@@ -52,8 +53,8 @@ export class MapService {
       apiKey: secretEnvironment.mapsKey,
       element: mapRef.nativeElement,
       forceCreate: environment.MAPS_FORCE_CREATE,
-      config: config,
-    }).then();
+      config,
+    });
   }
 
   async enableClustering() {

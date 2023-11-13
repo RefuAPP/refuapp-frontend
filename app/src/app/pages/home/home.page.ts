@@ -5,30 +5,17 @@ import {
   OnDestroy,
   ViewChild,
 } from '@angular/core';
-import { Location } from '@angular/common';
 import { MapService } from '../../services/map/map.service';
 import { SearchService } from '../../services/search/search.service';
-import { RefugeService } from '../../services/refuge/refuge.service';
-import { AlertController, ModalController } from '@ionic/angular';
 import { ActivatedRoute, Router } from '@angular/router';
-import { GetAllRefugesErrors } from '../../schemas/refuge/get-all-refuges-schema';
-import { match } from 'ts-pattern';
-import { Refuge } from '../../schemas/refuge/refuge';
 import { MapConfiguration } from './map-configuration';
 import { Observable, take } from 'rxjs';
-import { getModalConfigurationFrom } from './modal-configuration';
-import {
-  GetRefugeFromIdErrors,
-  GetRefugeResponse,
-} from '../../schemas/refuge/get-refuge-schema';
-import { TranslateService } from '@ngx-translate/core';
 import { Store } from '@ngrx/store';
-import { AppState } from '@capacitor/app';
-import {
-  destroyMap,
-  loadMap,
-  loadRefuges,
-} from '../../state/init/init.actions';
+import { destroyMap, loadMap } from '../../state/init/init.actions';
+import { getCurrentRefuge } from '../../state/refuge/refuge.selectors';
+import { AppState } from '../../state/app.state';
+import { isModalOpened } from '../../state/modal/modal.selectors';
+import { close } from '../../state/modal/modal.actions';
 
 type AutocompletePrediction = google.maps.places.AutocompletePrediction;
 
@@ -42,18 +29,14 @@ export class HomePage implements AfterViewInit, OnDestroy {
   search: string = '';
   private readonly refugeId?: string = undefined;
   searchResults: Observable<AutocompletePrediction[]>;
+  currentRefuge$ = this.store.select(getCurrentRefuge);
+  modalOpen$ = this.store.select(isModalOpened);
 
   constructor(
-    private router: Router,
     private mapService: MapService,
-    private refugeService: RefugeService,
     private searchService: SearchService,
     private route: ActivatedRoute,
-    private location: Location,
-    private alertController: AlertController,
-    private modalController: ModalController,
     private store: Store<AppState>,
-    private translateService: TranslateService,
   ) {
     this.searchResults = this.searchService.getPredictions();
     this.refugeId = this.route.snapshot.paramMap.get('id')?.toString();
@@ -82,146 +65,15 @@ export class HomePage implements AfterViewInit, OnDestroy {
         loadMap({ map: this.mapRef, config: MapConfiguration }),
       );
     } else {
-      this.renderMapError();
+      console.log('MapRef is undefined');
     }
+  }
+
+  dismissedModal() {
+    this.store.dispatch(close());
   }
 
   ngOnDestroy() {
     this.store.dispatch(destroyMap());
-  }
-
-  private showRefuge(refugeId: string) {
-    this.refugeService.getRefugeFrom(refugeId).subscribe({
-      next: (response: GetRefugeResponse) =>
-        this.handleGetRefugeResponse(response),
-      error: () => this.handleClientError().then(),
-    });
-  }
-
-  private handleGetRefugeResponse(response: GetRefugeResponse) {
-    match(response)
-      .with({ status: 'correct' }, (response) =>
-        this.onRefugeLoaded(response.data),
-      )
-      .with({ status: 'error' }, (response) => {
-        this.handleGetRefugeError(response.error);
-      })
-      .exhaustive();
-  }
-
-  private onRefugeLoaded(refuge: Refuge) {
-    this.mapService.move(refuge.coordinates);
-    this.onRefugeClick(refuge);
-  }
-
-  private handleGetRefugeError(error: GetRefugeFromIdErrors) {
-    match(error)
-      .with(GetRefugeFromIdErrors.NOT_FOUND, () => this.handleNotFoundRefuge())
-      .with(GetRefugeFromIdErrors.CLIENT_SEND_DATA_ERROR, () =>
-        this.handleBadUserData(),
-      )
-      .with(GetRefugeFromIdErrors.UNKNOWN_ERROR, () =>
-        this.handleUnknownError(),
-      )
-      .with(
-        GetRefugeFromIdErrors.SERVER_INCORRECT_DATA_FORMAT_ERROR,
-        GetRefugeFromIdErrors.PROGRAMMER_SEND_DATA_ERROR,
-        () => this.handleBadProgrammerData(),
-      )
-      .exhaustive();
-  }
-
-  private handleNotFoundRefuge() {
-    this.router
-      .navigate(['not-found-page'], {
-        skipLocationChange: true,
-      })
-      .then();
-  }
-
-  private handleBadProgrammerData() {
-    this.router
-      .navigate(['programming-error'], {
-        skipLocationChange: true,
-      })
-      .then();
-  }
-
-  private handleBadUserData() {
-    this.router
-      .navigate(['not-found-page'], {
-        skipLocationChange: true,
-      })
-      .then();
-  }
-
-  private onRefugeClick(refuge: Refuge) {
-    this.location.go(`/home/${refuge.id}`);
-    this.modalController
-      .create(getModalConfigurationFrom(refuge))
-      .then(async (modal) => {
-        await modal.present();
-      });
-  }
-
-  private handleGetAllRefugesError(error: GetAllRefugesErrors) {
-    match(error)
-      .with(GetAllRefugesErrors.UNKNOWN_ERROR, () => this.handleUnknownError())
-      .with(GetAllRefugesErrors.SERVER_INCORRECT_DATA_FORMAT_ERROR, () =>
-        this.handleBagProgrammerData(),
-      )
-      .exhaustive();
-  }
-
-  private async handleClientError() {
-    const alert = await this.alertController.create({
-      header: this.translateService.instant('HOME.CLIENT_ERROR.HEADER'),
-      subHeader: this.translateService.instant('HOME.CLIENT_ERROR.SUBHEADER'),
-      message: this.translateService.instant('HOME.CLIENT_ERROR.MESSAGE'),
-      buttons: [
-        {
-          text: this.translateService.instant('HOME.CLIENT_ERROR.OKAY_BUTTON'),
-          handler: () => {
-            this.alertController.dismiss().then();
-          },
-        },
-      ],
-    });
-    return await alert.present();
-  }
-
-  private handleUnknownError() {
-    this.router
-      .navigate(['internal-error-page'], {
-        skipLocationChange: true,
-      })
-      .then();
-  }
-
-  private handleBagProgrammerData() {
-    this.router
-      .navigate(['programming-error'], {
-        skipLocationChange: true,
-      })
-      .then();
-  }
-
-  private renderMapError() {
-    this.alertController
-      .create({
-        header: this.translateService.instant('HOME.RENDER_MAP_ERROR.HEADER'),
-        message: this.translateService.instant('HOME.RENDER_MAP_ERROR.MESSAGE'),
-        buttons: [
-          {
-            text: this.translateService.instant(
-              'HOME.RENDER_MAP_ERROR.OKAY_BUTTON',
-            ),
-            handler: () => {
-              this.alertController.dismiss().then();
-            },
-          },
-        ],
-      })
-      .then((alert) => alert.present());
   }
 }

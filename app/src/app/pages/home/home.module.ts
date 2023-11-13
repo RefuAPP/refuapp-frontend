@@ -8,6 +8,7 @@ import { HomePageRoutingModule } from './home-routing.module';
 
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
+import { RefugePageModule } from '../refuge/refuge.module';
 
 @NgModule({
   imports: [
@@ -16,6 +17,7 @@ import { TranslateModule } from '@ngx-translate/core';
     IonicModule,
     HomePageRoutingModule,
     TranslateModule,
+    RefugePageModule,
   ],
   declarations: [HomePage],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],

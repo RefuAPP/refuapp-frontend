@@ -21,11 +21,17 @@ import { fromPromise } from 'rxjs/internal/observable/innerFrom';
 import { secretEnvironment } from '../../../environments/environment.secret';
 import { MapService } from '../../services/map/map.service';
 import { RefugeService } from '../../services/refuge/refuge.service';
+import { Store } from '@ngrx/store';
+import { AppState } from '../app.state';
+import { setRefuge } from '../refuge/refuge.actions';
+import { cloneDeep } from 'lodash';
+import { setOpen } from '../modal/modal.actions';
 
 @Injectable()
 export class InitEffects {
   constructor(
     private actions$: Actions,
+    private store: Store<AppState>,
     private mapService$: MapService,
     private refugeService: RefugeService,
   ) {}
@@ -59,12 +65,17 @@ export class InitEffects {
   );
 
   loadMap$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(loadMap),
-      switchMap((e) =>
-        fromPromise(this.mapService$.createMap(e.map, e.config)).pipe(
-          map(() => loadedMap()),
-        ),
+    combineLatest([
+      this.actions$.pipe(ofType(loadMap)),
+      this.actions$.pipe(ofType(loadedMapLibrary)),
+    ]).pipe(
+      switchMap((actions) =>
+        fromPromise(
+          this.mapService$.createMap(
+            actions[0].map,
+            cloneDeep(actions[0].config),
+          ),
+        ).pipe(map(() => loadedMap())),
       ),
     ),
   );
@@ -89,7 +100,8 @@ export class InitEffects {
       tap((mapAndRefuges) =>
         // TODO: Check for errors here
         this.mapService$.addRefuges(mapAndRefuges[0].refuges, (refuge) => {
-          console.log(refuge);
+          this.store.dispatch(setRefuge({ refuge }));
+          this.store.dispatch(setOpen());
         }),
       ),
       map((mapAndRefuges) => loadedRefugesOnMap()),

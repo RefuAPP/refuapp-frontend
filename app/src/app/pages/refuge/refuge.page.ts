@@ -1,12 +1,7 @@
 import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
 import { AlertController, ModalController, Platform } from '@ionic/angular';
-import { match } from 'ts-pattern';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RefugeService } from '../../services/refuge/refuge.service';
-import {
-  GetRefugeFromIdErrors,
-  GetRefugeResponse,
-} from '../../schemas/refuge/get-refuge-schema';
 import { Refuge } from '../../schemas/refuge/refuge';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -56,9 +51,11 @@ export class RefugePage implements OnInit, AfterViewInit {
     this.modalController.getTop().then((modal) => {
       this.modal = modal;
     });
-    if (this.refuge) return;
+    if (this.refuge) {
+      return;
+    }
     const refugeId = this.getRefugeIdFromUrl();
-    this.fetchRefuge(refugeId);
+    // this.fetchRefuge(refugeId);
   }
 
   private getRefugeIdFromUrl(): string | null {
@@ -67,94 +64,94 @@ export class RefugePage implements OnInit, AfterViewInit {
 
   // Fetch Refuge
 
-  private fetchRefuge(refugeId: string | null) {
-    if (refugeId != null) this.fetchRefugeFromId(refugeId);
-    else this.router.navigate(['/']).then();
-  }
-
-  private fetchRefugeFromId(refugeId: string) {
-    this.refugeService.getRefugeFrom(refugeId).subscribe({
-      next: (response: GetRefugeResponse) =>
-        this.handleGetRefugeResponse(response),
-      error: () => this.handleClientError().then(),
-    });
-  }
-
-  private handleGetRefugeResponse(response: GetRefugeResponse) {
-    match(response)
-      .with({ status: 'correct' }, (response) => {
-        this.refuge = response.data;
-      })
-      .with({ status: 'error' }, (response) => {
-        this.handleError(response.error);
-      })
-      .exhaustive();
-  }
-
-  private handleError(error: GetRefugeFromIdErrors) {
-    match(error)
-      .with(GetRefugeFromIdErrors.NOT_FOUND, () => this.handleNotFoundRefuge())
-      .with(GetRefugeFromIdErrors.CLIENT_SEND_DATA_ERROR, () =>
-        this.handleBadUserData(),
-      )
-      .with(GetRefugeFromIdErrors.UNKNOWN_ERROR, () =>
-        this.handleUnknownError(),
-      )
-      .with(
-        GetRefugeFromIdErrors.SERVER_INCORRECT_DATA_FORMAT_ERROR,
-        GetRefugeFromIdErrors.PROGRAMMER_SEND_DATA_ERROR,
-        () => this.handleBadProgrammerData(),
-      )
-      .exhaustive();
-  }
-
-  private async handleClientError() {
-    const alert = await this.alertController.create({
-      header: this.translateService.instant('HOME.CLIENT_ERROR.HEADER'),
-      subHeader: this.translateService.instant('HOME.CLIENT_ERROR.SUBHEADER'),
-      message: this.translateService.instant('HOME.CLIENT_ERROR.MESSAGE'),
-      buttons: [
-        {
-          text: this.translateService.instant('HOME.CLIENT_ERROR.OKAY_BUTTON'),
-          handler: () => {
-            this.alertController.dismiss().then();
-            this.fetchRefuge(this.getRefugeIdFromUrl());
-          },
-        },
-      ],
-    });
-    return await alert.present();
-  }
-
-  private handleNotFoundRefuge() {
-    this.router
-      .navigate(['not-found-page'], {
-        skipLocationChange: true,
-      })
-      .then();
-  }
-
-  private handleBadProgrammerData() {
-    this.router
-      .navigate(['programming-error'], {
-        skipLocationChange: true,
-      })
-      .then();
-  }
-
-  private handleBadUserData() {
-    this.router
-      .navigate(['not-found-page'], {
-        skipLocationChange: true,
-      })
-      .then();
-  }
-
-  private handleUnknownError() {
-    this.router
-      .navigate(['internal-error-page'], {
-        skipLocationChange: true,
-      })
-      .then();
-  }
+  // private fetchRefuge(refugeId: string | null) {
+  //   if (refugeId != null) this.fetchRefugeFromId(refugeId);
+  //   else this.router.navigate(['/']).then();
+  // }
+  //
+  // private fetchRefugeFromId(refugeId: string) {
+  //   this.refugeService.getRefugeFrom(refugeId).subscribe({
+  //     next: (response: GetRefugeResponse) =>
+  //       this.handleGetRefugeResponse(response),
+  //     error: () => this.handleClientError().then(),
+  //   });
+  // }
+  //
+  // private handleGetRefugeResponse(response: GetRefugeResponse) {
+  //   match(response)
+  //     .with({ status: 'correct' }, (response) => {
+  //       this.refuge = response.data;
+  //     })
+  //     .with({ status: 'error' }, (response) => {
+  //       this.handleError(response.error);
+  //     })
+  //     .exhaustive();
+  // }
+  //
+  // private handleError(error: GetRefugeFromIdErrors) {
+  //   match(error)
+  //     .with(GetRefugeFromIdErrors.NOT_FOUND, () => this.handleNotFoundRefuge())
+  //     .with(GetRefugeFromIdErrors.CLIENT_SEND_DATA_ERROR, () =>
+  //       this.handleBadUserData(),
+  //     )
+  //     .with(GetRefugeFromIdErrors.UNKNOWN_ERROR, () =>
+  //       this.handleUnknownError(),
+  //     )
+  //     .with(
+  //       GetRefugeFromIdErrors.SERVER_INCORRECT_DATA_FORMAT_ERROR,
+  //       GetRefugeFromIdErrors.PROGRAMMER_SEND_DATA_ERROR,
+  //       () => this.handleBadProgrammerData(),
+  //     )
+  //     .exhaustive();
+  // }
+  //
+  // private async handleClientError() {
+  //   const alert = await this.alertController.create({
+  //     header: this.translateService.instant('HOME.CLIENT_ERROR.HEADER'),
+  //     subHeader: this.translateService.instant('HOME.CLIENT_ERROR.SUBHEADER'),
+  //     message: this.translateService.instant('HOME.CLIENT_ERROR.MESSAGE'),
+  //     buttons: [
+  //       {
+  //         text: this.translateService.instant('HOME.CLIENT_ERROR.OKAY_BUTTON'),
+  //         handler: () => {
+  //           this.alertController.dismiss().then();
+  //           this.fetchRefuge(this.getRefugeIdFromUrl());
+  //         },
+  //       },
+  //     ],
+  //   });
+  //   return await alert.present();
+  // }
+  //
+  // private handleNotFoundRefuge() {
+  //   this.router
+  //     .navigate(['not-found-page'], {
+  //       skipLocationChange: true,
+  //     })
+  //     .then();
+  // }
+  //
+  // private handleBadProgrammerData() {
+  //   this.router
+  //     .navigate(['programming-error'], {
+  //       skipLocationChange: true,
+  //     })
+  //     .then();
+  // }
+  //
+  // private handleBadUserData() {
+  //   this.router
+  //     .navigate(['not-found-page'], {
+  //       skipLocationChange: true,
+  //     })
+  //     .then();
+  // }
+  //
+  // private handleUnknownError() {
+  //   this.router
+  //     .navigate(['internal-error-page'], {
+  //       skipLocationChange: true,
+  //     })
+  //     .then();
+  // }
 }

@@ -25,6 +25,9 @@ import { LanguageEffects } from './state/language/language.effects';
 import { languageReducer } from './state/language/language.reducer';
 import { InitEffects } from './state/init/init.effects';
 import { initReducer } from './state/init/init.reducer';
+import { refugeReducer } from './state/refuge/refuge.reducer';
+import { environment } from '../environments/environment';
+import { modalReducer } from './state/modal/modal.reducer';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -44,12 +47,23 @@ export function createTranslateLoader(http: HttpClient) {
       },
     }),
     AppRoutingModule,
-    StoreModule.forRoot({
-      auth: authReducer,
-      createUser: createUserReducer,
-      language: languageReducer,
-      initStatus: initReducer,
-    }),
+    StoreModule.forRoot(
+      {
+        auth: authReducer,
+        createUser: createUserReducer,
+        language: languageReducer,
+        initStatus: initReducer,
+        refuge: refugeReducer,
+        modal: modalReducer,
+      },
+      {
+        // This is because inmutability objects on actions (and google maps libraries and capacitor change the object from the action)
+        runtimeChecks: {
+          strictStateImmutability: environment.production,
+          strictActionImmutability: environment.production,
+        },
+      },
+    ),
     StoreDevtoolsModule.instrument({
       maxAge: 25, // Retains last 25 states
       logOnly: false, // Restrict extension to log-only mode

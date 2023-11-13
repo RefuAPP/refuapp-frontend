@@ -24,5 +24,6 @@ import { ReservationsChartComponent } from '../../components/reservations-chart/
     ReservationPickerComponent,
     ReservationsChartComponent,
   ],
+  exports: [RefugePage],
 })
 export class RefugePageModule {}
