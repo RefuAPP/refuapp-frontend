@@ -1,15 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../../services/auth/auth.service';
+import { AuthService } from '../../../services/auth/auth.service';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../../environments/environment';
 import { UserCreated } from 'src/app/schemas/user/user';
 import { Store } from '@ngrx/store';
-import { AppState } from '../../state/app.state';
-import { changeLanguageRequest } from '../../state/language/language.actions';
+import { AppState } from '../../../state/app.state';
+import { changeLanguageRequest } from '../../../state/language/language.actions';
 import {
   getCurrentLanguage,
   selectLanguage,
-} from '../../state/language/language.selectors';
+} from '../../../state/language/language.selectors';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
@@ -26,6 +27,7 @@ export class ProfilePage implements OnInit {
     private authService: AuthService,
     private http: HttpClient,
     private store: Store<AppState>,
+    private router: Router,
   ) {}
 
   ngOnInit() {
@@ -54,5 +56,10 @@ export class ProfilePage implements OnInit {
   async changeLanguage(event: any) {
     const languageCode = (event as CustomEvent).detail.value;
     this.store.dispatch(changeLanguageRequest({ languageCode }));
+  }
+
+  updateUser() {
+    if (this.user === undefined) return;
+    this.router.navigate(['/profile/update', this.user.id]).then();
   }
 }
