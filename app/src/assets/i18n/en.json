@@ -28,6 +28,11 @@
     "MESSAGE": "We suck, our code had a programming error and we didn't notice it. Send us an email!",
     "EXIT_BUTTON": "Return to Home"
   },
+  "FORBIDDEN_ERROR": {
+    "HEADER": "Forbidden resource",
+    "MESSAGE": "The page you're looking for is forbidden for your role. You're either being naughty or it's our fault.",
+    "EXIT": "Go home"
+  },
   "LOGIN": {
     "HEADER": "Login",
     "USERNAME": {
@@ -139,5 +144,8 @@
     "PROFILE": "Profile",
     "LOGOUT": "LogOut",
     "LOGIN": "LogIn"
+  },
+  "UNAUTHORIZED_ERROR": {
+    "MESSAGE": "You are not authorized to access this resource. Are you logged in?"
   }
 }

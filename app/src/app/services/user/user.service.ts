@@ -1,13 +1,24 @@
 import { Injectable } from '@angular/core';
-import { catchError, map, Observable, of, retry } from 'rxjs';
+import { catchError, map, Observable, ObservableInput, of, retry } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { CreateUser, UserCreated } from '../../schemas/user/user';
+import {
+  CreateUser,
+  isValidId,
+  User,
+  UserCreated,
+  UserPattern,
+} from '../../schemas/user/user';
 import {
   CreateUserResponse,
   fromError,
   fromResponse,
 } from '../../schemas/user/create/create-user-response';
+import {
+  GetUserFromIdErrors,
+  GetUserResponse,
+} from '../../schemas/user/fetch/get-refuge-schema';
+import { isMatching } from 'ts-pattern';
 
 const createUserUri = `${environment.API}/users/`;
 
@@ -23,5 +34,41 @@ export class UserService {
       catchError((err: HttpErrorResponse) => of(fromError(err))),
       retry(3),
     );
+  }
+
+  getUserFrom(userId: string): Observable<GetUserResponse> {
+    if (!isValidId(userId)) {
+      return of({
+        status: 'error',
+        error: GetUserFromIdErrors.CLIENT_SEND_DATA_ERROR,
+      });
+    }
+    return this.getUserFromApi(userId);
+  }
+
+  private getUserFromApi(userId: string): Observable<GetUserResponse> {
+    const endpoint = this.getUserFromIdEndpoint(userId);
+    return this.http.get<User>(endpoint).pipe(
+      map<User, GetUserResponse | Error>((user: User) => {
+        if (isMatching(UserPattern, user))
+          return { status: 'correct', data: user };
+        return {
+          status: 'error',
+          error: GetUserFromIdErrors.SERVER_INCORRECT_DATA_FORMAT_ERROR,
+        };
+      }),
+      catchError<GetUserResponse | Error, ObservableInput<any>>(
+        (err: HttpErrorResponse) =>
+          of({
+            status: 'error',
+            error: GetUserFromIdErrors.from(err),
+          }),
+      ),
+      retry(3),
+    );
+  }
+
+  private getUserFromIdEndpoint(id: string): string {
+    return `${environment.API}/users/${id}`;
   }
 }

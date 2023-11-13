@@ -28,6 +28,11 @@
     "MESSAGE": "Som ineficients, el nostre codi té un error de programació i no l'hem detectat. Envian's un correu electrònic!",
     "EXIT_BUTTON": "Torna a la Pàgina Principal"
   },
+  "FORBIDDEN_ERROR": {
+    "HEADER": "Recurs prohibit",
+    "MESSAGE": "La pàgina que estàs buscant està prohibit per al teu rol. O estàs essent un ximplet o és culpa nostra.",
+    "EXIT": "Anar a casa"
+  },
   "LOGIN": {
     "HEADER": "Inicia Sessió",
     "USERNAME": {
@@ -139,5 +144,8 @@
     "PROFILE": "Perfil",
     "LOGOUT": "Tanca Sessió",
     "LOGIN": "Inicia Sessió"
+  },
+  "UNAUTHORIZED_ERROR": {
+    "MESSAGE": "No estàs autoritzat a accedir a aquest recurs. Estàs connectat?"
   }
 }

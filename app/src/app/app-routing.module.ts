@@ -65,6 +65,13 @@ const routes: Routes = [
     loadChildren: () =>
       import('./pages/profile/profile.module').then((m) => m.ProfilePageModule),
   },
+  {
+    path: 'forbidden',
+    loadChildren: () =>
+      import('./pages/forbidden/forbidden/forbidden.module').then(
+        (m) => m.ForbiddenPageModule,
+      ),
+  },
 ];
 
 @NgModule({

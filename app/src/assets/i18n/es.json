@@ -28,6 +28,11 @@
     "MESSAGE": "Somos malos, nuestro código tiene un error de programación y no lo notamos. ¡Envíanos un correo electrónico!",
     "EXIT_BUTTON": "Volver a la Página Principal"
   },
+  "FORBIDDEN_ERROR": {
+    "HEADER": "Recurso prohibido",
+    "MESSAGE": "La página que estás buscando está prohibida para tu rol. O estás siendo travieso o es nuestra culpa.",
+    "EXIT": "Ir a inicio"
+  },
   "LOGIN": {
     "HEADER": "Iniciar Sesión",
     "USERNAME": {
@@ -139,5 +144,8 @@
     "PROFILE": "Perfil",
     "LOGOUT": "Cerrar Sesión",
     "LOGIN": "Inicia Sesión"
+  },
+  "UNAUTHORIZED_ERROR": {
+    "MESSAGE": "No estás autorizado para acceder a este recurso. ¿Estás conectado?"
   }
 }
