@@ -3,6 +3,7 @@ import { ElementRef } from '@angular/core';
 import { GoogleMapConfig } from '@capacitor/google-maps/dist/typings/definitions';
 import { Refuge } from '../../schemas/refuge/refuge';
 import { Coordinates } from '../../services/search/search.service';
+import { GetAllRefugesErrors } from '../../schemas/refuge/get-all-refuges-schema';
 
 export const loadMap = createAction(
   '[Map] Loading Map',
@@ -20,10 +21,9 @@ export const moveMapTo = createAction(
   props<{ coordinates: Coordinates }>(),
 );
 
-// TODO: This error shouldn't be any
 export const loadRefugesError = createAction(
   '[Map] Load All Refuges Error',
-  props<{ error: any }>(),
+  props<{ error: GetAllRefugesErrors }>(),
 );
 
 export const loadedRefuges = createAction(

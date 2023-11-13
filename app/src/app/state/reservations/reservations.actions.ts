@@ -4,6 +4,14 @@ import {
   ReservationWithoutUserId,
 } from '../../schemas/reservations/reservation';
 import { RefugeReservationsRelations } from '../../services/reservations/grouped-by/refuge';
+import {
+  CreateReservationError,
+  ErrorCreateReservation,
+} from '../../schemas/reservations/create-reservation';
+import {
+  DeleteReservationError,
+  ErrorDeleteReservation,
+} from '../../schemas/reservations/delete-reservation';
 
 export const addReservation = createAction(
   '[Reservations] Add Reservation',
@@ -22,8 +30,7 @@ export const fetchReservations = createAction(
 
 export const errorAddingReservation = createAction(
   '[Reservations] Error Adding Reservation',
-  // TODO: This error shouldn't be any
-  props<{ error: any }>(),
+  props<{ error: CreateReservationError }>(),
 );
 
 export const deleteReservation = createAction(
@@ -38,6 +45,5 @@ export const deletedReservation = createAction(
 
 export const errorDeletingReservation = createAction(
   '[Reservations] Error Deleting Reservation',
-  // TODO: This error shouldn't be any
-  props<{ error: any }>(),
+  props<{ error: DeleteReservationError }>(),
 );

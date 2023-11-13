@@ -4,7 +4,7 @@ import {
   ofType,
   ROOT_EFFECTS_INIT,
 } from '@ngrx/effects';
-import { combineLatest, map, switchMap, tap } from 'rxjs';
+import { catchError, combineLatest, map, of, switchMap, tap } from 'rxjs';
 import { fromPromise } from 'rxjs/internal/observable/innerFrom';
 import { cloneDeep } from 'lodash';
 import { openModal } from '../components/modal/modal.actions';
@@ -24,6 +24,9 @@ import {
   moveMapTo,
 } from './map.actions';
 import { loadedMapLibrary } from '../init/init.actions';
+import { programmingError, unknownError } from '../errors/error.actions';
+import { match } from 'ts-pattern';
+import { GetAllRefugesErrors } from '../../schemas/refuge/get-all-refuges-schema';
 
 @Injectable()
 export class MapEffects {
@@ -52,7 +55,10 @@ export class MapEffects {
             actions[0].map,
             cloneDeep(actions[0].config),
           ),
-        ).pipe(map(() => loadedMap())),
+        ).pipe(
+          map(() => loadedMap()),
+          catchError(() => of(unknownError())),
+        ),
       ),
     ),
   );
@@ -99,5 +105,19 @@ export class MapEffects {
         tap((action) => this.mapService$.move(action.coordinates)),
       ),
     { dispatch: false },
+  );
+
+  getAllRefugesErrors$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(loadRefugesError),
+      map((action) => {
+        return match(action.error)
+          .with(GetAllRefugesErrors.SERVER_INCORRECT_DATA_FORMAT_ERROR, () =>
+            programmingError(),
+          )
+          .with(GetAllRefugesErrors.UNKNOWN_ERROR, () => unknownError())
+          .exhaustive();
+      }),
+    ),
   );
 }

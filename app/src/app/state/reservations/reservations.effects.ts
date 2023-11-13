@@ -5,7 +5,7 @@ import {
   ofType,
   ROOT_EFFECTS_INIT,
 } from '@ngrx/effects';
-import { combineLatest, map, mergeMap, switchMap, tap } from 'rxjs';
+import { combineLatest, map, mergeMap, switchMap } from 'rxjs';
 import { loginCompleted } from '../auth/auth.actions';
 import { UserReservationService } from '../../services/reservations/user-reservation.service';
 import {
