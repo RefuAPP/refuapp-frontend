@@ -1,6 +1,6 @@
 import { createSelector } from '@ngrx/store';
-import { selectAuth } from '../auth/auth.selectors';
-import { selectLanguage } from '../language/language.selectors';
+import { selectAuth } from '../../auth/auth.selectors';
+import { selectLanguage } from '../../language/language.selectors';
 
 export type MenuItem = {
   titleTranslateKey: string;

@@ -1,6 +1,6 @@
 import { createSelector } from '@ngrx/store';
-import { selectAuth } from '../auth/auth.selectors';
-import { selectCreateUser } from '../create-user/create-user.selectors';
+import { selectAuth } from '../../auth/auth.selectors';
+import { selectCreateUser } from '../../create-user/create-user.selectors';
 
 export type LoadingState = {
   isLoading: boolean;

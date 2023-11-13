@@ -25,9 +25,8 @@ import { LanguageEffects } from './state/language/language.effects';
 import { languageReducer } from './state/language/language.reducer';
 import { InitEffects } from './state/init/init.effects';
 import { initReducer } from './state/init/init.reducer';
-import { refugeReducer } from './state/refuge/refuge.reducer';
 import { environment } from '../environments/environment';
-import { modalReducer } from './state/modal/modal.reducer';
+import { modalReducer } from './state/components/modal/modal.reducer';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -53,7 +52,6 @@ export function createTranslateLoader(http: HttpClient) {
         createUser: createUserReducer,
         language: languageReducer,
         initStatus: initReducer,
-        refuge: refugeReducer,
         modal: modalReducer,
       },
       {
@@ -66,7 +64,7 @@ export function createTranslateLoader(http: HttpClient) {
     ),
     StoreDevtoolsModule.instrument({
       maxAge: 25, // Retains last 25 states
-      logOnly: false, // Restrict extension to log-only mode
+      logOnly: environment.production, // Restrict extension to log-only mode
       autoPause: true, // Pauses recording actions and state changes when the extension window is not open
       trace: false, //  If set to true, will include stack trace for every dispatched action, so you can see it in trace tab jumping directly to that part of code
       traceLimit: 75, // maximum stack trace frames to be stored (in case trace option was provided as true)

@@ -2,9 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from './state/app.state';
 import { Observable } from 'rxjs';
-import { getBottomItems, getTopItems } from './state/menu/menu.selector';
-import { isLoading, LoadingState } from './state/loading/loading.selector';
 import { librariesLoaded } from './state/init/init.selectors';
+import {
+  isLoading,
+  LoadingState,
+} from './state/components/loading/loading.selector';
+import {
+  getBottomItems,
+  getTopItems,
+} from './state/components/menu/menu.selector';
 
 @Component({
   selector: 'app-root',

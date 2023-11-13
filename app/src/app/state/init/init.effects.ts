@@ -23,9 +23,8 @@ import { MapService } from '../../services/map/map.service';
 import { RefugeService } from '../../services/refuge/refuge.service';
 import { Store } from '@ngrx/store';
 import { AppState } from '../app.state';
-import { setRefuge } from '../refuge/refuge.actions';
 import { cloneDeep } from 'lodash';
-import { setOpen } from '../modal/modal.actions';
+import { openModal } from '../components/modal/modal.actions';
 
 @Injectable()
 export class InitEffects {
@@ -100,8 +99,7 @@ export class InitEffects {
       tap((mapAndRefuges) =>
         // TODO: Check for errors here
         this.mapService$.addRefuges(mapAndRefuges[0].refuges, (refuge) => {
-          this.store.dispatch(setRefuge({ refuge }));
-          this.store.dispatch(setOpen());
+          this.store.dispatch(openModal({ refuge }));
         }),
       ),
       map((mapAndRefuges) => loadedRefugesOnMap()),

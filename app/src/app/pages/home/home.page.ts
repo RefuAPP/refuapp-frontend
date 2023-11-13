@@ -7,15 +7,14 @@ import {
 } from '@angular/core';
 import { MapService } from '../../services/map/map.service';
 import { SearchService } from '../../services/search/search.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { MapConfiguration } from './map-configuration';
 import { Observable, take } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { destroyMap, loadMap } from '../../state/init/init.actions';
-import { getCurrentRefuge } from '../../state/refuge/refuge.selectors';
 import { AppState } from '../../state/app.state';
-import { isModalOpened } from '../../state/modal/modal.selectors';
-import { close } from '../../state/modal/modal.actions';
+import { selectModalState } from '../../state/components/modal/modal.selectors';
+import { closeModal } from '../../state/components/modal/modal.actions';
 
 type AutocompletePrediction = google.maps.places.AutocompletePrediction;
 
@@ -29,8 +28,7 @@ export class HomePage implements AfterViewInit, OnDestroy {
   search: string = '';
   private readonly refugeId?: string = undefined;
   searchResults: Observable<AutocompletePrediction[]>;
-  currentRefuge$ = this.store.select(getCurrentRefuge);
-  modalOpen$ = this.store.select(isModalOpened);
+  modalState$ = this.store.select(selectModalState);
 
   constructor(
     private mapService: MapService,
@@ -70,7 +68,7 @@ export class HomePage implements AfterViewInit, OnDestroy {
   }
 
   dismissedModal() {
-    this.store.dispatch(close());
+    this.store.dispatch(closeModal());
   }
 
   ngOnDestroy() {
