@@ -11,10 +11,10 @@ import { ActivatedRoute } from '@angular/router';
 import { MapConfiguration } from './map-configuration';
 import { Observable, take } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { destroyMap, loadMap } from '../../state/init/init.actions';
 import { AppState } from '../../state/app.state';
 import { selectModalState } from '../../state/components/modal/modal.selectors';
 import { closeModal } from '../../state/components/modal/modal.actions';
+import { destroyMap, loadMap } from '../../state/map/map.actions';
 
 type AutocompletePrediction = google.maps.places.AutocompletePrediction;
 

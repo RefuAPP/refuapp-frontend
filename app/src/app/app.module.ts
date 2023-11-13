@@ -27,6 +27,8 @@ import { InitEffects } from './state/init/init.effects';
 import { initReducer } from './state/init/init.reducer';
 import { environment } from '../environments/environment';
 import { modalReducer } from './state/components/modal/modal.reducer';
+import { mapReducer } from './state/map/map.reducer';
+import { MapEffects } from './state/map/map.effects';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -52,6 +54,7 @@ export function createTranslateLoader(http: HttpClient) {
         createUser: createUserReducer,
         language: languageReducer,
         initStatus: initReducer,
+        map: mapReducer,
         modal: modalReducer,
       },
       {
@@ -75,6 +78,7 @@ export function createTranslateLoader(http: HttpClient) {
       AuthEffects,
       CreateUserEffects,
       LanguageEffects,
+      MapEffects,
     ]),
   ],
   providers: [

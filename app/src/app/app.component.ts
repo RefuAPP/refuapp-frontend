@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from './state/app.state';
 import { Observable } from 'rxjs';
-import { librariesLoaded } from './state/init/init.selectors';
+import { areLibrariesLoaded } from './state/init/init.selectors';
 import {
   isLoading,
   LoadingState,
@@ -21,7 +21,8 @@ export class AppComponent implements OnInit {
   topMenuItems$ = this.store.select(getTopItems);
   bottomMenuItems$ = this.store.select(getBottomItems);
   isLoading$: Observable<LoadingState> = this.store.select(isLoading);
-  librariesAreLoaded$: Observable<boolean> = this.store.select(librariesLoaded);
+  librariesAreLoaded$: Observable<boolean> =
+    this.store.select(areLibrariesLoaded);
 
   constructor(private store: Store<AppState>) {}
 

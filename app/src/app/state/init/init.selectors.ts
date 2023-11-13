@@ -3,12 +3,7 @@ import { AppState } from '../app.state';
 
 export const selectInitStatus = (state: AppState) => state.initStatus;
 
-export const librariesLoaded = createSelector(
+export const areLibrariesLoaded = createSelector(
   selectInitStatus,
-  (initStatus) => initStatus.mapLibraryFetched,
-);
-
-export const allMapsAreLoaded = createSelector(
-  selectInitStatus,
-  (initStatus) => initStatus.refugesOnMap,
+  (initStatus) => initStatus.mapLibraryLoaded,
 );
