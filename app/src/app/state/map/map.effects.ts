@@ -21,6 +21,7 @@ import {
   loadMap,
   loadRefuges,
   loadRefugesError,
+  moveMapTo,
 } from './map.actions';
 import { loadedMapLibrary } from '../init/init.actions';
 
@@ -89,5 +90,14 @@ export class MapEffects {
       ),
       map((mapAndRefuges) => loadedRefugesOnMap()),
     ),
+  );
+
+  moveMapTo$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(moveMapTo),
+        tap((action) => this.mapService$.move(action.coordinates)),
+      ),
+    { dispatch: false },
   );
 }

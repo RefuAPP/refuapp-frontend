@@ -4,18 +4,18 @@
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
     <ion-searchbar
-      [(ngModel)]="search"
-      (ionInput)="onSearchChange()"
+      [value]="searchValue$ | async"
+      (ionInput)="onSearchChange($event)"
       placeholder="{{ 'HOME.SEARCH_PLACES_BAR' | translate }}"
       (keyup.enter)="selectFirstSearchResult()"
     ></ion-searchbar>
     <ion-title></ion-title>
   </ion-toolbar>
-  <ion-list>
+  <ion-list *ngIf="searchCompletion$ | async as completions">
     <ion-item
-      *ngFor="let item of searchResults | async"
+      *ngFor="let item of completions"
       tappable
-      (click)="selectSearchResult(item)"
+      (click)="moveMapTo(item.coordinate)"
     >
       {{ item.description }}
     </ion-item>

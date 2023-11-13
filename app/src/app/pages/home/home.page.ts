@@ -5,18 +5,24 @@ import {
   OnDestroy,
   ViewChild,
 } from '@angular/core';
-import { MapService } from '../../services/map/map.service';
-import { SearchService } from '../../services/search/search.service';
+import { Coordinates } from '../../services/search/search.service';
 import { ActivatedRoute } from '@angular/router';
 import { MapConfiguration } from './map-configuration';
-import { Observable, take } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../state/app.state';
 import { selectModalState } from '../../state/components/modal/modal.selectors';
 import { closeModal } from '../../state/components/modal/modal.actions';
-import { destroyMap, loadMap } from '../../state/map/map.actions';
-
-type AutocompletePrediction = google.maps.places.AutocompletePrediction;
+import { destroyMap, loadMap, moveMapTo } from '../../state/map/map.actions';
+import {
+  selectAutoCompletion,
+  selectCurrentSearch,
+} from '../../state/components/search/search.selectors';
+import {
+  addSearch,
+  clearSearch,
+} from '../../state/components/search/search.actions';
+import { first } from 'rxjs';
+import { SearchbarCustomEvent } from '@ionic/angular';
 
 @Component({
   selector: 'app-home',
@@ -25,36 +31,33 @@ type AutocompletePrediction = google.maps.places.AutocompletePrediction;
 })
 export class HomePage implements AfterViewInit, OnDestroy {
   @ViewChild('mapRef', { static: false }) mapRef?: ElementRef;
-  search: string = '';
   private readonly refugeId?: string = undefined;
-  searchResults: Observable<AutocompletePrediction[]>;
   modalState$ = this.store.select(selectModalState);
+  searchCompletion$ = this.store.select(selectAutoCompletion);
+  searchValue$ = this.store.select(selectCurrentSearch);
 
   constructor(
-    private mapService: MapService,
-    private searchService: SearchService,
     private route: ActivatedRoute,
     private store: Store<AppState>,
   ) {
-    this.searchResults = this.searchService.getPredictions();
     this.refugeId = this.route.snapshot.paramMap.get('id')?.toString();
   }
 
-  selectSearchResult(item: AutocompletePrediction) {
-    this.searchService.toCoordinates(item).then((coordinates) => {
-      if (coordinates != null) this.mapService.move(coordinates);
-      this.searchService.clear();
-    });
+  moveMapTo(coordinates: Coordinates) {
+    this.store.dispatch(moveMapTo({ coordinates }));
+    this.store.dispatch(clearSearch());
   }
 
   selectFirstSearchResult() {
-    this.searchResults.pipe(take(1)).subscribe((predictions) => {
-      if (predictions.length > 0) this.selectSearchResult(predictions[0]);
+    this.searchCompletion$.pipe(first()).subscribe((completion) => {
+      if (completion.length === 0) return;
+      this.moveMapTo(completion[0].coordinate);
     });
   }
 
-  onSearchChange() {
-    this.searchService.sendRequest(this.search);
+  onSearchChange(value: SearchbarCustomEvent) {
+    const search = value.detail.value as string;
+    this.store.dispatch(addSearch({ search }));
   }
 
   ngAfterViewInit() {

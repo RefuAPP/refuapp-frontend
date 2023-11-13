@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Observable, ReplaySubject } from 'rxjs';
+import { map, Observable, of } from 'rxjs';
+import { fromPromise } from 'rxjs/internal/observable/innerFrom';
 
 type PlaceResult = google.maps.places.PlaceResult;
 type AutocompleteService = google.maps.places.AutocompleteService;
@@ -14,7 +15,6 @@ export type Coordinates = {
   providedIn: 'root',
 })
 export class SearchService {
-  private predictions = new ReplaySubject<AutocompletePrediction[]>(1);
   private placesService = new google.maps.places.PlacesService(
     document.createElement('div'),
   );
@@ -23,22 +23,13 @@ export class SearchService {
 
   constructor() {}
 
-  sendRequest(request: string) {
+  getPredictions(request: string): Observable<AutocompletePrediction[]> {
     if (request.length < 3) {
-      this.predictions.next([]);
-      return;
+      return of([]);
     }
-    this.GoogleAutoComplete.getPlacePredictions({ input: request })
-      .then((response) => {
-        this.predictions.next(response.predictions);
-      })
-      .catch((error) => {
-        this.predictions.error(error);
-      });
-  }
-
-  getPredictions(): Observable<AutocompletePrediction[]> {
-    return this.predictions.asObservable();
+    return fromPromise(
+      this.GoogleAutoComplete.getPlacePredictions({ input: request }),
+    ).pipe(map((predictions) => predictions.predictions));
   }
 
   async toCoordinates(
@@ -52,10 +43,6 @@ export class SearchService {
       latitude: place.geometry.location.lat(),
       longitude: place.geometry.location.lng(),
     };
-  }
-
-  clear() {
-    this.predictions.next([]);
   }
 
   private async getPlace(placeId: string): Promise<PlaceResult | null> {

@@ -2,6 +2,7 @@ import { createAction, props } from '@ngrx/store';
 import { ElementRef } from '@angular/core';
 import { GoogleMapConfig } from '@capacitor/google-maps/dist/typings/definitions';
 import { Refuge } from '../../schemas/refuge/refuge';
+import { Coordinates } from '../../services/search/search.service';
 
 export const loadMap = createAction(
   '[Map] Loading Map',
@@ -13,6 +14,11 @@ export const loadedMap = createAction('[Map] Loaded Map');
 export const destroyMap = createAction('[Map] Destroying Map');
 
 export const loadRefuges = createAction('[Map] Load All Refuges');
+
+export const moveMapTo = createAction(
+  '[Map] Moving Map to Coordinates',
+  props<{ coordinates: Coordinates }>(),
+);
 
 // TODO: This error shouldn't be any
 export const loadRefugesError = createAction(
