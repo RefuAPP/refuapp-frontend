@@ -40,6 +40,7 @@
       <ion-item>
         <ion-label>{{ 'SETTINGS.LANGUAGE' | translate }}</ion-label>
         <ion-select
+          class="language-select"
           value="{{ currentLanguage$ | async }}"
           placeholder="{{ 'SETTINGS.SELECT' | translate }}"
           (ionChange)="changeLanguage($event)"

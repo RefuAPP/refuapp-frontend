@@ -4,7 +4,6 @@ $margin-gap: 20px;
 $padding-container: 20px;
 $profile-image-size: 100px;
 $color-border: #dedede;
-$color-text: #ffffff;
 
 ion-content {
   display: flex;
@@ -21,7 +20,7 @@ ion-content {
 .profile-card,
 .language-card {
   width: 100%;
-  max-width: 400px;
+  max-width: 800px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -42,14 +41,12 @@ ion-content {
 .user-name {
   font-size: 1.5em;
   margin-bottom: $margin-gap;
-  color: $color-text;
   font-weight: bold;
 }
 
 .details p {
   font-size: 1em;
   margin: 8px 0;
-  color: $color-text;
 }
 
 .profile-image {
@@ -66,4 +63,8 @@ ion-content {
   justify-content: center;
   align-items: center;
   margin-top: $margin-gap;
+}
+
+.language-select {
+  max-width: 200px;
 }
