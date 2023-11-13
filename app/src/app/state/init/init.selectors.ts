@@ -7,3 +7,8 @@ export const areLibrariesLoaded = createSelector(
   selectInitStatus,
   (initStatus) => initStatus.mapLibraryLoaded,
 );
+
+export const isLoadingLibraries = createSelector(
+  selectInitStatus,
+  (initStatus) => initStatus.isFetchingLibraries,
+);

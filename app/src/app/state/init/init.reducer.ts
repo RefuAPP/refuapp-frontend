@@ -1,5 +1,9 @@
 import { createReducer, on } from '@ngrx/store';
-import { loadedMapLibrary, loadMapLibrary } from './init.actions';
+import {
+  errorLoadingMapLibrary,
+  loadedMapLibrary,
+  loadMapLibrary,
+} from './init.actions';
 
 export type InitializerStatus = {
   isFetchingLibraries: boolean;
@@ -20,5 +24,9 @@ export const initReducer = createReducer(
   on(loadedMapLibrary, (state) => ({
     isFetchingLibraries: false,
     mapLibraryLoaded: true,
+  })),
+  on(errorLoadingMapLibrary, (state) => ({
+    isFetchingLibraries: false,
+    mapLibraryLoaded: false,
   })),
 );

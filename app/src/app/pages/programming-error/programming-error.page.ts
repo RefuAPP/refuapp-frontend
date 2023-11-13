@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { AppState } from 'src/app/state/app.state';
+import { Store } from '@ngrx/store';
+import { cleanError } from 'src/app/state/errors/error.actions';
 
 @Component({
   selector: 'app-programming-error',
@@ -6,7 +9,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./programming-error.page.scss'],
 })
 export class ProgrammingErrorPage implements OnInit {
-  constructor() {}
+  constructor(private store: Store<AppState>) {}
 
   ngOnInit() {}
+
+  cleanError() {
+    this.store.dispatch(cleanError());
+  }
 }

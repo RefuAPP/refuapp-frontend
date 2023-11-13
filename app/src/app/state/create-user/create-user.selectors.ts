@@ -29,14 +29,6 @@ export const getCreateUserFormErrors = createSelector(
   },
 );
 
-export const getCreateUserDeviceErrors = createSelector(
-  selectCreateUser,
-  (createUser) => {
-    if (createUser.deviceError) return createUser.deviceError;
-    return null;
-  },
-);
-
 export const getCreateUserForm = createSelector(
   selectCreateUser,
   (createUser) => {

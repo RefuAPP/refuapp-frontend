@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from './state/app.state';
-import { Observable } from 'rxjs';
+import { combineLatest, map, Observable } from 'rxjs';
 import { areLibrariesLoaded } from './state/init/init.selectors';
 import {
   isLoading,
@@ -12,6 +12,7 @@ import {
   getTopItems,
 } from './state/components/menu/menu.selector';
 import { isMapLoading } from './state/map/map.selectors';
+import { hasError } from './state/errors/error.selectors';
 
 @Component({
   selector: 'app-root',
@@ -22,11 +23,19 @@ export class AppComponent implements OnInit {
   topMenuItems$ = this.store.select(getTopItems);
   bottomMenuItems$ = this.store.select(getBottomItems);
   isLoading$: Observable<LoadingState> = this.store.select(isLoading);
+  isMapLoading$: Observable<boolean> = this.store.select(isMapLoading);
+  hasError$: Observable<boolean> = this.store.select(hasError);
   librariesAreLoaded$: Observable<boolean> =
     this.store.select(areLibrariesLoaded);
-  isMapLoading$: Observable<boolean> = this.store.select(isMapLoading);
+  canShowPage$ = combineLatest([this.librariesAreLoaded$, this.hasError$]).pipe(
+    map(([librariesAreLoaded, hasError]) => librariesAreLoaded || hasError),
+  );
 
-  constructor(private store: Store<AppState>) {}
+  constructor(private store: Store<AppState>) {
+    this.canShowPage$.subscribe((canShowPage) => {
+      console.log('canShowPage', canShowPage);
+    });
+  }
 
   ngOnInit(): void {}
 }

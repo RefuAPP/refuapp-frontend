@@ -12,7 +12,12 @@
         ></ion-img>
         <h1>{{ 'NOT_FOUND_ERROR.HEADER' | translate }}</h1>
         <p>{{ 'NOT_FOUND_ERROR.MESSAGE' | translate }}</p>
-        <ion-button expand="full" fill="solid" color="primary" routerLink="/">
+        <ion-button
+          (click)="cleanError()"
+          expand="full"
+          fill="solid"
+          color="primary"
+        >
           {{ 'NOT_FOUND_ERROR.EXIT_BUTTON' | translate }}
         </ion-button>
       </ion-col>

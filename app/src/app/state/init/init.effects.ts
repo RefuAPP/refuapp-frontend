@@ -5,10 +5,15 @@ import {
   ofType,
   ROOT_EFFECTS_INIT,
 } from '@ngrx/effects';
-import { map, switchMap } from 'rxjs';
-import { loadedMapLibrary, loadMapLibrary } from './init.actions';
+import { catchError, map, switchMap } from 'rxjs';
+import {
+  errorLoadingMapLibrary,
+  loadedMapLibrary,
+  loadMapLibrary,
+} from './init.actions';
 import { fromPromise } from 'rxjs/internal/observable/innerFrom';
 import { secretEnvironment } from '../../../environments/environment.secret';
+import { unknownError } from '../errors/error.actions';
 
 @Injectable()
 export class InitEffects {
@@ -24,10 +29,10 @@ export class InitEffects {
   loadGoogleMapsLibrary$ = createEffect(() =>
     this.actions$.pipe(
       ofType(loadMapLibrary),
-      // TODO: Search for errors here
       switchMap((createData) =>
         fromPromise(this.fetchGoogleMapsLibrary()).pipe(
           map(() => loadedMapLibrary()),
+          catchError(() => [unknownError(), errorLoadingMapLibrary()]),
         ),
       ),
     ),

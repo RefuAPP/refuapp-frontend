@@ -1,4 +1,4 @@
-<ion-app *ngIf="librariesAreLoaded$ | async">
+<ion-app>
   <ion-menu contentId="main-content" type="overlay">
     <ion-content>
       <ion-list id="top-menu-list">
@@ -56,7 +56,10 @@
       </ion-footer>
     </ion-list>
   </ion-menu>
-  <ion-router-outlet id="main-content"></ion-router-outlet>
+  <ion-router-outlet
+    *ngIf="canShowPage$ | async"
+    id="main-content"
+  ></ion-router-outlet>
   <ng-container *ngIf="isLoading$ | async as loading">
     <ion-loading
       isOpen="{{ loading.isLoading }}"

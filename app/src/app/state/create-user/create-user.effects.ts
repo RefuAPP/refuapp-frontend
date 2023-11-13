@@ -5,7 +5,6 @@ import { loginRequest } from '../auth/auth.actions';
 import { map, of, switchMap } from 'rxjs';
 import {
   createUserCorrect,
-  createUserDeviceError,
   createUserError,
   createUserRequest,
 } from './create-user.actions';
@@ -19,6 +18,7 @@ import {
 import { ServerErrors } from '../../schemas/errors/server';
 import { CreateUserError } from '../../schemas/user/create/create-user-error';
 import { CreateUserResponse } from '../../schemas/user/create/create-user-response';
+import { programmingError, unknownError } from '../errors/error.actions';
 
 @Injectable()
 export class CreateUserEffects {
@@ -93,11 +93,8 @@ export class CreateUserEffects {
     loginData: { credentials: UserForm },
   ) {
     return match(errorResponse)
-      .with(
-        ServerErrors.UNKNOWN_ERROR,
-        ServerErrors.INCORRECT_DATA_FORMAT,
-        (err) => createUserDeviceError({ error: err, ...loginData }),
-      )
+      .with(ServerErrors.UNKNOWN_ERROR, (err) => unknownError())
+      .with(ServerErrors.INCORRECT_DATA_FORMAT, (err) => programmingError())
       .with('PHONE_ALREADY_EXISTS', (err) =>
         createUserError({ error: err, ...loginData }),
       )

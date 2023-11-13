@@ -1,10 +1,8 @@
 import { createReducer, on } from '@ngrx/store';
-import { ServerErrors } from '../../schemas/errors/server';
 import { RepeatedData } from '../../schemas/user/create/create-user-error';
 import { UserFormError } from '../../schemas/user/validate/form';
 import {
   createUserCorrect,
-  createUserDeviceError,
   createUserError,
   createUserRequest,
 } from './create-user.actions';
@@ -19,7 +17,6 @@ export type CreateUserState = {
   };
   error?: RepeatedData | UserFormError;
   isLoading: boolean;
-  deviceError?: ServerErrors;
 };
 
 export const emptyUserCreationState = {
@@ -56,11 +53,5 @@ export const createUserReducer = createReducer(
     userCreateForm: action.credentials,
     isLoading: false,
     error: action.error,
-  })),
-  on(createUserDeviceError, (state, action) => ({
-    ...state,
-    userCreateForm: action.credentials,
-    isLoading: false,
-    deviceError: action.error,
   })),
 );

@@ -33,6 +33,8 @@ import { searchReducer } from './state/components/search/search.reducer';
 import { SearchEffects } from './state/components/search/search.effects';
 import { ReservationsEffects } from './state/reservations/reservations.effects';
 import { reservationsReducer } from './state/reservations/reservations.reducer';
+import { errorReducer } from './state/errors/error.reducer';
+import { ErrorEffects } from './state/errors/error.effects';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -62,6 +64,7 @@ export function createTranslateLoader(http: HttpClient) {
         modal: modalReducer,
         searchCompletion: searchReducer,
         reservations: reservationsReducer,
+        error: errorReducer,
       },
       {
         // This is because inmutability objects on actions (and google maps libraries and capacitor change the object from the action)
@@ -87,6 +90,7 @@ export function createTranslateLoader(http: HttpClient) {
       MapEffects,
       SearchEffects,
       ReservationsEffects,
+      ErrorEffects,
     ]),
   ],
   providers: [
