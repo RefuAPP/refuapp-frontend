@@ -21,7 +21,6 @@
       <ion-input
         label="{{'LOGIN.USERNAME.FIELD' | translate }}"
         labelPlacement="stacked"
-        [clearInput]="true"
         placeholder="(+34) xxx xxx xxx"
         type="tel"
         fill="outline"
@@ -43,10 +42,11 @@
         type="password"
         errorText="{{'LOGIN.PASSWORD.ERROR_REQUIRED' | translate }}"
         required="true"
+        (keyup.enter)="submit()"
       >
       </ion-input>
       <ion-note color="danger" *ngIf="formErrors$ | async as errorMessage">
-        {{ errorMessage }}
+        {{ errorMessage | translate }}
       </ion-note>
 
       <ion-row>
