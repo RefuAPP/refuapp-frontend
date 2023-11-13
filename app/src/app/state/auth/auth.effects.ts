@@ -15,7 +15,7 @@ import {
   logOutCompleted,
   logOutRequest,
 } from './auth.actions';
-import { map, of, switchMap } from 'rxjs';
+import { map, of, switchMap, tap } from 'rxjs';
 import { isMatching, match } from 'ts-pattern';
 import { fromPromise } from 'rxjs/internal/observable/innerFrom';
 import {
@@ -33,11 +33,13 @@ import {
 } from '../../schemas/user/user';
 import { AuthenticationResponse } from '../../schemas/auth/authenticate';
 import { ServerErrors } from '../../schemas/errors/server';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class AuthEffects {
   constructor(
     private actions$: Actions,
+    private router: Router,
     private authService: AuthService,
   ) {}
 
@@ -96,6 +98,15 @@ export class AuthEffects {
       switchMap(() => fromPromise(this.authService.deauthenticate())),
       map(() => logOutCompleted()),
     ),
+  );
+
+  loginCompletedGoToHome$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(loginCompleted),
+        tap(() => this.router.navigateByUrl('/home')),
+      ),
+    { dispatch: false },
   );
 
   private fetchNewStateFromAuthApi(loginData: {
