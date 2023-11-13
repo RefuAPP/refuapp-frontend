@@ -1,14 +1,17 @@
-import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  OnDestroy,
+  ViewChild,
+} from '@angular/core';
 import { Location } from '@angular/common';
 import { MapService } from '../../services/map/map.service';
 import { SearchService } from '../../services/search/search.service';
 import { RefugeService } from '../../services/refuge/refuge.service';
 import { AlertController, ModalController } from '@ionic/angular';
 import { ActivatedRoute, Router } from '@angular/router';
-import {
-  GetAllRefugesErrors,
-  GetAllRefugesResponse,
-} from '../../schemas/refuge/get-all-refuges-schema';
+import { GetAllRefugesErrors } from '../../schemas/refuge/get-all-refuges-schema';
 import { match } from 'ts-pattern';
 import { Refuge } from '../../schemas/refuge/refuge';
 import { MapConfiguration } from './map-configuration';
@@ -19,6 +22,13 @@ import {
   GetRefugeResponse,
 } from '../../schemas/refuge/get-refuge-schema';
 import { TranslateService } from '@ngx-translate/core';
+import { Store } from '@ngrx/store';
+import { AppState } from '@capacitor/app';
+import {
+  destroyMap,
+  loadMap,
+  loadRefuges,
+} from '../../state/init/init.actions';
 
 type AutocompletePrediction = google.maps.places.AutocompletePrediction;
 
@@ -27,7 +37,7 @@ type AutocompletePrediction = google.maps.places.AutocompletePrediction;
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
 })
-export class HomePage implements AfterViewInit {
+export class HomePage implements AfterViewInit, OnDestroy {
   @ViewChild('mapRef', { static: false }) mapRef?: ElementRef;
   search: string = '';
   private readonly refugeId?: string = undefined;
@@ -42,6 +52,7 @@ export class HomePage implements AfterViewInit {
     private location: Location,
     private alertController: AlertController,
     private modalController: ModalController,
+    private store: Store<AppState>,
     private translateService: TranslateService,
   ) {
     this.searchResults = this.searchService.getPredictions();
@@ -67,21 +78,16 @@ export class HomePage implements AfterViewInit {
 
   ngAfterViewInit() {
     if (this.mapRef) {
-      this.mapService
-        .createMap(this.mapRef, MapConfiguration)
-        .then(() => this.fetchRefuges())
-        .then(() => this.showRefugeIfOnUrl());
+      this.store.dispatch(
+        loadMap({ map: this.mapRef, config: MapConfiguration }),
+      );
     } else {
       this.renderMapError();
     }
   }
 
   ngOnDestroy() {
-    this.mapService.onDestroy();
-  }
-
-  private showRefugeIfOnUrl() {
-    if (this.refugeId) this.showRefuge(this.refugeId);
+    this.store.dispatch(destroyMap());
   }
 
   private showRefuge(refugeId: string) {
@@ -91,6 +97,7 @@ export class HomePage implements AfterViewInit {
       error: () => this.handleClientError().then(),
     });
   }
+
   private handleGetRefugeResponse(response: GetRefugeResponse) {
     match(response)
       .with({ status: 'correct' }, (response) =>
@@ -148,30 +155,6 @@ export class HomePage implements AfterViewInit {
       .then();
   }
 
-  fetchRefuges() {
-    return this.refugeService.getRefuges().subscribe({
-      next: (response: any) => this.handleGetAllRefugesResponse(response),
-      error: () => this.handleClientError().then(),
-    });
-  }
-
-  private handleGetAllRefugesResponse(response: GetAllRefugesResponse) {
-    match(response)
-      .with({ status: 'correct' }, (response) => {
-        this.addRefugesToMap(response.data);
-      })
-      .with({ status: 'error' }, (response) => {
-        this.handleGetAllRefugesError(response.error);
-      })
-      .exhaustive();
-  }
-
-  private addRefugesToMap(refuges: Refuge[]) {
-    this.mapService
-      .addRefuges(refuges, (refuge: Refuge) => this.onRefugeClick(refuge))
-      .then(() => this.mapService.enableClustering());
-  }
-
   private onRefugeClick(refuge: Refuge) {
     this.location.go(`/home/${refuge.id}`);
     this.modalController
@@ -200,7 +183,6 @@ export class HomePage implements AfterViewInit {
           text: this.translateService.instant('HOME.CLIENT_ERROR.OKAY_BUTTON'),
           handler: () => {
             this.alertController.dismiss().then();
-            this.fetchRefuges();
           },
         },
       ],

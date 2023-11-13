@@ -1,68 +1,66 @@
-<ng-container *ngIf="{ isLoading: isLoadingApp$ | async } as l">
-  <ion-app *ngIf="!l.isLoading">
-    <ion-menu contentId="main-content" type="overlay">
-      <ion-content>
-        <ion-list id="top-menu-list">
-          <ion-list-header>RefuApp</ion-list-header>
-          <ion-note>refuapp@refuapp.com</ion-note>
+<ion-app *ngIf="librariesAreLoaded$ | async">
+  <ion-menu contentId="main-content" type="overlay">
+    <ion-content>
+      <ion-list id="top-menu-list">
+        <ion-list-header>RefuApp</ion-list-header>
+        <ion-note>refuapp.online</ion-note>
 
-          <ion-menu-toggle
-            auto-hide="false"
-            *ngFor="let topMenuItem of topMenuItems$ | async"
+        <ion-menu-toggle
+          auto-hide="false"
+          *ngFor="let topMenuItem of topMenuItems$ | async"
+        >
+          <ion-item
+            routerDirection="root"
+            [routerLink]="[topMenuItem.url]"
+            lines="none"
+            detail="false"
+            routerLinkActive="selected"
           >
-            <ion-item
-              routerDirection="root"
-              [routerLink]="[topMenuItem.url]"
-              lines="none"
-              detail="false"
-              routerLinkActive="selected"
-            >
-              <ion-icon
-                aria-hidden="true"
-                slot="start"
-                [ios]="topMenuItem.icon + '-outline'"
-                [md]="topMenuItem.icon + '-sharp'"
-              ></ion-icon>
-              <ion-label>{{
-                topMenuItem.titleTranslateKey | translate
-              }}</ion-label>
-            </ion-item>
-          </ion-menu-toggle>
-        </ion-list>
-      </ion-content>
-      <ion-list id="bottom-menu-list">
-        <ion-footer class="bar-stable" id="bottom-menu-item-container">
-          <ion-menu-toggle
-            auto-hide="false"
-            *ngFor="let topMenuBottom of bottomMenuItems$ | async"
-          >
-            <ion-item
-              routerDirection="root"
-              [routerLink]="topMenuBottom.url"
-              lines="none"
-              detail="false"
-              routerLinkActive="selected"
-            >
-              <ion-icon
-                aria-hidden="true"
-                slot="start"
-                [ios]="topMenuBottom.icon + '-outline'"
-                [md]="topMenuBottom.icon + '-sharp'"
-              ></ion-icon>
-              <ion-label>{{
-                topMenuBottom.titleTranslateKey | translate
-              }}</ion-label>
-            </ion-item>
-          </ion-menu-toggle>
-        </ion-footer>
+            <ion-icon
+              aria-hidden="true"
+              slot="start"
+              [ios]="topMenuItem.icon + '-outline'"
+              [md]="topMenuItem.icon + '-sharp'"
+            ></ion-icon>
+            <ion-label>{{
+              topMenuItem.titleTranslateKey | translate
+            }}</ion-label>
+          </ion-item>
+        </ion-menu-toggle>
       </ion-list>
-    </ion-menu>
-    <ion-router-outlet id="main-content"></ion-router-outlet>
-    <ng-container *ngIf="isLoading$ | async as loading">
-      <ion-loading
-        isOpen="{{ loading.isLoading }}"
-        message="{{ loading.keyMessage! | translate }}"
-      ></ion-loading>
-    </ng-container>
-  </ion-app>
-</ng-container>
+    </ion-content>
+    <ion-list id="bottom-menu-list">
+      <ion-footer class="bar-stable" id="bottom-menu-item-container">
+        <ion-menu-toggle
+          auto-hide="false"
+          *ngFor="let topMenuBottom of bottomMenuItems$ | async"
+        >
+          <ion-item
+            routerDirection="root"
+            [routerLink]="topMenuBottom.url"
+            lines="none"
+            detail="false"
+            routerLinkActive="selected"
+          >
+            <ion-icon
+              aria-hidden="true"
+              slot="start"
+              [ios]="topMenuBottom.icon + '-outline'"
+              [md]="topMenuBottom.icon + '-sharp'"
+            ></ion-icon>
+            <ion-label>{{
+              topMenuBottom.titleTranslateKey | translate
+            }}</ion-label>
+          </ion-item>
+        </ion-menu-toggle>
+      </ion-footer>
+    </ion-list>
+  </ion-menu>
+  <ion-router-outlet id="main-content"></ion-router-outlet>
+  <ng-container *ngIf="isLoading$ | async as loading">
+    <ion-loading
+      isOpen="{{ loading.isLoading }}"
+      message="{{ loading.keyMessage! | translate }}"
+    ></ion-loading>
+  </ng-container>
+</ion-app>

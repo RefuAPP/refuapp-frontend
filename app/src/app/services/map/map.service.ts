@@ -17,7 +17,7 @@ export class MapService {
 
   constructor() {}
 
-  onDestroy() {
+  destroyMap() {
     this.map?.destroy();
   }
 

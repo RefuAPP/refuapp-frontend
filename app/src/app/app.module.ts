@@ -48,7 +48,7 @@ export function createTranslateLoader(http: HttpClient) {
       auth: authReducer,
       createUser: createUserReducer,
       language: languageReducer,
-      init: initReducer,
+      initStatus: initReducer,
     }),
     StoreDevtoolsModule.instrument({
       maxAge: 25, // Retains last 25 states
@@ -59,10 +59,10 @@ export function createTranslateLoader(http: HttpClient) {
       connectOutsideZone: true, // If set to true, the connection is established outside the Angular zone for better performance
     }),
     EffectsModule.forRoot([
+      InitEffects,
       AuthEffects,
       CreateUserEffects,
       LanguageEffects,
-      InitEffects,
     ]),
   ],
   providers: [
