@@ -37,7 +37,7 @@ export class ProfileUpdatePage implements OnInit {
     private translateService: TranslateService,
   ) {
     const userId = this.getUserIdFromUrl();
-    this.fetchUser(userId).then(() => console.log(this.user));
+    this.fetchUser(userId).then();
   }
 
   ngOnInit() {}

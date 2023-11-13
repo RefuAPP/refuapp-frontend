@@ -11,11 +11,7 @@
   <ion-card class="profile-card">
     <ion-card-header>
       <div class="header-container">
-        <img
-          class="profile-image"
-          [src]="'assets/img/perfil' + avatarNumber + '.png'"
-          alt="Profile photo"
-        />
+        <img class="profile-image" [src]="avatar" alt="Profile photo" />
         <ion-card-title class="user-name">
           {{ 'PROFILE.USER_NAME' | translate: { username: user?.username } }}
         </ion-card-title>
@@ -58,6 +54,7 @@
       </ion-item>
     </ion-list>
   </ion-card>
+  <ion-note color="danger" *ngIf="hasError"> {{errorMessage}} </ion-note>
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button (click)="updateUser()">
