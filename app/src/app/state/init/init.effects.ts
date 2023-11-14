@@ -13,7 +13,7 @@ import {
 } from './init.actions';
 import { fromPromise } from 'rxjs/internal/observable/innerFrom';
 import { secretEnvironment } from '../../../environments/environment.secret';
-import { unknownError } from '../errors/error.actions';
+import { connectionError, unknownError } from '../errors/error.actions';
 
 @Injectable()
 export class InitEffects {
@@ -32,7 +32,7 @@ export class InitEffects {
       switchMap((createData) =>
         fromPromise(this.fetchGoogleMapsLibrary()).pipe(
           map(() => loadedMapLibrary()),
-          catchError(() => [unknownError(), errorLoadingMapLibrary()]),
+          catchError(() => [connectionError(), errorLoadingMapLibrary()]),
         ),
       ),
     ),

@@ -2,9 +2,10 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { UserService } from '../../services/user/user.service';
 import { loginRequest } from '../auth/auth.actions';
-import { map, of, switchMap } from 'rxjs';
+import { catchError, map, of, switchMap } from 'rxjs';
 import {
   createUserCorrect,
+  createUserDevicesError,
   createUserError,
   createUserRequest,
 } from './create-user.actions';
@@ -18,7 +19,11 @@ import {
 import { ServerErrors } from '../../schemas/errors/server';
 import { CreateUserError } from '../../schemas/user/create/create-user-error';
 import { CreateUserResponse } from '../../schemas/user/create/create-user-response';
-import { programmingError, unknownError } from '../errors/error.actions';
+import {
+  connectionError,
+  programmingError,
+  unknownError,
+} from '../errors/error.actions';
 
 @Injectable()
 export class CreateUserEffects {
@@ -64,6 +69,7 @@ export class CreateUserEffects {
         map((response) =>
           this.getNewStateFromUserCreateServer(response, createUserData),
         ),
+        catchError((error) => [connectionError(), createUserDevicesError()]),
       );
   }
 

@@ -1,4 +1,4 @@
-<ion-app>
+<ion-app *ngIf="canShowPage$ | async">
   <ion-menu contentId="main-content" type="overlay">
     <ion-content>
       <ion-list id="top-menu-list">
@@ -56,10 +56,7 @@
       </ion-footer>
     </ion-list>
   </ion-menu>
-  <ion-router-outlet
-    *ngIf="canShowPage$ | async"
-    id="main-content"
-  ></ion-router-outlet>
+  <ion-router-outlet id="main-content"></ion-router-outlet>
   <ng-container *ngIf="isLoading$ | async as loading">
     <ion-loading
       isOpen="{{ loading.isLoading }}"
@@ -67,6 +64,11 @@
     ></ion-loading>
   </ng-container>
 </ion-app>
-<ng-container *ngIf="isMapLoading$ | async as loading">
-  <ion-loading isOpen="{{ loading }}"> </ion-loading>
+<ng-container *ngIf="hasConnectionError$ | async as error">
+  <ion-alert
+    isOpen="{{ error }}"
+    header="You are offline!"
+    message="You are offline or the server is not reachable. Please check your internet connection and try again."
+    [buttons]="alertButtons"
+  ></ion-alert>
 </ng-container>

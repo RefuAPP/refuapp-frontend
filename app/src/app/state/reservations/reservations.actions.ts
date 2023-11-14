@@ -5,10 +5,12 @@ import {
 } from '../../schemas/reservations/reservation';
 import { RefugeReservationsRelations } from '../../services/reservations/grouped-by/refuge';
 import {
+  CreateReservationDataError,
   CreateReservationError,
   ErrorCreateReservation,
 } from '../../schemas/reservations/create-reservation';
 import {
+  DeleteReservationDataError,
   DeleteReservationError,
   ErrorDeleteReservation,
 } from '../../schemas/reservations/delete-reservation';
@@ -28,14 +30,26 @@ export const fetchReservations = createAction(
   props<{ reservations: RefugeReservationsRelations }>(),
 );
 
+export const connectionErrorFetchReservations = createAction(
+  '[Reservations] Fetch Reservations had a connection error',
+);
+
 export const errorAddingReservation = createAction(
   '[Reservations] Error Adding Reservation',
   props<{ error: CreateReservationError }>(),
 );
 
+export const connectionErrorAddReservation = createAction(
+  '[Reservations] Add Reservation had a connection error',
+);
+
 export const deleteReservation = createAction(
   '[Reservations] Delete Reservation',
   props<{ id: string }>(),
+);
+
+export const connectionErrorDeleteReservation = createAction(
+  '[Reservations] Delete Reservation had a connection error',
 );
 
 export const deletedReservation = createAction(

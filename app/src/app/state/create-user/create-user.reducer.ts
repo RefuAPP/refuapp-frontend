@@ -3,6 +3,7 @@ import { RepeatedData } from '../../schemas/user/create/create-user-error';
 import { UserFormError } from '../../schemas/user/validate/form';
 import {
   createUserCorrect,
+  createUserDevicesError,
   createUserError,
   createUserRequest,
 } from './create-user.actions';
@@ -53,5 +54,9 @@ export const createUserReducer = createReducer(
     userCreateForm: action.credentials,
     isLoading: false,
     error: action.error,
+  })),
+  on(createUserDevicesError, (state, action) => ({
+    ...state,
+    isLoading: false,
   })),
 );

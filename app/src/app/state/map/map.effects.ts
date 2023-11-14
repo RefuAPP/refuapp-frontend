@@ -24,7 +24,11 @@ import {
   moveMapTo,
 } from './map.actions';
 import { loadedMapLibrary } from '../init/init.actions';
-import { programmingError, unknownError } from '../errors/error.actions';
+import {
+  connectionError,
+  programmingError,
+  unknownError,
+} from '../errors/error.actions';
 import { match } from 'ts-pattern';
 import { GetAllRefugesErrors } from '../../schemas/refuge/get-all-refuges-schema';
 
@@ -81,6 +85,7 @@ export class MapEffects {
           return loadedRefuges({ refuges: refuges.data });
         return loadRefugesError({ error: refuges.error });
       }),
+      catchError(() => of(connectionError())),
     ),
   );
 

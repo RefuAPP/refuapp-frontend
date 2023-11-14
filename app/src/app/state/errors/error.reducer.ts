@@ -1,9 +1,19 @@
 import { createReducer, on } from '@ngrx/store';
-import { cleanError, resourceNotFound, unknownError } from './error.actions';
+import {
+  cleanError,
+  connectionError,
+  resourceNotFound,
+  unknownError,
+} from './error.actions';
 
 export type ErrorState = {
   hasError: boolean;
-  type: 'resourceNotFound' | 'programmingError' | 'unknownError' | undefined;
+  type:
+    | 'resourceNotFound'
+    | 'programmingError'
+    | 'unknownError'
+    | 'connectionError'
+    | undefined;
 };
 
 export const reservationState = {
@@ -23,6 +33,10 @@ export const errorReducer = createReducer(
   on(resourceNotFound, (state, action) => ({
     hasError: true,
     type: 'programmingError',
+  })),
+  on(connectionError, (state, action) => ({
+    hasError: true,
+    type: 'connectionError',
   })),
   on(cleanError, (state, action) => ({
     hasError: false,

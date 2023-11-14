@@ -5,7 +5,11 @@ import { TranslateService } from '@ngx-translate/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../state/app.state';
 import { deleteReservation } from '../../state/reservations/reservations.actions';
-import { getReservationsSortedByRefuge } from '../../state/reservations/reservations.selectors';
+import {
+  deletedReservation,
+  getDeleteReservationErrors,
+  getReservationsSortedByRefuge,
+} from '../../state/reservations/reservations.selectors';
 
 @Component({
   selector: 'app-reservations',
@@ -13,11 +17,13 @@ import { getReservationsSortedByRefuge } from '../../state/reservations/reservat
   styleUrls: ['./reservations.page.scss'],
 })
 export class ReservationsPage implements OnInit {
-  reservations = this.store.select(getReservationsSortedByRefuge);
+  reservations$ = this.store.select(getReservationsSortedByRefuge);
+  deleteErrors$ = this.store.select(getDeleteReservationErrors);
+  deletedReservation$ = this.store.select(deletedReservation);
 
   onRemoveReservation(reservation: ReservationWithId) {
     this.showDeleteReservationMessage(reservation, () => {
-      this.removeReservation(reservation);
+      this.store.dispatch(deleteReservation({ id: reservation.id }));
     }).then();
   }
 
@@ -26,10 +32,6 @@ export class ReservationsPage implements OnInit {
     private alertController: AlertController,
     private translateService: TranslateService,
   ) {}
-
-  private removeReservation(reservation: ReservationWithId) {
-    this.store.dispatch(deleteReservation({ id: reservation.id }));
-  }
 
   private async showDeleteReservationMessage(
     reservation: ReservationWithId,

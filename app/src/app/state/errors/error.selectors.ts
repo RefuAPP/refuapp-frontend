@@ -7,3 +7,8 @@ export const hasError = createSelector(
   selectError,
   (errorState) => errorState.hasError,
 );
+
+export const clientHasErrorConnection = createSelector(
+  selectError,
+  (errorState) => errorState.type === 'connectionError',
+);

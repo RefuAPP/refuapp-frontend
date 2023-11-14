@@ -8,6 +8,10 @@ export const createUserRequest = createAction(
   props<{ credentials: UserForm }>(),
 );
 
+export const createUserDevicesError = createAction(
+  '[User] Create User Device Error',
+);
+
 export const createUserError = createAction(
   '[User] Create User Error',
   props<{

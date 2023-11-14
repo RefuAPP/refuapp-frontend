@@ -9,7 +9,7 @@
 
 <ion-content [fullscreen]="true">
   <ion-list style="padding-block: 0px">
-    <ion-item-group *ngFor="let res of reservations | async">
+    <ion-item-group *ngFor="let res of reservations$ | async">
       <ion-item-divider sticky>
         <ion-label> {{ res.refuge.name }} </ion-label>
       </ion-item-divider>
@@ -36,4 +36,23 @@
       </ion-item>
     </ion-item-group>
   </ion-list>
+
+  <ng-container *ngIf="deleteErrors$ | async as errorMessage">
+    <ion-toast
+      [isOpen]="errorMessage !== null"
+      message="{{errorMessage | translate}}"
+      color="danger"
+      icon="bug-outline"
+      [duration]="3000"
+    ></ion-toast>
+  </ng-container>
+  <ng-container *ngIf="deletedReservation$ | async as isDeleted">
+    <ion-toast
+      [isOpen]="isDeleted"
+      message="{{'RESERVATIONS.DELETE_SUCCESS' | translate}}"
+      color="success"
+      icon="checkmark-outline"
+      [duration]="3000"
+    ></ion-toast>
+  </ng-container>
 </ion-content>

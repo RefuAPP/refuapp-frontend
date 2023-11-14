@@ -5,12 +5,15 @@ import {
   ofType,
   ROOT_EFFECTS_INIT,
 } from '@ngrx/effects';
-import { combineLatest, map, mergeMap, switchMap } from 'rxjs';
+import { catchError, combineLatest, map, mergeMap, of, switchMap } from 'rxjs';
 import { loginCompleted } from '../auth/auth.actions';
 import { UserReservationService } from '../../services/reservations/user-reservation.service';
 import {
   addedReservation,
   addReservation,
+  connectionErrorAddReservation,
+  connectionErrorDeleteReservation,
+  connectionErrorFetchReservations,
   deletedReservation,
   deleteReservation,
   errorAddingReservation,
@@ -43,9 +46,8 @@ export class ReservationsEffects {
         this.userReservationService
           .getReservationsGroupedByRefugeForUser(actions[0].userId)
           .pipe(
-            map((reservations) => {
-              return fetchReservations({ reservations });
-            }),
+            map((reservations) => fetchReservations({ reservations })),
+            catchError(() => of(connectionErrorFetchReservations())),
           ),
       ),
     ),
@@ -65,6 +67,7 @@ export class ReservationsEffects {
               });
             return errorDeletingReservation({ error: reservations.error });
           }),
+          catchError(() => of(connectionErrorDeleteReservation())),
         ),
       ),
     ),
@@ -89,6 +92,7 @@ export class ReservationsEffects {
                 });
               return errorAddingReservation({ error: reservations.error });
             }),
+            catchError(() => of(connectionErrorAddReservation())),
           ),
       ),
     ),
@@ -107,6 +111,7 @@ export class ReservationsEffects {
               orderByRefuge(reservations, this.reservationFactory),
             ),
             map((reservations) => fetchReservations({ reservations })),
+            catchError(() => of(connectionErrorFetchReservations())),
           ),
       ),
     ),

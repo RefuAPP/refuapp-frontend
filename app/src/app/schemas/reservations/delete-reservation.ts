@@ -5,15 +5,21 @@ import {
   ReservationPattern,
   ReservationWithId,
 } from './reservation';
+import { ServerErrors } from '../errors/server';
+import { PermissionsErrors } from '../errors/permissions';
+import { CommonErrors } from '../errors/common';
+import { CreateReservationDataError } from './create-reservation';
+import { AuthenticationErrors } from '../auth/errors';
 
-export enum DeleteReservationError {
+export enum DeleteReservationDataError {
   RESERVATION_NOT_FOUND = 'RESERVATION_NOT_FOUND',
-  PROGRAMMING_ERROR = 'PROGRAMMING_ERROR',
-  SERVER_ERROR = 'SERVER_DATA_ERROR',
-  NOT_ALLOWED_DELETION_FOR_USER = 'NOT_ALLOWED_DELETION_FOR_USER',
-  NOT_AUTHENTICATED = 'NOT_AUTHENTICATED',
-  UNKNOWN_ERROR = 'UNKNOWN_ERROR',
 }
+
+export type DeleteReservationError =
+  | DeleteReservationDataError
+  | ServerErrors
+  | PermissionsErrors
+  | CommonErrors;
 
 export namespace DeleteReservationError {
   export function from(
@@ -25,21 +31,21 @@ export namespace DeleteReservationError {
       })
       .with(
         HttpStatusCode.Unauthorized,
-        () => DeleteReservationError.NOT_AUTHENTICATED,
+        () => PermissionsErrors.NOT_AUTHENTICATED,
       )
       .with(
         HttpStatusCode.NotFound,
-        () => DeleteReservationError.RESERVATION_NOT_FOUND,
+        () => DeleteReservationDataError.RESERVATION_NOT_FOUND,
       )
       .with(
         HttpStatusCode.Forbidden,
-        () => DeleteReservationError.NOT_ALLOWED_DELETION_FOR_USER,
+        () => PermissionsErrors.NOT_ALLOWED_OPERATION_FOR_USER,
       )
       .with(
         HttpStatusCode.UnprocessableEntity,
-        () => DeleteReservationError.PROGRAMMING_ERROR,
+        () => CommonErrors.PROGRAMMING_ERROR,
       )
-      .otherwise(() => DeleteReservationError.UNKNOWN_ERROR);
+      .otherwise(() => ServerErrors.UNKNOWN_ERROR);
   }
 }
 
@@ -60,7 +66,7 @@ export type DeleteReservation =
 export function fromResponse(response: any): DeleteReservation {
   if (isMatching(ReservationPattern, response))
     return { status: 'ok', reservation: response };
-  return { status: 'error', error: DeleteReservationError.SERVER_ERROR };
+  return { status: 'error', error: ServerErrors.INCORRECT_DATA_FORMAT };
 }
 
 export function fromError(error: HttpErrorResponse): DeleteReservation | never {
