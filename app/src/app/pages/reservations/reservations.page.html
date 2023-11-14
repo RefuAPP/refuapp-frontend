@@ -8,51 +8,60 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-list style="padding-block: 0px">
-    <ion-item-group *ngFor="let res of reservations$ | async">
-      <ion-item-divider sticky>
-        <ion-label> {{ res.refuge.name }} </ion-label>
-      </ion-item-divider>
-      <ion-item *ngFor="let reservation of res.reservations">
-        <ion-label routerLink="/home/{{reservation.refuge_id}}">
-          <h3>
-            {{'RESERVATIONS.DETAILS.HEADER' | translate: { day:
-            reservation.night.day } }}
-          </h3>
-          <p>
-            {{'RESERVATIONS.DETAILS.MESSAGE' | translate: { month:
-            reservation.night.month, year: reservation.night.year, day:
-            reservation.night.day } }}
-          </p>
-        </ion-label>
-        <ion-button
-          slot="end"
-          color="danger"
-          (click)="onRemoveReservation(reservation)"
-        >
-          <ion-icon slot="end" name="trash"></ion-icon>
-          {{ 'RESERVATIONS.DELETE_BUTTON' | translate }}
-        </ion-button>
-      </ion-item>
-    </ion-item-group>
-  </ion-list>
+  <div class="page-reservations-fullscreen">
+    <ion-list>
+      <ion-item-group *ngFor="let res of reservations$ | async">
+        <ion-item-divider>
+          <ion-label class="refuge_name"> {{ res.refuge.name }} </ion-label>
+          <img
+            class="refuge-image"
+            [src]="'https://backend.refuapp.online/static/images/refuges/' + res.refuge.image"
+            alt="{{ res.refuge.name }}"
+          />`
+        </ion-item-divider>
 
-  <ng-container *ngIf="deleteErrors$ | async as errorMessage">
-    <ion-toast
-      [isOpen]="errorMessage !== null"
-      message="{{errorMessage | translate}}"
-      color="danger"
-      icon="bug-outline"
-      [duration]="3000"
-    ></ion-toast>
-  </ng-container>
-  <ng-container *ngIf="deletedReservation$ | async as isDeleted">
-    <ion-toast
-      [isOpen]="isDeleted"
-      message="{{'RESERVATIONS.DELETE_SUCCESS' | translate}}"
-      color="success"
-      icon="checkmark-outline"
-      [duration]="3000"
-    ></ion-toast>
-  </ng-container>
+        <ion-item *ngFor="let reservation of res.reservations">
+          <ion-label routerLink="/home/{{reservation.refuge_id}}">
+            <div class="reservation-details">
+              {{'RESERVATIONS.DETAILS.HEADER' | translate: { day:
+              reservation.night.day } }}
+
+              <p>
+                {{'RESERVATIONS.DETAILS.MESSAGE' | translate: { month:
+                reservation.night.month, year: reservation.night.year, day:
+                reservation.night.day } }}
+              </p>
+            </div>
+          </ion-label>
+          <ion-button
+            slot="end"
+            color="danger"
+            (click)="onRemoveReservation(reservation)"
+          >
+            <ion-icon slot="end" name="trash"></ion-icon>
+            {{ 'RESERVATIONS.DELETE_BUTTON' | translate }}
+          </ion-button>
+        </ion-item>
+      </ion-item-group>
+    </ion-list>
+
+    <ng-container *ngIf="deleteErrors$ | async as errorMessage">
+      <ion-toast
+        [isOpen]="errorMessage !== null"
+        message="{{errorMessage | translate}}"
+        color="danger"
+        icon="bug-outline"
+        [duration]="3000"
+      ></ion-toast>
+    </ng-container>
+    <ng-container *ngIf="deletedReservation$ | async as isDeleted">
+      <ion-toast
+        [isOpen]="isDeleted"
+        message="{{'RESERVATIONS.DELETE_SUCCESS' | translate}}"
+        color="success"
+        icon="checkmark-outline"
+        [duration]="3000"
+      ></ion-toast>
+    </ng-container>
+  </div>
 </ion-content>

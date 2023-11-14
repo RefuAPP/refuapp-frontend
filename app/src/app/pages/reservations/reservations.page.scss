@@ -1,0 +1,63 @@
+.page-reservations-fullscreen {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 50px;
+    max-width: 800px;
+    margin: 0 auto;
+    border-radius: 10px;
+}
+
+.refuge_name {
+    font-size: 2.5em;
+    font-weight: bold;
+    text-align: left;
+    width: 100%;
+}
+
+.refuge-image {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.reservation-details {
+    font-size: 2.5em;
+}
+
+@media (max-width: 768px) {
+    .page-reservations-fullscreen {
+        padding: 30px;
+        gap: 15px;
+    }
+    .refuge-image {
+        width: 80px;
+        height: 80px;
+    }
+    .refuge_name,
+    .reservation-details {
+        font-size: 1.3em;
+    }
+    .reservation-details p {
+        font-size: 0.7em;
+    }
+}
+
+@media (max-width: 480px) {
+    .page-reservations-fullscreen {
+        padding: 20px;
+        gap: 10px;
+    }
+    .refuge-image {
+        width: 80px;
+        height: 80px;
+    }
+    .refuge_name,
+    .reservation-details {
+        font-size: 1.3m;
+    }
+    .reservation-details p {
+        font-size: 0.7em;
+    }
+}
