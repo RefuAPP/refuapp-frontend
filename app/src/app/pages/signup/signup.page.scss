@@ -8,10 +8,13 @@
 
 .sign-up-logo img {
   max-width: 150px;
+  border-radius: 50%;
 }
 
 .sign-up-form {
   padding: 16px;
+  max-width: 500px;
+  margin: 0 auto;
 }
 
 ion-input {
