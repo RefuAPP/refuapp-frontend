@@ -8,6 +8,8 @@ import { HomePageRoutingModule } from './home-routing.module';
 import { TranslateModule } from '@ngx-translate/core';
 import { RefugePageModule } from '../refuge/refuge.module';
 import { SearchbarLocationComponent } from '../../components/searchbar-location/searchbar-location.component';
+import { RefugeModalComponent } from '../../components/refuge-modal/refuge-modal.component';
+import { MapComponent } from '../../components/map/map.component';
 
 @NgModule({
   imports: [
@@ -18,7 +20,12 @@ import { SearchbarLocationComponent } from '../../components/searchbar-location/
     TranslateModule,
     RefugePageModule,
   ],
-  declarations: [HomePage, SearchbarLocationComponent],
+  declarations: [
+    HomePage,
+    SearchbarLocationComponent,
+    RefugeModalComponent,
+    MapComponent,
+  ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class HomePageModule {}

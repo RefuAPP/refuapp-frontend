@@ -1,0 +1,18 @@
+<ng-container *ngIf="modalState$ | async as state">
+  <ion-modal
+    #modal
+    [isOpen]="state.isOpen"
+    [breakpoints]="[0, 0.3, 1]"
+    [initialBreakpoint]="0.3"
+    (ionModalDidDismiss)="dismissedModal()"
+    class="ion-modal"
+  >
+    <ng-template class="example-modal">
+      <app-refuge
+        class="example-modal"
+        [refuge]="state.refuge"
+        (clickedBar)="changeCurrentModalSize(modal)"
+      ></app-refuge>
+    </ng-template>
+  </ion-modal>
+</ng-container>

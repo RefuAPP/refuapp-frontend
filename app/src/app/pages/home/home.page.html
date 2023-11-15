@@ -1,22 +1,5 @@
 <app-searchbar-location></app-searchbar-location>
 <ion-content [fullscreen]="true">
-  <ng-container *ngIf="modalState$ | async as state">
-    <ion-modal
-      #modal
-      [isOpen]="state.isOpen"
-      [breakpoints]="[0, 0.3, 1]"
-      [initialBreakpoint]="0.3"
-      (ionModalDidDismiss)="dismissedModal()"
-      class="ion-modal"
-    >
-      <ng-template class="example-modal">
-        <app-refuge
-          class="example-modal"
-          [refuge]="state.refuge"
-          (clickedBar)="changeCurrentModalSize(modal)"
-        ></app-refuge>
-      </ng-template>
-    </ion-modal>
-  </ng-container>
-  <capacitor-google-map #mapRef></capacitor-google-map>
+  <app-refuge-modal></app-refuge-modal>
+  <app-map></app-map>
 </ion-content>
