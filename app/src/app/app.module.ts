@@ -38,6 +38,7 @@ import { ErrorEffects } from './state/errors/error.effects';
 import { ReservationsPageModule } from './pages/reservations/reservations.module';
 import { refugesReducer } from './state/refuges/refuges.reducer';
 import { RefugesEffects } from './state/refuges/refuges.effects';
+import { ModalEffects } from './state/components/modal/modal.effects';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -96,6 +97,7 @@ export function createTranslateLoader(http: HttpClient) {
       ReservationsEffects,
       ErrorEffects,
       RefugesEffects,
+      ModalEffects,
     ]),
     ReservationsPageModule,
   ],
