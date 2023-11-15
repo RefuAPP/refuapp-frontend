@@ -20,11 +20,7 @@ export class ReservationPickerComponent implements OnInit {
 
   createErrors = this.store.select(getCreateReservationErrors);
 
-  constructor(private store: Store<AppState>) {
-    this.createErrors.subscribe((errors) => {
-      console.log(errors);
-    });
-  }
+  constructor(private store: Store<AppState>) {}
 
   ngOnInit() {}
 

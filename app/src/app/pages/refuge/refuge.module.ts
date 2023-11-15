@@ -10,6 +10,7 @@ import { RefugePage } from './refuge.page';
 import { TranslateModule } from '@ngx-translate/core';
 import { ReservationPickerComponent } from '../../components/reservation-picker/reservation-picker.component';
 import { ReservationsChartComponent } from '../../components/reservations-chart/reservations-chart.component';
+import { ReservationsPageModule } from '../reservations/reservations.module';
 
 @NgModule({
   imports: [
@@ -18,6 +19,7 @@ import { ReservationsChartComponent } from '../../components/reservations-chart/
     IonicModule,
     RefugePageRoutingModule,
     TranslateModule,
+    ReservationsPageModule,
   ],
   declarations: [
     RefugePage,

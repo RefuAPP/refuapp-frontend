@@ -6,8 +6,22 @@
   [duration]="3000"
 ></ion-toast>
 <ion-toast
+  [isOpen]="hasCreationErrors$ | async"
+  message="{{ createErrors$ | async | translate }}"
+  color="danger"
+  icon="bug-outline"
+  [duration]="3000"
+></ion-toast>
+<ion-toast
   [isOpen]="deletedReservation$ | async"
   message="{{ 'RESERVATIONS.DELETE_SUCCESS' | translate }}"
+  color="success"
+  icon="checkmark-outline"
+  [duration]="3000"
+></ion-toast>
+<ion-toast
+  [isOpen]="createdReservation$ | async"
+  message="{{ 'RESERVATIONS.CREATE_SUCCESS' | translate }}"
   color="success"
   icon="checkmark-outline"
   [duration]="3000"

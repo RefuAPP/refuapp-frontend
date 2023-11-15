@@ -25,23 +25,24 @@ export namespace CreateReservationError {
       .with(0, () => {
         throw new Error('You are offline or the server is down.');
       })
-      .with(HttpStatusCode.Unauthorized, () => {
-        if (
-          error.message.includes(
-            'You are not allowed to get a reservation of another user',
-          )
-        )
-          return CreateReservationDataError.INVALID_DATE;
-        return PermissionsErrors.NOT_AUTHENTICATED;
-      })
+      .with(
+        HttpStatusCode.Unauthorized,
+        () => PermissionsErrors.NOT_AUTHENTICATED,
+      )
       .with(
         HttpStatusCode.NotFound,
         () => CreateReservationDataError.REFUGE_OR_USER_NOT_FOUND,
       )
-      .with(
-        HttpStatusCode.Forbidden,
-        () => PermissionsErrors.NOT_ALLOWED_OPERATION_FOR_USER,
-      )
+      .with(HttpStatusCode.Forbidden, () => {
+        if (
+          error.error.detail != undefined &&
+          error.error.detail.includes(
+            'User already has a reservation on this date',
+          )
+        )
+          return CreateReservationDataError.INVALID_DATE;
+        return PermissionsErrors.NOT_ALLOWED_OPERATION_FOR_USER;
+      })
       .with(
         HttpStatusCode.UnprocessableEntity,
         () => CommonErrors.PROGRAMMING_ERROR,
