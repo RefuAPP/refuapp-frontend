@@ -5,12 +5,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../state/app.state';
 import { deleteReservation } from '../../state/reservations/reservations.actions';
-import {
-  deletedReservation,
-  getDeleteReservationErrors,
-  getReservationsSortedByRefuge,
-} from '../../state/reservations/reservations.selectors';
-import { filter, map, OperatorFunction } from 'rxjs';
+import { getReservationsSortedByRefuge } from '../../state/reservations/reservations.selectors';
 
 @Component({
   selector: 'app-reservations',
@@ -19,18 +14,6 @@ import { filter, map, OperatorFunction } from 'rxjs';
 })
 export class ReservationsPage implements OnInit {
   reservations$ = this.store.select(getReservationsSortedByRefuge);
-  deleteErrors$ = this.store
-    .select(getDeleteReservationErrors)
-    .pipe(
-      filter((errors) => errors !== null) as OperatorFunction<
-        string | null,
-        any
-      >,
-    );
-  hasDeletionErrors$ = this.store
-    .select(getDeleteReservationErrors)
-    .pipe(map((errors) => errors !== null));
-  deletedReservation$ = this.store.select(deletedReservation);
 
   onRemoveReservation(reservation: ReservationWithId) {
     this.showDeleteReservationMessage(reservation, () => {

@@ -8,6 +8,7 @@ import { ReservationsPageRoutingModule } from './reservations-routing.module';
 
 import { ReservationsPage } from './reservations.page';
 import { TranslateModule } from '@ngx-translate/core';
+import { ReactiveReservationsComponent } from '../../components/reactive-reservations/reactive-reservations.component';
 
 @NgModule({
   imports: [
@@ -17,6 +18,6 @@ import { TranslateModule } from '@ngx-translate/core';
     ReservationsPageRoutingModule,
     TranslateModule,
   ],
-  declarations: [ReservationsPage],
+  declarations: [ReservationsPage, ReactiveReservationsComponent],
 })
 export class ReservationsPageModule {}

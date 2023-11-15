@@ -44,19 +44,6 @@
         </ion-item>
       </ion-item-group>
     </ion-list>
-    <ion-toast
-      [isOpen]="hasDeletionErrors$ | async"
-      message="{{deleteErrors$ | async | translate }}"
-      color="danger"
-      icon="bug-outline"
-      [duration]="3000"
-    ></ion-toast>
-    <ion-toast
-      [isOpen]="deletedReservation$ | async"
-      message="{{'RESERVATIONS.DELETE_SUCCESS' | translate}}"
-      color="success"
-      icon="checkmark-outline"
-      [duration]="3000"
-    ></ion-toast>
+    <app-reactive-reservations></app-reactive-reservations>
   </div>
 </ion-content>
