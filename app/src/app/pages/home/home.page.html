@@ -1,27 +1,4 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-menu-button></ion-menu-button>
-    </ion-buttons>
-    <ion-searchbar
-      [value]="searchValue$ | async"
-      (ionInput)="onSearchChange($event)"
-      placeholder="{{ 'HOME.SEARCH_PLACES_BAR' | translate }}"
-      (keyup.enter)="selectFirstSearchResult()"
-    ></ion-searchbar>
-    <ion-title></ion-title>
-  </ion-toolbar>
-  <ion-list *ngIf="searchCompletion$ | async as completions">
-    <ion-item
-      *ngFor="let item of completions"
-      tappable
-      (click)="moveMapTo(item.coordinate)"
-    >
-      {{ item.description }}
-    </ion-item>
-  </ion-list>
-</ion-header>
-
+<app-searchbar-location></app-searchbar-location>
 <ion-content [fullscreen]="true">
   <ng-container *ngIf="modalState$ | async as state">
     <ion-modal

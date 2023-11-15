@@ -7,6 +7,7 @@ import { HomePage } from './home.page';
 import { HomePageRoutingModule } from './home-routing.module';
 import { TranslateModule } from '@ngx-translate/core';
 import { RefugePageModule } from '../refuge/refuge.module';
+import { SearchbarLocationComponent } from '../../components/searchbar-location/searchbar-location.component';
 
 @NgModule({
   imports: [
@@ -17,7 +18,7 @@ import { RefugePageModule } from '../refuge/refuge.module';
     TranslateModule,
     RefugePageModule,
   ],
-  declarations: [HomePage],
+  declarations: [HomePage, SearchbarLocationComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class HomePageModule {}
