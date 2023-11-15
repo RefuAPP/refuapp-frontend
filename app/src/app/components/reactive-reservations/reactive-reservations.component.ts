@@ -15,6 +15,8 @@ import { Store } from '@ngrx/store';
   styleUrls: ['./reactive-reservations.component.scss'],
 })
 export class ReactiveReservationsComponent implements OnInit {
+  // NOTE: Be aware that this component needs to be instantiated on the init of the app, since we have ion-toasts that
+  // fail when view finished and the component timeout hasn't finished yet.
   deleteErrors$ = this.store
     .select(getDeleteReservationErrors)
     .pipe(

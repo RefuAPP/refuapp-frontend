@@ -35,6 +35,7 @@ import { ReservationsEffects } from './state/reservations/reservations.effects';
 import { reservationsReducer } from './state/reservations/reservations.reducer';
 import { errorReducer } from './state/errors/error.reducer';
 import { ErrorEffects } from './state/errors/error.effects';
+import { ReservationsPageModule } from './pages/reservations/reservations.module';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -92,6 +93,7 @@ export function createTranslateLoader(http: HttpClient) {
       ReservationsEffects,
       ErrorEffects,
     ]),
+    ReservationsPageModule,
   ],
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },

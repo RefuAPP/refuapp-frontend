@@ -6,7 +6,7 @@ import {
   OnInit,
   Output,
 } from '@angular/core';
-import { ModalController, Platform } from '@ionic/angular';
+import { Platform } from '@ionic/angular';
 import { ActivatedRoute } from '@angular/router';
 import { RefugeService } from '../../services/refuge/refuge.service';
 import { Refuge } from '../../schemas/refuge/refuge';

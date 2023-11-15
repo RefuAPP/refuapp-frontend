@@ -11,6 +11,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { ReservationPickerComponent } from '../../components/reservation-picker/reservation-picker.component';
 import { ReservationsChartComponent } from '../../components/reservations-chart/reservations-chart.component';
 import { ReservationsPageModule } from '../reservations/reservations.module';
+import { ReservationsComponent } from '../../components/reservations/reservations.component';
 
 @NgModule({
   imports: [
@@ -25,6 +26,7 @@ import { ReservationsPageModule } from '../reservations/reservations.module';
     RefugePage,
     ReservationPickerComponent,
     ReservationsChartComponent,
+    ReservationsComponent,
   ],
   exports: [RefugePage],
 })

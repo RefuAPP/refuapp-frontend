@@ -24,6 +24,6 @@ import { ReservationsItemComponent } from '../../components/reservations-item/re
     ReactiveReservationsComponent,
     ReservationsItemComponent,
   ],
-  exports: [ReactiveReservationsComponent],
+  exports: [ReactiveReservationsComponent, ReservationsItemComponent],
 })
 export class ReservationsPageModule {}

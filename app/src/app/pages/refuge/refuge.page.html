@@ -27,7 +27,6 @@
 
   <div class="about-info">
     <h3 class="ion-padding-top ion-padding-start">{{refuge.name}}</h3>
-
     <ion-list lines="none">
       <ion-item>
         <ion-label> {{ 'REFUGE.INFORMATION.REGION' | translate }}</ion-label>
@@ -62,37 +61,6 @@
         </ion-label>
       </ion-item>
     </ion-list>
-    <ion-grid *ngIf="!platformIsMobile()">
-      <ion-row>
-        <ion-col>
-          <ion-row>
-            <h3 class="ion-padding-top ion-padding-start">
-              {{'REFUGE.RESERVATIONS.HEADER' | translate }}
-            </h3>
-          </ion-row>
-          <ion-row>
-            <app-reservation-picker [refuge]="refuge!"></app-reservation-picker>
-          </ion-row>
-        </ion-col>
-        <ion-col size="8">
-          <app-reservations-chart [refuge]="refuge!"></app-reservations-chart>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-    <ion-grid *ngIf="platformIsMobile()">
-      <ion-col>
-        <ion-row>
-          <h3 class="ion-padding-top ion-padding-start">
-            {{'REFUGE.RESERVATIONS.HEADER' | translate }}
-          </h3>
-        </ion-row>
-        <ion-row>
-          <app-reservation-picker [refuge]="refuge!"></app-reservation-picker>
-        </ion-row>
-        <ion-col>
-          <app-reservations-chart [refuge]="refuge!"></app-reservations-chart>
-        </ion-col>
-      </ion-col>
-    </ion-grid>
+    <app-reservations [refuge]="refuge!"></app-reservations>
   </div>
 </ion-content>
