@@ -10,6 +10,7 @@ import {
   getDeleteReservationErrors,
   getReservationsSortedByRefuge,
 } from '../../state/reservations/reservations.selectors';
+import { filter, map, OperatorFunction } from 'rxjs';
 
 @Component({
   selector: 'app-reservations',
@@ -18,7 +19,17 @@ import {
 })
 export class ReservationsPage implements OnInit {
   reservations$ = this.store.select(getReservationsSortedByRefuge);
-  deleteErrors$ = this.store.select(getDeleteReservationErrors);
+  deleteErrors$ = this.store
+    .select(getDeleteReservationErrors)
+    .pipe(
+      filter((errors) => errors !== null) as OperatorFunction<
+        string | null,
+        any
+      >,
+    );
+  hasDeletionErrors$ = this.store
+    .select(getDeleteReservationErrors)
+    .pipe(map((errors) => errors !== null));
   deletedReservation$ = this.store.select(deletedReservation);
 
   onRemoveReservation(reservation: ReservationWithId) {

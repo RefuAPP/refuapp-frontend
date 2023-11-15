@@ -45,6 +45,10 @@ export const getCreateReservationErrors = createSelector(
           CommonErrors.PROGRAMMING_ERROR,
           () => 'TODO: PROGRAMMING_ERROR_STRING',
         )
+        .with(
+          'connectionError',
+          () => 'TODO: CONNECTION_ERROR_STRING_WHILE_CREATING_RESERVATION',
+        )
         .exhaustive();
     }
     return null;
@@ -73,6 +77,10 @@ export const getDeleteReservationErrors = createSelector(
         .with(
           CommonErrors.PROGRAMMING_ERROR,
           () => 'TODO: PROGRAMMING_ERROR_STRING',
+        )
+        .with(
+          'connectionError',
+          () => 'TODO: CONNECTION_ERROR_STRING_WHILE_DELETING_RESERVATION',
         )
         .exhaustive();
     return null;

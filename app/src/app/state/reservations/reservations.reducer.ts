@@ -17,8 +17,8 @@ import { DeleteReservationError } from '../../schemas/reservations/delete-reserv
 
 export type ReservationsState = {
   reservations: RefugeReservationsRelations;
-  createError?: CreateReservationError;
-  deleteError?: DeleteReservationError;
+  createError?: CreateReservationError | 'connectionError';
+  deleteError?: DeleteReservationError | 'connectionError';
   isLoading: boolean;
   hasNewReservation: boolean;
   hasDeletedReservation: boolean;
@@ -40,7 +40,7 @@ export const reservationsReducer = createReducer(
     isLoading: true,
   })),
   on(fetchReservations, (state, action) => ({
-    hasNewReservation: true,
+    hasNewReservation: false,
     hasDeletedReservation: false,
     isLoading: false,
     reservations: action.reservations,
@@ -51,10 +51,12 @@ export const reservationsReducer = createReducer(
   })),
   on(connectionErrorAddReservation, (state, action) => ({
     ...state,
+    createError: 'connectionError',
     isLoading: false,
   })),
   on(connectionErrorDeleteReservation, (state, action) => ({
     ...state,
+    deleteError: 'connectionError',
     isLoading: false,
   })),
   on(addReservation, (state, action) => ({
