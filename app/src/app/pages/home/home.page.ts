@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../state/app.state';
 import { openModal } from '../../state/components/modal/modal.actions';
-import { map, takeWhile } from 'rxjs';
+import { filter, map, takeWhile } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { resourceNotFound } from '../../state/errors/error.actions';
 import { getRefuges } from '../../state/refuges/refuges.selectors';
@@ -16,6 +16,7 @@ import { getRefuges } from '../../state/refuges/refuges.selectors';
 export class HomePage implements OnInit {
   refuge$ = this.store.select(getRefuges).pipe(
     takeWhile(() => this.route.snapshot.paramMap.get('id') !== null),
+    filter((refuges) => refuges.length > 0),
     map((refuges) =>
       refuges.find(
         (refuge) => refuge.id === this.route.snapshot.paramMap.get('id'),
