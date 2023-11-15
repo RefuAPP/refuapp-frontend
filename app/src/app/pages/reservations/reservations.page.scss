@@ -16,14 +16,17 @@
 }
 
 .refuge-image {
-  width: 150px;
-  height: 150px;
+  width: 110px;
+  height: 110px;
   object-fit: cover;
   border-radius: 50%;
+  margin-bottom: 20px;
+  margin-top: 20px;
 }
 
 .reservation-details {
   font-size: 2.5em;
+    font-weight: bold;
 }
 
 @media (max-width: 768px) {
