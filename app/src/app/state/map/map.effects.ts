@@ -1,9 +1,4 @@
-import {
-  Actions,
-  createEffect,
-  ofType,
-  ROOT_EFFECTS_INIT,
-} from '@ngrx/effects';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { catchError, combineLatest, map, of, switchMap, tap } from 'rxjs';
 import { fromPromise } from 'rxjs/internal/observable/innerFrom';
 import { cloneDeep } from 'lodash';
@@ -16,21 +11,13 @@ import { RefugeService } from '../../services/refuge/refuge.service';
 import {
   destroyMap,
   loadedMap,
-  loadedRefuges,
   loadedRefugesOnMap,
   loadMap,
-  loadRefuges,
-  loadRefugesError,
   moveMapTo,
 } from './map.actions';
 import { loadedMapLibrary } from '../init/init.actions';
-import {
-  connectionError,
-  programmingError,
-  unknownError,
-} from '../errors/error.actions';
-import { match } from 'ts-pattern';
-import { GetAllRefugesErrors } from '../../schemas/refuge/get-all-refuges-schema';
+import { unknownError } from '../errors/error.actions';
+import { loadedRefuges } from '../refuges/refuges.actions';
 
 @Injectable()
 export class MapEffects {
@@ -40,13 +27,6 @@ export class MapEffects {
     private mapService$: MapService,
     private refugeService: RefugeService,
   ) {}
-
-  loadRefugesAtStart$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(ROOT_EFFECTS_INIT),
-      map((createData) => loadRefuges()),
-    ),
-  );
 
   loadMap$ = createEffect(() =>
     combineLatest([
@@ -76,30 +56,21 @@ export class MapEffects {
     { dispatch: false },
   );
 
-  loadRefugePoints$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(loadRefuges),
-      switchMap(() => this.refugeService.getRefuges()),
-      map((refuges) => {
-        if (refuges.status === 'correct')
-          return loadedRefuges({ refuges: refuges.data });
-        return loadRefugesError({ error: refuges.error });
-      }),
-      catchError(() => of(connectionError())),
-    ),
-  );
-
   loadRefugePointsOnMap = createEffect(() =>
     combineLatest([
       this.actions$.pipe(ofType(loadedRefuges)),
       this.actions$.pipe(ofType(loadedMap)),
     ]).pipe(
-      tap((mapAndRefuges) =>
-        this.mapService$.addRefuges(mapAndRefuges[0].refuges, (refuge) => {
-          this.store.dispatch(openModal({ refuge }));
-        }),
+      switchMap((mapAndRefuges) =>
+        fromPromise(
+          this.mapService$.addRefuges(mapAndRefuges[0].refuges, (refuge) => {
+            this.store.dispatch(openModal({ refuge }));
+          }),
+        ).pipe(
+          map(() => loadedRefugesOnMap()),
+          catchError(() => of(unknownError())),
+        ),
       ),
-      map((mapAndRefuges) => loadedRefugesOnMap()),
     ),
   );
 
@@ -110,19 +81,5 @@ export class MapEffects {
         tap((action) => this.mapService$.move(action.coordinates)),
       ),
     { dispatch: false },
-  );
-
-  getAllRefugesErrors$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(loadRefugesError),
-      map((action) => {
-        return match(action.error)
-          .with(GetAllRefugesErrors.SERVER_INCORRECT_DATA_FORMAT_ERROR, () =>
-            programmingError(),
-          )
-          .with(GetAllRefugesErrors.UNKNOWN_ERROR, () => unknownError())
-          .exhaustive();
-      }),
-    ),
   );
 }

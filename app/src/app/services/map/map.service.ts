@@ -7,7 +7,6 @@ import { Refuge } from '../../schemas/refuge/refuge';
 import { Coordinates } from '../search/search.service';
 import { MapRefuge } from './map-refuge';
 import { GoogleMapConfig } from '@capacitor/google-maps/dist/typings/definitions';
-import { cloneDeep } from 'lodash';
 
 @Injectable({
   providedIn: 'root',
@@ -24,15 +23,18 @@ export class MapService {
 
   async addRefuges(refuges: Refuge[], onRefugeClick: (refuge: Refuge) => void) {
     if (!this.map) return;
+    if (this.mapRefuge.hasMarkers())
+      await this.mapRefuge.deleteMarkers(this.map);
     await this.mapRefuge.addMarkers(refuges, this.map);
     await this.map.setOnMarkerClickListener((marker) => {
       const refuge = this.mapRefuge.getRefugeFor(marker.markerId);
       if (refuge !== undefined) onRefugeClick(refuge);
       else
-        console.error(
+        throw new Error(
           `Google Map: Refuge for marker: ${marker.markerId} not found`,
         );
     });
+    await this.enableClustering();
   }
 
   move(location: Coordinates) {
@@ -55,9 +57,10 @@ export class MapService {
       forceCreate: environment.MAPS_FORCE_CREATE,
       config,
     });
+    this.mapRefuge = new MapRefuge();
   }
 
-  async enableClustering() {
+  private async enableClustering() {
     if (!this.map) return;
     await this.map.enableClustering(2);
   }

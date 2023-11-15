@@ -4,9 +4,9 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../../state/app.state';
 import { openModal } from '../../state/components/modal/modal.actions';
 import { map, takeWhile } from 'rxjs';
-import { getRefuges } from '../../state/map/map.selectors';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { resourceNotFound } from '../../state/errors/error.actions';
+import { getRefuges } from '../../state/refuges/refuges.selectors';
 
 @Component({
   selector: 'app-home',

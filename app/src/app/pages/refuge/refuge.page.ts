@@ -6,10 +6,12 @@ import {
   OnInit,
   Output,
 } from '@angular/core';
-import { Platform } from '@ionic/angular';
-import { ActivatedRoute } from '@angular/router';
 import { RefugeService } from '../../services/refuge/refuge.service';
 import { Refuge } from '../../schemas/refuge/refuge';
+import { AppState } from '../../state/app.state';
+import { Store } from '@ngrx/store';
+import { loadRefuges } from '../../state/refuges/refuges.actions';
+import { Route, Router } from '@angular/router';
 
 @Component({
   selector: 'app-refuge',
@@ -21,9 +23,8 @@ export class RefugePage implements OnInit, AfterViewInit {
   @Output() clickedBar = new EventEmitter();
 
   constructor(
-    private route: ActivatedRoute,
     private refugeService: RefugeService,
-    private platform: Platform,
+    private store: Store<AppState>,
   ) {}
 
   getImageUrl(): string | undefined {
@@ -31,12 +32,9 @@ export class RefugePage implements OnInit, AfterViewInit {
     return this.refugeService.getImageUrlFor(this.refuge);
   }
 
-  platformIsMobile(): boolean {
-    return this.platform.is('mobile');
-  }
-
-  clickButton() {
-    console.log('click');
+  refreshButton() {
+    this.store.dispatch(loadRefuges());
+    // TODO: fetch reservations here
   }
 
   ngOnInit() {}
@@ -49,11 +47,6 @@ export class RefugePage implements OnInit, AfterViewInit {
     if (this.refuge) {
       return;
     }
-    const refugeId = this.getRefugeIdFromUrl();
     // TODO: fetch refuge here
-  }
-
-  private getRefugeIdFromUrl(): string | null {
-    return this.route.snapshot.paramMap.get('id');
   }
 }

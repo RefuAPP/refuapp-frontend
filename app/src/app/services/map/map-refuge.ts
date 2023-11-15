@@ -1,14 +1,13 @@
 import { Refuge } from '../../schemas/refuge/refuge';
 import { GoogleMap, Marker } from '@capacitor/google-maps';
-import { Coordinates } from '../search/search.service';
 import { LatLng } from '@capacitor/google-maps/dist/typings/ts_old/definitions';
 
 export type MarkerWithRefuge = {
-  id: String;
+  id: string;
   refuge: Refuge;
 };
 
-function zip(markersId: String[], refuges: Refuge[]): MarkerWithRefuge[] {
+function zip(markersId: string[], refuges: Refuge[]): MarkerWithRefuge[] {
   return markersId.map((elementFirst, index) => {
     return {
       id: elementFirst,
@@ -33,7 +32,7 @@ export class MapRefuge {
   private getMarkersForRefuges(
     refuges: Refuge[],
     map: GoogleMap,
-  ): Promise<String>[] {
+  ): Promise<string>[] {
     return refuges
       .map((refuge) => refuge.coordinates)
       .map((coordinates) => {
@@ -66,5 +65,20 @@ export class MapRefuge {
     const element = this.refugesWithMarkers.find((e) => e.id === id);
     if (!element) return undefined;
     return element.refuge;
+  }
+
+  private getMarkers() {
+    return this.refugesWithMarkers.map((element) => element.id);
+  }
+
+  hasMarkers() {
+    return this.refugesWithMarkers.length > 0;
+  }
+
+  async deleteMarkers(map: GoogleMap) {
+    const markers = this.getMarkers();
+    if (markers.length === 0) return;
+    await map.removeMarkers(markers);
+    this.refugesWithMarkers = [];
   }
 }

@@ -4,16 +4,8 @@ import {
   ReservationWithoutUserId,
 } from '../../schemas/reservations/reservation';
 import { RefugeReservationsRelations } from '../../services/reservations/grouped-by/refuge';
-import {
-  CreateReservationDataError,
-  CreateReservationError,
-  ErrorCreateReservation,
-} from '../../schemas/reservations/create-reservation';
-import {
-  DeleteReservationDataError,
-  DeleteReservationError,
-  ErrorDeleteReservation,
-} from '../../schemas/reservations/delete-reservation';
+import { CreateReservationError } from '../../schemas/reservations/create-reservation';
+import { DeleteReservationError } from '../../schemas/reservations/delete-reservation';
 
 export const addReservation = createAction(
   '[Reservations] Add Reservation',

@@ -8,10 +8,6 @@ export const isMapLoading = createSelector(
   selectInitStatus,
   selectMap,
   (initState, mapState) => {
-    if (!initState.isFetchingLibraries && initState.mapLibraryLoaded)
-      return false;
-    return !mapState.areRefugesLoaded;
+    return mapState.loadingMap && !mapState.refugesOnMap;
   },
 );
-
-export const getRefuges = createSelector(selectMap, (state) => state.refuges);
