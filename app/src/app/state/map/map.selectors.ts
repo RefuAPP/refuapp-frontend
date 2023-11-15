@@ -13,3 +13,5 @@ export const isMapLoading = createSelector(
     return !mapState.areRefugesLoaded;
   },
 );
+
+export const getRefuges = createSelector(selectMap, (state) => state.refuges);

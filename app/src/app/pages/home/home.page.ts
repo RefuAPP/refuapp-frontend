@@ -11,7 +11,10 @@ import { MapConfiguration } from './map-configuration';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../state/app.state';
 import { selectModalState } from '../../state/components/modal/modal.selectors';
-import { closeModal } from '../../state/components/modal/modal.actions';
+import {
+  closeModal,
+  openModal,
+} from '../../state/components/modal/modal.actions';
 import { destroyMap, loadMap, moveMapTo } from '../../state/map/map.actions';
 import {
   selectAutoCompletion,
@@ -21,8 +24,11 @@ import {
   addSearch,
   clearSearch,
 } from '../../state/components/search/search.actions';
-import { first } from 'rxjs';
+import { first, map, takeWhile } from 'rxjs';
 import { IonModal, SearchbarCustomEvent } from '@ionic/angular';
+import { getRefuges } from '../../state/map/map.selectors';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { resourceNotFound } from '../../state/errors/error.actions';
 
 @Component({
   selector: 'app-home',
@@ -31,16 +37,26 @@ import { IonModal, SearchbarCustomEvent } from '@ionic/angular';
 })
 export class HomePage implements AfterViewInit, OnDestroy {
   @ViewChild('mapRef', { static: false }) mapRef?: ElementRef;
-  private readonly refugeId?: string = undefined;
   modalState$ = this.store.select(selectModalState);
   searchCompletion$ = this.store.select(selectAutoCompletion);
   searchValue$ = this.store.select(selectCurrentSearch);
+  refuge$ = this.store.select(getRefuges).pipe(
+    takeWhile(() => this.route.snapshot.paramMap.get('id') !== null),
+    map((refuges) =>
+      refuges.find(
+        (refuge) => refuge.id === this.route.snapshot.paramMap.get('id'),
+      ),
+    ),
+  );
 
   constructor(
     private route: ActivatedRoute,
     private store: Store<AppState>,
   ) {
-    this.refugeId = this.route.snapshot.paramMap.get('id')?.toString();
+    this.refuge$.pipe(takeUntilDestroyed()).subscribe((refuge) => {
+      if (refuge === undefined) this.store.dispatch(resourceNotFound());
+      else this.store.dispatch(openModal({ refuge }));
+    });
   }
 
   moveMapTo(coordinates: Coordinates) {
