@@ -132,6 +132,7 @@
     "SETTINGS": "Configuracions"
   },
   "SETTINGS": {
+    "FORCE_LANGUAGE": "Força l'idioma",
     "LANGUAGE": "Idioma",
     "SELECT": "Selecciona",
     "SPANISH": "Espanyol",

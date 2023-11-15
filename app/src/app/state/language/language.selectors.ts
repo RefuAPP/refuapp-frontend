@@ -7,3 +7,13 @@ export const getCurrentLanguage = createSelector(
   selectLanguage,
   (language) => language.currentLanguageCode,
 );
+
+export const isForcedLanguage = createSelector(
+  selectLanguage,
+  (language) => language.forcedLanguage,
+);
+
+export const currentLanguage = createSelector(
+  selectLanguage,
+  (language) => language.currentLanguageCode,
+);

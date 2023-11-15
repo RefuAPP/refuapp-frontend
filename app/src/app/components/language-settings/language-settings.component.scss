@@ -1,0 +1,12 @@
+$margin-gap: 20px;
+
+.language-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: $margin-gap;
+}
+
+.language-select {
+  max-width: 200px;
+}

@@ -1,9 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { UserCreated } from 'src/app/schemas/user/user';
-import { Store } from '@ngrx/store';
-import { AppState } from '../../../state/app.state';
-import { changeLanguageRequest } from '../../../state/language/language.actions';
-import { getCurrentLanguage } from '../../../state/language/language.selectors';
 import { Router } from '@angular/router';
 import {
   GetUserFromIdErrors,
@@ -26,10 +22,7 @@ export class ProfilePage implements OnInit {
   errorMessage = '';
   avatar: string = '';
 
-  currentLanguage$ = this.store.select(getCurrentLanguage);
-
   constructor(
-    private store: Store<AppState>,
     private router: Router,
     private userService: UserService,
     private authService: AuthService,
@@ -168,13 +161,9 @@ export class ProfilePage implements OnInit {
     const avatarNumber = this.getRandomPfpNumber();
     return `assets/img/perfil${avatarNumber}.png`;
   }
+
   private getRandomPfpNumber(): number {
     return Math.floor(Math.random() * 8) + 1;
-  }
-
-  async changeLanguage(event: any) {
-    const languageCode = (event as CustomEvent).detail.value;
-    this.store.dispatch(changeLanguageRequest({ languageCode }));
   }
 
   updateUser() {

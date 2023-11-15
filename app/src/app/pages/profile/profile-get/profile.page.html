@@ -33,25 +33,7 @@
       <ion-card-title> {{ 'PROFILE.SETTINGS' | translate }} </ion-card-title>
     </ion-card-header>
     <ion-list>
-      <ion-item>
-        <ion-label>{{ 'SETTINGS.LANGUAGE' | translate }}</ion-label>
-        <ion-select
-          class="language-select"
-          value="{{ currentLanguage$ | async }}"
-          placeholder="{{ 'SETTINGS.SELECT' | translate }}"
-          (ionChange)="changeLanguage($event)"
-        >
-          <ion-select-option value="es"
-            >{{ 'SETTINGS.SPANISH' | translate }}</ion-select-option
-          >
-          <ion-select-option value="ca"
-            >{{ 'SETTINGS.CATALAN' | translate }}</ion-select-option
-          >
-          <ion-select-option value="en"
-            >{{ 'SETTINGS.ENGLISH' | translate }}</ion-select-option
-          >
-        </ion-select>
-      </ion-item>
+      <app-language-settings></app-language-settings>
     </ion-list>
   </ion-card>
   <ion-note color="danger" *ngIf="hasError"> {{errorMessage}} </ion-note>

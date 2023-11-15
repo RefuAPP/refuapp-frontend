@@ -133,6 +133,7 @@
   },
   "SETTINGS": {
     "LANGUAGE": "Language",
+    "FORCE_LANGUAGE": "Force Language",
     "SELECT": "Select",
     "SPANISH": "Spanish",
     "CATALAN": "Catalan",

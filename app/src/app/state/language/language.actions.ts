@@ -26,6 +26,5 @@ export const forcedLanguage = createAction(
 );
 
 export const removeForceLanguage = createAction(
-  '[Language] Force Language Request',
-  props<{ languageCode: string }>(),
+  '[Language] Remove Forced Language',
 );
