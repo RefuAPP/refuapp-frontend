@@ -1,0 +1,30 @@
+<ion-item *ngFor="let reservation of reservations">
+  <ion-label routerLink="/home/{{ reservation.refuge_id }}">
+    <div class="reservation-details">
+      {{
+        "RESERVATIONS.DETAILS.HEADER"
+          | translate: { day: reservation.night.day }
+      }}
+
+      <p>
+        {{
+          "RESERVATIONS.DETAILS.MESSAGE"
+            | translate
+              : {
+                  month: reservation.night.month,
+                  year: reservation.night.year,
+                  day: reservation.night.day
+                }
+        }}
+      </p>
+    </div>
+  </ion-label>
+  <ion-button
+    slot="end"
+    color="danger"
+    (click)="onRemoveReservation(reservation)"
+  >
+    <ion-icon slot="end" name="trash"></ion-icon>
+    {{ "RESERVATIONS.DELETE_BUTTON" | translate }}
+  </ion-button>
+</ion-item>
