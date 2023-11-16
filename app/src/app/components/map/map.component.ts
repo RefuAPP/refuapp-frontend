@@ -10,6 +10,8 @@ import { destroyMap, loadMap } from '../../state/map/map.actions';
 import { AppState } from '../../state/app.state';
 import { Store } from '@ngrx/store';
 import { MapConfiguration } from './map-configuration';
+import { ServerErrors } from '../../schemas/errors/server';
+import { fatalError } from '../../state/errors/error.actions';
 
 @Component({
   selector: 'app-map',
@@ -24,13 +26,11 @@ export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnInit() {}
 
   ngAfterViewInit() {
-    if (this.mapRef) {
+    if (this.mapRef)
       this.store.dispatch(
         loadMap({ map: this.mapRef, config: MapConfiguration }),
       );
-    } else {
-      console.log('TODO: MapRef is undefined');
-    }
+    else this.store.dispatch(fatalError({ error: ServerErrors.UNKNOWN_ERROR }));
   }
 
   ngOnDestroy() {

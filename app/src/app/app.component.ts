@@ -16,6 +16,7 @@ import {
   getMinorErrors,
   hasMinorErrors,
 } from './state/errors/error.selectors';
+import { fixFatalError } from './state/errors/error.actions';
 
 @Component({
   selector: 'app-root',
@@ -31,7 +32,7 @@ export class AppComponent implements OnInit {
       text: 'OK',
       role: 'confirm',
       handler: () => {
-        console.log('TODO: here reload the app, or dispatch an error action');
+        this.store.dispatch(fixFatalError());
       },
     },
   ];
@@ -39,6 +40,7 @@ export class AppComponent implements OnInit {
     clientHasErrorConnection,
   );
   canShowPage$ = this.store.select(areLibrariesLoaded);
+
   hasMinorErrors$ = this.store.select(hasMinorErrors);
   minorErrors$ = this.store.select(getMinorErrors);
 

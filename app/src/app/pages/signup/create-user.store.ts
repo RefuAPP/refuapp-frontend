@@ -14,6 +14,10 @@ import { UserService } from '../../services/user/user.service';
 import { CreateUserResponse } from '../../schemas/user/create/create-user-response';
 import { Injectable } from '@angular/core';
 import { EMPTY_OBSERVER } from 'rxjs/internal/Subscriber';
+import { DeviceErrors } from '../../schemas/errors/device';
+import { minorError } from '../../state/errors/error.actions';
+import { AppState } from '@capacitor/app';
+import { Store } from '@ngrx/store';
 
 export interface CreateUserState {
   userCreateForm: UserForm;
@@ -47,7 +51,10 @@ export class CreateUserComponentStore extends ComponentStore<CreateUserState> {
     >,
   );
 
-  constructor(readonly userService: UserService) {
+  constructor(
+    readonly userService: UserService,
+    readonly store: Store<AppState>,
+  ) {
     super({
       userCreateForm: {
         username: '',
@@ -100,7 +107,9 @@ export class CreateUserComponentStore extends ComponentStore<CreateUserState> {
           this.patchState({
             isLoading: false,
           });
-          // TODO: handle error here
+          this.store.dispatch(
+            minorError({ error: DeviceErrors.NOT_CONNECTED }),
+          );
         },
       ),
     );
@@ -127,14 +136,12 @@ export class CreateUserComponentStore extends ComponentStore<CreateUserState> {
 
   private getNewStateFromError(errorResponse: CreateUserError) {
     match(errorResponse)
-      .with(ServerErrors.UNKNOWN_ERROR, (err) => {
-        // TODO: handle error here
-      })
       .with(
         ServerErrors.INCORRECT_DATA_FORMAT_OF_SERVER,
         ServerErrors.INCORRECT_DATA_FORMAT_OF_CLIENT,
-        (err) => {
-          // TODO: handle error here
+        ServerErrors.UNKNOWN_ERROR,
+        (error) => {
+          this.store.dispatch(minorError({ error }));
         },
       )
       .with('PHONE_ALREADY_EXISTS', (err) =>

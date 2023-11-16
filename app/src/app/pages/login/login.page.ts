@@ -9,6 +9,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { login } from '../../state/auth/auth.actions';
 import { ActivatedRoute, Params } from '@angular/router';
 import { Maskito, maskitoTransform } from '@maskito/core';
+import { UserCredentials } from '../../schemas/user/user';
+import { Token } from '../../schemas/auth/token';
 
 @Component({
   selector: 'app-login',
@@ -40,7 +42,7 @@ export class LoginPage implements OnInit {
     this.credentials$
       .pipe(
         takeUntilDestroyed(),
-        tap((credentials) => {
+        tap((credentials: UserCredentials) => {
           if (credentials) this.form.patchValue(credentials);
         }),
       )
@@ -66,7 +68,7 @@ export class LoginPage implements OnInit {
     this.token$
       .pipe(
         takeUntilDestroyed(),
-        tap((token) => this.store.dispatch(login({ token }))),
+        tap((token: Token) => this.store.dispatch(login({ token }))),
       )
       .subscribe();
   }

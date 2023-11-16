@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AppState } from 'src/app/state/app.state';
 import { Store } from '@ngrx/store';
+import { fixFatalError } from '../../state/errors/error.actions';
 
 @Component({
   selector: 'app-internal-error-page',
@@ -13,6 +14,6 @@ export class InternalErrorPagePage implements OnInit {
   ngOnInit() {}
 
   cleanError() {
-    // TODO: here dispatch an action to clean the error
+    this.store.dispatch(fixFatalError());
   }
 }

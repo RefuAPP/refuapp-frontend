@@ -19,6 +19,10 @@ import {
 import { AuthService } from '../../services/auth/auth.service';
 import { AuthenticationResponse } from '../../schemas/auth/authenticate';
 import { Token } from '../../schemas/auth/token';
+import { AppState } from '../../state/app.state';
+import { Store } from '@ngrx/store';
+import { minorError } from '../../state/errors/error.actions';
+import { DeviceErrors } from '../../schemas/errors/device';
 
 export interface LoginState {
   credentials: UserCredentials;
@@ -50,7 +54,10 @@ export class LoginComponentStore extends ComponentStore<LoginState> {
     >,
   );
 
-  constructor(readonly authService: AuthService) {
+  constructor(
+    readonly authService: AuthService,
+    private store: Store<AppState>,
+  ) {
     super({
       credentials: {
         phone_number: '',
@@ -99,7 +106,9 @@ export class LoginComponentStore extends ComponentStore<LoginState> {
           this.patchState({
             isLoading: false,
           });
-          // TODO: handle error here
+          this.store.dispatch(
+            minorError({ error: DeviceErrors.NOT_CONNECTED }),
+          );
         },
       ),
     );
@@ -124,16 +133,16 @@ export class LoginComponentStore extends ComponentStore<LoginState> {
         ServerErrors.UNKNOWN_ERROR,
         ServerErrors.INCORRECT_DATA_FORMAT_OF_SERVER,
         ServerErrors.INCORRECT_DATA_FORMAT_OF_CLIENT,
-        (err) => {
-          // TODO: handle error here
+        (error) => {
+          this.store.dispatch(minorError({ error }));
         },
       )
       .with(
         UserFormErrors.USER_NOT_FOUND,
         UserFormErrors.INCORRECT_PASSWORD,
-        (err) => {
+        (error) => {
           this.patchState({
-            error: err,
+            error,
           });
         },
       )

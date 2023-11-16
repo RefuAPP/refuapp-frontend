@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { AppState } from '../../../state/app.state';
+import { Store } from '@ngrx/store';
+import { fixFatalError } from '../../../state/errors/error.actions';
 
 @Component({
   selector: 'app-forbidden',
@@ -6,7 +9,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./forbidden.page.scss'],
 })
 export class ForbiddenPage implements OnInit {
-  constructor() {}
+  constructor(private readonly store: Store<AppState>) {}
 
   ngOnInit() {}
+
+  cleanError() {
+    this.store.dispatch(fixFatalError());
+  }
 }

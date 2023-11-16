@@ -1,6 +1,11 @@
 import { createReducer, on } from '@ngrx/store';
 import { AllErrors } from '../../schemas/errors/all-errors';
-import { customMinorError, fatalError, minorError } from './error.actions';
+import {
+  customMinorError,
+  fatalError,
+  fixFatalError,
+  minorError,
+} from './error.actions';
 
 export type ErrorState = {
   hasError: boolean;
@@ -26,5 +31,8 @@ export const errorReducer = createReducer(
   on(customMinorError, (state, action) => ({
     hasError: true,
     customMinorError: action.error,
+  })),
+  on(fixFatalError, (state, action) => ({
+    hasError: false,
   })),
 );

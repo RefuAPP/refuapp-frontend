@@ -15,3 +15,5 @@ export const customMinorError = createAction(
   '[Error] Custom Minor Error',
   props<{ error: string }>(),
 );
+
+export const fixFatalError = createAction('[Error] Fixing Fatal Error');

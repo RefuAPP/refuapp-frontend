@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../state/app.state';
+import { fixFatalError } from '../../state/errors/error.actions';
 
 @Component({
   selector: 'app-not-found-page',
@@ -13,6 +14,6 @@ export class NotFoundPagePage implements OnInit {
   ngOnInit() {}
 
   cleanError() {
-    // TODO: here dispatch an action to clean the error
+    this.store.dispatch(fixFatalError());
   }
 }

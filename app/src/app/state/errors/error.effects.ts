@@ -8,7 +8,7 @@ import { ServerErrors } from '../../schemas/errors/server';
 import { ResourceErrors } from '../../schemas/errors/resource';
 import { PermissionsErrors } from '../../schemas/errors/permissions';
 import { DeviceErrors } from '../../schemas/errors/device';
-import { fatalError } from './error.actions';
+import { fatalError, fixFatalError } from './error.actions';
 
 @Injectable()
 export class ErrorEffects {
@@ -22,6 +22,15 @@ export class ErrorEffects {
       this.actions$.pipe(
         ofType(fatalError),
         tap((error) => this.redirect(error.error)),
+      ),
+    { dispatch: false },
+  );
+
+  restartGoToHome$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(fixFatalError),
+        tap((error) => this.router.navigate(['/']).then()),
       ),
     { dispatch: false },
   );
@@ -42,10 +51,9 @@ export class ErrorEffects {
       .with(
         PermissionsErrors.NOT_AUTHENTICATED,
         PermissionsErrors.NOT_ALLOWED_OPERATION_FOR_USER,
-        () => console.log('TODO'),
+        () => this.router.navigate(['/forbidden']).then(),
       )
-      .with(DeviceErrors.NOT_CONNECTED, () => {
-        console.log('TODO');
-      });
+      .with(DeviceErrors.NOT_CONNECTED, () => {})
+      .exhaustive();
   }
 }
