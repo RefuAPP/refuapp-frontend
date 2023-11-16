@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AppState } from 'src/app/state/app.state';
 import { Store } from '@ngrx/store';
-import { cleanError } from 'src/app/state/errors/error.actions';
 
 @Component({
   selector: 'app-programming-error',
@@ -14,6 +13,6 @@ export class ProgrammingErrorPage implements OnInit {
   ngOnInit() {}
 
   cleanError() {
-    this.store.dispatch(cleanError());
+    // TODO: here dispatch an action to clean the error
   }
 }

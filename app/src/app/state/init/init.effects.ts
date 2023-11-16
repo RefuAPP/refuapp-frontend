@@ -13,7 +13,8 @@ import {
 } from './init.actions';
 import { fromPromise } from 'rxjs/internal/observable/innerFrom';
 import { secretEnvironment } from '../../../environments/environment.secret';
-import { connectionError, unknownError } from '../errors/error.actions';
+import { fatalError } from '../errors/error.actions';
+import { DeviceErrors } from '../../schemas/errors/device';
 
 @Injectable()
 export class InitEffects {
@@ -32,7 +33,10 @@ export class InitEffects {
       switchMap((createData) =>
         fromPromise(this.fetchGoogleMapsLibrary()).pipe(
           map(() => loadedMapLibrary()),
-          catchError(() => [connectionError(), errorLoadingMapLibrary()]),
+          catchError(() => [
+            fatalError({ error: DeviceErrors.NOT_CONNECTED }),
+            errorLoadingMapLibrary(),
+          ]),
         ),
       ),
     ),

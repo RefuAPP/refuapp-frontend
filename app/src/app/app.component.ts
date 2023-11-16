@@ -12,7 +12,6 @@ import {
   getTopItems,
 } from './state/components/menu/menu.selector';
 import { clientHasErrorConnection } from './state/errors/error.selectors';
-import { cleanError } from './state/errors/error.actions';
 
 @Component({
   selector: 'app-root',
@@ -28,7 +27,7 @@ export class AppComponent implements OnInit {
       text: 'OK',
       role: 'confirm',
       handler: () => {
-        this.store.dispatch(cleanError());
+        console.log('TODO: here reload the app, or dispatch an error action');
       },
     },
   ];

@@ -4,11 +4,6 @@ import { AppState } from '../app.state';
 import { MapService } from '../../services/map/map.service';
 import { RefugeService } from '../../services/refuge/refuge.service';
 import { catchError, map, of, switchMap } from 'rxjs';
-import {
-  connectionError,
-  programmingError,
-  unknownError,
-} from '../errors/error.actions';
 import { match } from 'ts-pattern';
 import {
   loadedRefuges,
@@ -22,6 +17,8 @@ import {
   ROOT_EFFECTS_INIT,
 } from '@ngrx/effects';
 import { ServerErrors } from '../../schemas/errors/server';
+import { fatalError } from '../errors/error.actions';
+import { DeviceErrors } from '../../schemas/errors/device';
 
 @Injectable()
 export class RefugesEffects {
@@ -48,23 +45,14 @@ export class RefugesEffects {
           return loadedRefuges({ refuges: refuges.data });
         return loadRefugesError({ error: refuges.error });
       }),
-      catchError(() => of(connectionError())),
+      catchError(() => of(fatalError({ error: DeviceErrors.NOT_CONNECTED }))),
     ),
   );
 
   getAllRefugesErrors$ = createEffect(() =>
     this.actions$.pipe(
       ofType(loadRefugesError),
-      map((action) => {
-        return match(action.error)
-          .with(
-            ServerErrors.INCORRECT_DATA_FORMAT_OF_SERVER,
-            ServerErrors.INCORRECT_DATA_FORMAT_OF_CLIENT,
-            () => programmingError(),
-          )
-          .with(ServerErrors.UNKNOWN_ERROR, () => unknownError())
-          .exhaustive();
-      }),
+      map((action) => fatalError({ error: action.error })),
     ),
   );
 }

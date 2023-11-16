@@ -1,11 +1,12 @@
-import { createAction } from '@ngrx/store';
+import { createAction, props } from '@ngrx/store';
+import { AllErrors } from '../../schemas/errors/all-errors';
 
-export const resourceNotFound = createAction('[Error] Resource Not Found');
+export const fatalError = createAction(
+  '[Error] Fatal Error',
+  props<{ error: AllErrors }>(),
+);
 
-export const programmingError = createAction('[Error] Programming Error');
-
-export const connectionError = createAction('[Error] Connection Error');
-
-export const unknownError = createAction('[Error] Unknown Error');
-
-export const cleanError = createAction('[Error] Clean Error');
+export const minorError = createAction(
+  '[Error] Minor Error',
+  props<{ error: AllErrors }>(),
+);

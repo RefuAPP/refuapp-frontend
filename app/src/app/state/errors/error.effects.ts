@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Router } from '@angular/router';
 import { tap } from 'rxjs';
-import {
-  cleanError,
-  programmingError,
-  resourceNotFound,
-  unknownError,
-} from './error.actions';
+import { AllErrors } from '../../schemas/errors/all-errors';
+import { match } from 'ts-pattern';
+import { ServerErrors } from '../../schemas/errors/server';
+import { ResourceErrors } from '../../schemas/errors/resource';
+import { PermissionsErrors } from '../../schemas/errors/permissions';
+import { DeviceErrors } from '../../schemas/errors/device';
+import { fatalError } from './error.actions';
 
 @Injectable()
 export class ErrorEffects {
@@ -16,43 +17,35 @@ export class ErrorEffects {
     private router: Router,
   ) {}
 
-  redirectUnknownError$ = createEffect(
+  redirectOnFatalError$ = createEffect(
     () =>
       this.actions$.pipe(
-        ofType(unknownError),
-        tap(() =>
-          this.router
-            .navigate(['/internal-error-page'])
-            .then(() => console.log('Redirecting to internal error page')),
-        ),
+        ofType(fatalError),
+        tap((error) => this.redirect(error.error)),
       ),
     { dispatch: false },
   );
 
-  redirectProgrammingError$ = createEffect(
-    () =>
-      this.actions$.pipe(
-        ofType(programmingError),
-        tap(() => this.router.navigate(['/programming-error']).then()),
-      ),
-    { dispatch: false },
-  );
-
-  redirectResourceNotFound$ = createEffect(
-    () =>
-      this.actions$.pipe(
-        ofType(resourceNotFound),
-        tap(() => this.router.navigate(['/not-found-page']).then()),
-      ),
-    { dispatch: false },
-  );
-
-  redirectToHomeWhenCleaningErrors$ = createEffect(
-    () =>
-      this.actions$.pipe(
-        ofType(cleanError),
-        tap(() => this.router.navigate(['/']).then()),
-      ),
-    { dispatch: false },
-  );
+  private redirect(error: AllErrors) {
+    match(error)
+      .with(ServerErrors.UNKNOWN_ERROR, () =>
+        this.router.navigate(['/internal-error-page']).then(),
+      )
+      .with(
+        ServerErrors.INCORRECT_DATA_FORMAT_OF_SERVER,
+        ServerErrors.INCORRECT_DATA_FORMAT_OF_CLIENT,
+        () => this.router.navigate(['/programming-error']).then(),
+      )
+      .with(ResourceErrors.NOT_FOUND, () =>
+        this.router.navigate(['/not-found-page']).then(),
+      )
+      .with(
+        PermissionsErrors.NOT_AUTHENTICATED,
+        PermissionsErrors.NOT_ALLOWED_OPERATION_FOR_USER,
+        () => console.log('TODO'),
+      )
+      .with(DeviceErrors.NOT_CONNECTED, () => {
+        console.log('TODO');
+      });
+  }
 }

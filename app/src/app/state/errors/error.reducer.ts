@@ -1,19 +1,11 @@
 import { createReducer, on } from '@ngrx/store';
-import {
-  cleanError,
-  connectionError,
-  resourceNotFound,
-  unknownError,
-} from './error.actions';
+import { AllErrors } from '../../schemas/errors/all-errors';
+import { fatalError, minorError } from './error.actions';
 
 export type ErrorState = {
   hasError: boolean;
-  type:
-    | 'resourceNotFound'
-    | 'programmingError'
-    | 'unknownError'
-    | 'connectionError'
-    | undefined;
+  fatalError?: AllErrors;
+  minorError?: AllErrors;
 };
 
 export const reservationState = {
@@ -22,24 +14,12 @@ export const reservationState = {
 
 export const errorReducer = createReducer(
   reservationState,
-  on(unknownError, (state, action) => ({
+  on(fatalError, (state, action) => ({
     hasError: true,
-    type: 'unknownError',
+    fatalError: action.error,
   })),
-  on(resourceNotFound, (state, action) => ({
+  on(minorError, (state, action) => ({
     hasError: true,
-    type: 'resourceNotFound',
-  })),
-  on(resourceNotFound, (state, action) => ({
-    hasError: true,
-    type: 'programmingError',
-  })),
-  on(connectionError, (state, action) => ({
-    hasError: true,
-    type: 'connectionError',
-  })),
-  on(cleanError, (state, action) => ({
-    hasError: false,
-    type: undefined,
+    minorError: action.error,
   })),
 );

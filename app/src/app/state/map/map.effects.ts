@@ -16,8 +16,9 @@ import {
   moveMapTo,
 } from './map.actions';
 import { loadedMapLibrary } from '../init/init.actions';
-import { unknownError } from '../errors/error.actions';
 import { loadedRefuges } from '../refuges/refuges.actions';
+import { fatalError } from '../errors/error.actions';
+import { ServerErrors } from '../../schemas/errors/server';
 
 @Injectable()
 export class MapEffects {
@@ -41,7 +42,9 @@ export class MapEffects {
           ),
         ).pipe(
           map(() => loadedMap()),
-          catchError(() => of(unknownError())),
+          catchError(() =>
+            of(fatalError({ error: ServerErrors.UNKNOWN_ERROR })),
+          ),
         ),
       ),
     ),
@@ -68,7 +71,9 @@ export class MapEffects {
           }),
         ).pipe(
           map(() => loadedRefugesOnMap()),
-          catchError(() => of(unknownError())),
+          catchError(() =>
+            of(fatalError({ error: ServerErrors.UNKNOWN_ERROR })),
+          ),
         ),
       ),
     ),

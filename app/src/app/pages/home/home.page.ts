@@ -5,8 +5,9 @@ import { AppState } from '../../state/app.state';
 import { openModal } from '../../state/components/modal/modal.actions';
 import { filter, map, takeWhile } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { resourceNotFound } from '../../state/errors/error.actions';
 import { getRefuges } from '../../state/refuges/refuges.selectors';
+import { minorError } from '../../state/errors/error.actions';
+import { ResourceErrors } from '../../schemas/errors/resource';
 
 @Component({
   selector: 'app-home',
@@ -29,7 +30,8 @@ export class HomePage implements OnInit {
     private store: Store<AppState>,
   ) {
     this.refuge$.pipe(takeUntilDestroyed()).subscribe((refuge) => {
-      if (refuge === undefined) this.store.dispatch(resourceNotFound());
+      if (refuge === undefined)
+        this.store.dispatch(minorError({ error: ResourceErrors.NOT_FOUND }));
       else this.store.dispatch(openModal({ refuge }));
     });
   }
