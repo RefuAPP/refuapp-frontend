@@ -19,7 +19,7 @@ export function fromResponse(response: any): CreateUserResponse {
     return { status: 'created', data: response };
   return {
     status: 'error',
-    error: ServerErrors.INCORRECT_DATA_FORMAT,
+    error: ServerErrors.INCORRECT_DATA_FORMAT_OF_SERVER,
   };
 }
 

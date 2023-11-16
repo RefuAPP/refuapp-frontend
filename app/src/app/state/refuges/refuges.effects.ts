@@ -10,7 +10,6 @@ import {
   unknownError,
 } from '../errors/error.actions';
 import { match } from 'ts-pattern';
-import { GetAllRefugesErrors } from '../../schemas/refuge/get-all-refuges-schema';
 import {
   loadedRefuges,
   loadRefuges,
@@ -22,6 +21,7 @@ import {
   ofType,
   ROOT_EFFECTS_INIT,
 } from '@ngrx/effects';
+import { ServerErrors } from '../../schemas/errors/server';
 
 @Injectable()
 export class RefugesEffects {
@@ -57,10 +57,12 @@ export class RefugesEffects {
       ofType(loadRefugesError),
       map((action) => {
         return match(action.error)
-          .with(GetAllRefugesErrors.SERVER_INCORRECT_DATA_FORMAT_ERROR, () =>
-            programmingError(),
+          .with(
+            ServerErrors.INCORRECT_DATA_FORMAT_OF_SERVER,
+            ServerErrors.INCORRECT_DATA_FORMAT_OF_CLIENT,
+            () => programmingError(),
           )
-          .with(GetAllRefugesErrors.UNKNOWN_ERROR, () => unknownError())
+          .with(ServerErrors.UNKNOWN_ERROR, () => unknownError())
           .exhaustive();
       }),
     ),

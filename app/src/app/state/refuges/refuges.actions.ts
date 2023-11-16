@@ -1,12 +1,12 @@
 import { createAction, props } from '@ngrx/store';
-import { GetAllRefugesErrors } from '../../schemas/refuge/get-all-refuges-schema';
 import { Refuge } from '../../schemas/refuge/refuge';
+import { ServerErrors } from '../../schemas/errors/server';
 
 export const loadRefuges = createAction('[Refuges] Fetch all refuges');
 
 export const loadRefugesError = createAction(
   '[Refuges] Error loading refuges',
-  props<{ error: GetAllRefugesErrors }>(),
+  props<{ error: ServerErrors }>(),
 );
 
 export const loadedRefuges = createAction(

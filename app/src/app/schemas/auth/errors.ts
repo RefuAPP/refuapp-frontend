@@ -2,18 +2,13 @@ import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { match } from 'ts-pattern';
 import { ServerErrors } from '../errors/server';
 
-export type NonUserFormErrors = ServerErrors | DeviceErrors;
+export type NonUserFormErrors = ServerErrors;
 
 export type AuthenticationErrors = NonUserFormErrors | UserFormErrors;
 
 export enum UserFormErrors {
   INCORRECT_PASSWORD = 'INCORRECT_PASSWORD',
   USER_NOT_FOUND = 'USER_NOT_FOUND',
-}
-
-export enum DeviceErrors {
-  NOT_CONNECTED = 'NOT_CONNECTED',
-  COULDN_T_SAVE_USER_DATA = 'COULDN_T_SAVE_USER_DATA',
 }
 
 export namespace AuthenticationErrors {
@@ -32,7 +27,7 @@ export namespace AuthenticationErrors {
       .with(HttpStatusCode.NotFound, () => UserFormErrors.USER_NOT_FOUND)
       .with(
         HttpStatusCode.UnprocessableEntity,
-        () => ServerErrors.INCORRECT_DATA_FORMAT,
+        () => ServerErrors.INCORRECT_DATA_FORMAT_OF_CLIENT,
       )
       .otherwise(() => ServerErrors.UNKNOWN_ERROR);
   }

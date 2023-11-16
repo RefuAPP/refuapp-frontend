@@ -5,11 +5,11 @@ import {
   loadRefuges,
   loadRefugesError,
 } from './refuges.actions';
-import { GetAllRefugesErrors } from '../../schemas/refuge/get-all-refuges-schema';
+import { ServerErrors } from '../../schemas/errors/server';
 
 export type RefugesState = {
   isFetching: boolean;
-  error?: GetAllRefugesErrors;
+  error?: ServerErrors;
   refuges: Refuge[];
 };
 

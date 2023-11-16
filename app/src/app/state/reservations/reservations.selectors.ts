@@ -1,11 +1,10 @@
 import { createSelector } from '@ngrx/store';
 import { AppState } from '../app.state';
 import { match } from 'ts-pattern';
-import { DeleteReservationDataError } from '../../schemas/reservations/delete-reservation';
 import { ServerErrors } from '../../schemas/errors/server';
 import { PermissionsErrors } from '../../schemas/errors/permissions';
-import { CommonErrors } from '../../schemas/errors/common';
 import { CreateReservationDataError } from '../../schemas/reservations/create-reservation';
+import { ResourceErrors } from '../../schemas/errors/resource';
 
 export const selectReservations = (state: AppState) => state.reservations;
 
@@ -33,17 +32,14 @@ export const getCreateReservationErrors = createSelector(
         )
         .with(
           ServerErrors.UNKNOWN_ERROR,
-          ServerErrors.INCORRECT_DATA_FORMAT,
-          () => 'TODO: SERVER_ERROR_STRING',
+          ServerErrors.INCORRECT_DATA_FORMAT_OF_SERVER,
+          ServerErrors.INCORRECT_DATA_FORMAT_OF_CLIENT,
+          () => 'TODO: SERVER ERROR / PROGRAMMING ERROR',
         )
         .with(
           PermissionsErrors.NOT_ALLOWED_OPERATION_FOR_USER,
           PermissionsErrors.NOT_AUTHENTICATED,
           () => 'TODO: PERMISSIONS_ERROR_STRING',
-        )
-        .with(
-          CommonErrors.PROGRAMMING_ERROR,
-          () => 'TODO: PROGRAMMING_ERROR_STRING',
         )
         .with(
           'connectionError',
@@ -61,22 +57,19 @@ export const getDeleteReservationErrors = createSelector(
     if (reservations.deleteError)
       return match(reservations.deleteError)
         .with(
-          DeleteReservationDataError.RESERVATION_NOT_FOUND,
+          ResourceErrors.NOT_FOUND,
           () => 'TODO: RESERVATION_NOT_FOUND_STRING',
         )
         .with(
           ServerErrors.UNKNOWN_ERROR,
-          ServerErrors.INCORRECT_DATA_FORMAT,
+          ServerErrors.INCORRECT_DATA_FORMAT_OF_SERVER,
+          ServerErrors.INCORRECT_DATA_FORMAT_OF_CLIENT,
           () => 'TODO: SERVER_ERROR_STRING',
         )
         .with(
           PermissionsErrors.NOT_ALLOWED_OPERATION_FOR_USER,
           PermissionsErrors.NOT_AUTHENTICATED,
           () => 'TODO: PERMISSIONS_ERROR_STRING',
-        )
-        .with(
-          CommonErrors.PROGRAMMING_ERROR,
-          () => 'TODO: PROGRAMMING_ERROR_STRING',
         )
         .with(
           'connectionError',

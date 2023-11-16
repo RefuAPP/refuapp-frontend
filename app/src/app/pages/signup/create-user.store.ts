@@ -130,9 +130,13 @@ export class CreateUserComponentStore extends ComponentStore<CreateUserState> {
       .with(ServerErrors.UNKNOWN_ERROR, (err) => {
         // TODO: handle error here
       })
-      .with(ServerErrors.INCORRECT_DATA_FORMAT, (err) => {
-        // TODO: handle error here
-      })
+      .with(
+        ServerErrors.INCORRECT_DATA_FORMAT_OF_SERVER,
+        ServerErrors.INCORRECT_DATA_FORMAT_OF_CLIENT,
+        (err) => {
+          // TODO: handle error here
+        },
+      )
       .with('PHONE_ALREADY_EXISTS', (err) =>
         this.patchState({
           error: err,

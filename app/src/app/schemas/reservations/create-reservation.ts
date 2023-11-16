@@ -3,7 +3,7 @@ import { isMatching, match } from 'ts-pattern';
 import { ReservationPattern, ReservationWithId } from './reservation';
 import { ServerErrors } from '../errors/server';
 import { PermissionsErrors } from '../errors/permissions';
-import { CommonErrors } from '../errors/common';
+import { getErrorFrom } from '../errors/all-errors';
 
 export enum CreateReservationDataError {
   REFUGE_OR_USER_NOT_FOUND = 'REFUGE_OR_USER_NOT_FOUND',
@@ -14,25 +14,13 @@ export enum CreateReservationDataError {
 export type CreateReservationError =
   | CreateReservationDataError
   | ServerErrors
-  | PermissionsErrors
-  | CommonErrors;
+  | PermissionsErrors;
 
 export namespace CreateReservationError {
   export function from(
     error: HttpErrorResponse,
   ): CreateReservationError | never {
     return match(error.status)
-      .with(0, () => {
-        throw new Error('You are offline or the server is down.');
-      })
-      .with(
-        HttpStatusCode.Unauthorized,
-        () => PermissionsErrors.NOT_AUTHENTICATED,
-      )
-      .with(
-        HttpStatusCode.NotFound,
-        () => CreateReservationDataError.REFUGE_OR_USER_NOT_FOUND,
-      )
       .with(HttpStatusCode.Forbidden, () => {
         if (
           error.error.detail != undefined &&
@@ -44,14 +32,10 @@ export namespace CreateReservationError {
         return PermissionsErrors.NOT_ALLOWED_OPERATION_FOR_USER;
       })
       .with(
-        HttpStatusCode.UnprocessableEntity,
-        () => CommonErrors.PROGRAMMING_ERROR,
-      )
-      .with(
         HttpStatusCode.InternalServerError,
         () => CreateReservationDataError.NTP_SERVER_IS_DOWN,
       )
-      .otherwise(() => ServerErrors.UNKNOWN_ERROR);
+      .otherwise(() => getErrorFrom(error) as ServerErrors | PermissionsErrors);
   }
 }
 
@@ -72,7 +56,10 @@ export type CreateReservation =
 export function fromResponse(response: any): CreateReservation {
   if (isMatching(ReservationPattern, response))
     return { status: 'ok', reservation: response };
-  return { status: 'error', error: ServerErrors.INCORRECT_DATA_FORMAT };
+  return {
+    status: 'error',
+    error: ServerErrors.INCORRECT_DATA_FORMAT_OF_SERVER,
+  };
 }
 
 export function fromError(error: HttpErrorResponse): CreateReservation | never {

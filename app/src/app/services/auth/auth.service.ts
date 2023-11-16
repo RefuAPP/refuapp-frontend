@@ -6,13 +6,11 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { UserCredentials } from '../../schemas/user/user';
 import {
   AuthenticationResponse,
-  clientError,
   fromError,
   fromResponse,
 } from '../../schemas/auth/authenticate';
 import { Token } from '../../schemas/auth/token';
 import jwtDecode from 'jwt-decode';
-import { AuthenticationErrors, DeviceErrors } from '../../schemas/auth/errors';
 
 const authUri = `${environment.API}/login/`;
 
@@ -34,9 +32,7 @@ export class AuthService {
 
   getToken(credentials: UserCredentials): Observable<AuthenticationResponse> {
     const data = this.getFormDataFrom(credentials);
-    return this.getTokenFromApi(data).pipe(
-      catchError((err: HttpErrorResponse) => of(clientError())),
-    );
+    return this.getTokenFromApi(data);
   }
 
   async authenticate(token: Token): Promise<void> {

@@ -10,7 +10,6 @@ import { Injectable } from '@angular/core';
 import { EMPTY_OBSERVER } from 'rxjs/internal/Subscriber';
 import {
   AuthenticationErrors,
-  DeviceErrors,
   UserFormErrors,
 } from '../../schemas/auth/errors';
 import {
@@ -123,16 +122,12 @@ export class LoginComponentStore extends ComponentStore<LoginState> {
     match(errorResponse)
       .with(
         ServerErrors.UNKNOWN_ERROR,
-        ServerErrors.INCORRECT_DATA_FORMAT,
-        DeviceErrors.NOT_CONNECTED,
+        ServerErrors.INCORRECT_DATA_FORMAT_OF_SERVER,
+        ServerErrors.INCORRECT_DATA_FORMAT_OF_CLIENT,
         (err) => {
           // TODO: handle error here
         },
       )
-      .with(DeviceErrors.COULDN_T_SAVE_USER_DATA, () => {
-        // TODO: delete this error in the future
-        throw new Error('Impossible');
-      })
       .with(
         UserFormErrors.USER_NOT_FOUND,
         UserFormErrors.INCORRECT_PASSWORD,
