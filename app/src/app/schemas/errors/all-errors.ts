@@ -22,11 +22,11 @@ export function getErrorFrom(
       HttpStatusCode.Unauthorized,
       () => PermissionsErrors.NOT_AUTHENTICATED,
     )
-    .with(HttpStatusCode.NotFound, () => ResourceErrors.NOT_FOUND)
     .with(
       HttpStatusCode.Forbidden,
       () => PermissionsErrors.NOT_ALLOWED_OPERATION_FOR_USER,
     )
+    .with(HttpStatusCode.NotFound, () => ResourceErrors.NOT_FOUND)
     .with(
       HttpStatusCode.UnprocessableEntity,
       () => ServerErrors.INCORRECT_DATA_FORMAT_OF_CLIENT,

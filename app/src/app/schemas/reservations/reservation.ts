@@ -13,5 +13,4 @@ export type ReservationWithId = Reservation & { id: string };
 
 export type Reservations = ReservationWithId[];
 
-export const ReservationWithIdPattern: P.Pattern<ReservationWithId> = {};
 export const ReservationPattern: P.Pattern<Reservation> = {};

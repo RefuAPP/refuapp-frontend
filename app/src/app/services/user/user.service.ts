@@ -14,11 +14,10 @@ import {
   fromError,
   fromResponse,
 } from '../../schemas/user/create/create-user-response';
-import {
-  GetUserFromIdErrors,
-  GetUserResponse,
-} from '../../schemas/user/fetch/get-refuge-schema';
+import { GetUserResponse } from '../../schemas/user/fetch/get-refuge-schema';
 import { isMatching } from 'ts-pattern';
+import { ServerErrors } from '../../schemas/errors/server';
+import { getErrorFrom } from '../../schemas/errors/all-errors';
 
 const createUserUri = `${environment.API}/users/`;
 
@@ -40,7 +39,7 @@ export class UserService {
     if (!isValidId(userId)) {
       return of({
         status: 'error',
-        error: GetUserFromIdErrors.CLIENT_SEND_DATA_ERROR,
+        error: ServerErrors.INCORRECT_DATA_FORMAT_OF_CLIENT,
       });
     }
     return this.getUserFromApi(userId);
@@ -54,14 +53,14 @@ export class UserService {
           return { status: 'correct', data: user };
         return {
           status: 'error',
-          error: GetUserFromIdErrors.SERVER_INCORRECT_DATA_FORMAT_ERROR,
+          error: ServerErrors.INCORRECT_DATA_FORMAT_OF_SERVER,
         };
       }),
       catchError<GetUserResponse | Error, ObservableInput<any>>(
         (err: HttpErrorResponse) =>
           of({
             status: 'error',
-            error: GetUserFromIdErrors.from(err),
+            error: getErrorFrom(err),
           }),
       ),
       retry(3),

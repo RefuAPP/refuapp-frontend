@@ -45,5 +45,5 @@ function getErrorFromUnprocessableEntity(
   const errorResponse: UnprocessableEntitySignUp = err.error;
   if (isMatching(UnprocessableEntitySignUpPattern, errorResponse))
     return { type: 'INVALID_USER_DATA', message: errorResponse.detail[0].msg };
-  return ServerErrors.INCORRECT_DATA_FORMAT_OF_CLIENT;
+  return ServerErrors.INCORRECT_DATA_FORMAT_OF_SERVER;
 }

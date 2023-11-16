@@ -9,6 +9,9 @@ import {
   GetUserResponse,
 } from '../../../../schemas/user/fetch/get-refuge-schema';
 import { match } from 'ts-pattern';
+import { PermissionsErrors } from '../../../../schemas/errors/permissions';
+import { ResourceErrors } from '../../../../schemas/errors/resource';
+import { ServerErrors } from '../../../../schemas/errors/server';
 
 @Component({
   selector: 'app-profile-update',
@@ -78,20 +81,20 @@ export class ProfileUpdatePage implements OnInit {
 
   private handleGetError(error: GetUserFromIdErrors): void {
     match(error)
-      .with(GetUserFromIdErrors.UNAUTHORIZED, () =>
+      .with(PermissionsErrors.NOT_AUTHENTICATED, () =>
         this.handleUnauthorizedError(),
       )
-      .with(GetUserFromIdErrors.FORBIDDEN, () => this.handleForbiddenError())
-      .with(GetUserFromIdErrors.NOT_FOUND, () => this.handleNotFoundError())
-      .with(GetUserFromIdErrors.CLIENT_SEND_DATA_ERROR, () =>
-        this.handleBadUserData(),
+      .with(PermissionsErrors.NOT_ALLOWED_OPERATION_FOR_USER, () =>
+        this.handleForbiddenError(),
       )
-      .with(GetUserFromIdErrors.UNKNOWN_ERROR, () => this.handleUnknownError())
+      .with(ResourceErrors.NOT_FOUND, () => this.handleNotFoundError())
+      .with(ServerErrors.UNKNOWN_ERROR, () => this.handleUnknownError())
       .with(
-        GetUserFromIdErrors.PROGRAMMER_SEND_DATA_ERROR,
-        GetUserFromIdErrors.SERVER_INCORRECT_DATA_FORMAT_ERROR,
+        ServerErrors.INCORRECT_DATA_FORMAT_OF_SERVER,
+        ServerErrors.INCORRECT_DATA_FORMAT_OF_CLIENT,
         () => this.handleBadUserData(),
-      );
+      )
+      .exhaustive();
   }
 
   private async handleUnauthorizedError() {
