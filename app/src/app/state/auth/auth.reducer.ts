@@ -1,73 +1,16 @@
 import { createReducer, on } from '@ngrx/store';
-import {
-  loginCompleted,
-  loginRequest,
-  loginResponseCorrect,
-  loginDeviceError,
-  loginDataError,
-  logOutCompleted,
-  logOutRequest,
-} from './auth.actions';
-import { UserCredentials } from '../../schemas/user/user';
-import { Token } from '../../schemas/auth/token';
-import { NonUserFormErrors, UserFormErrors } from '../../schemas/auth/errors';
-import { CredentialsError } from '../../schemas/auth/validate/forms';
+import { loginCompleted, logOutRequest } from './auth.actions';
 
 export type AuthState = {
-  loginFormError?: UserFormErrors | CredentialsError;
-  deviceError?: NonUserFormErrors;
-  userToken?: Token;
-  userCredentials?: UserCredentials;
   userId?: string;
-  isLoading: boolean;
-  isAuthenticated: boolean;
 };
 
-export const notLoggedInState = {
-  isLoading: false,
-  isAuthenticated: false,
-  userCredentials: {
-    phone_number: '',
-    password: '',
-  },
-} as AuthState;
+export const notLoggedInState = {} as AuthState;
 
 export const authReducer = createReducer(
   notLoggedInState,
-  on(loginRequest, (state, action) => ({
-    ...state,
-    isLoading: true,
-    userCredentials: action.credentials,
-  })),
-  on(loginDataError, (state, action) => ({
-    ...state,
-    isLoading: false,
-    loginFormError: action.error,
-  })),
-  on(loginDeviceError, (state, action) => ({
-    ...state,
-    isLoading: false,
-    deviceError: action.error,
-  })),
-  on(loginResponseCorrect, (state, action) => ({
-    ...state,
-    userToken: action.token,
-  })),
   on(loginCompleted, (state, action) => ({
-    isLoading: false,
     userId: action.userId,
-    isAuthenticated: true,
   })),
-  on(logOutRequest, (state) => ({
-    ...state,
-    isLoading: true,
-  })),
-  on(logOutCompleted, (state) => ({
-    isLoading: false,
-    isAuthenticated: false,
-    userCredentials: {
-      phone_number: '',
-      password: '',
-    },
-  })),
+  on(logOutRequest, (state) => ({})),
 );

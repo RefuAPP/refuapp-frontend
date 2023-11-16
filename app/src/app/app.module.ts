@@ -19,8 +19,6 @@ import { AuthEffects } from './state/auth/auth.effects';
 import { StoreModule } from '@ngrx/store';
 import { authReducer } from './state/auth/auth.reducer';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { createUserReducer } from './state/create-user/create-user.reducer';
-import { CreateUserEffects } from './state/create-user/create-user.effects';
 import { LanguageEffects } from './state/language/language.effects';
 import { languageReducer } from './state/language/language.reducer';
 import { InitEffects } from './state/init/init.effects';
@@ -59,7 +57,6 @@ export function createTranslateLoader(http: HttpClient) {
     StoreModule.forRoot(
       {
         auth: authReducer,
-        createUser: createUserReducer,
         language: languageReducer,
         initStatus: initReducer,
         map: mapReducer,
@@ -87,7 +84,6 @@ export function createTranslateLoader(http: HttpClient) {
     EffectsModule.forRoot([
       InitEffects,
       AuthEffects,
-      CreateUserEffects,
       LanguageEffects,
       MapEffects,
       ReservationsEffects,

@@ -8,31 +8,12 @@ import {
 import { AuthService } from 'src/app/services/auth/auth.service';
 import {
   loginCompleted,
-  loginDataError,
-  loginDeviceError,
-  loginRequest,
-  loginResponseCorrect,
   logOutCompleted,
   logOutRequest,
+  login,
 } from './auth.actions';
-import { map, of, switchMap, tap } from 'rxjs';
-import { isMatching, match } from 'ts-pattern';
+import { combineLatest, map, switchMap, tap } from 'rxjs';
 import { fromPromise } from 'rxjs/internal/observable/innerFrom';
-import {
-  AuthenticationErrors,
-  DeviceErrors,
-  UserFormErrors,
-} from '../../schemas/auth/errors';
-import {
-  CredentialsError,
-  parseCredentials,
-} from '../../schemas/auth/validate/forms';
-import {
-  UserCredentials,
-  UserCredentialsPattern,
-} from '../../schemas/user/user';
-import { AuthenticationResponse } from '../../schemas/auth/authenticate';
-import { ServerErrors } from '../../schemas/errors/server';
 import { Router } from '@angular/router';
 
 @Injectable()
@@ -57,39 +38,29 @@ export class AuthEffects {
     ),
   );
 
-  sendLoginRequest$ = createEffect(() =>
+  saveTokenWhenLoginSilence$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(loginRequest),
-      switchMap((request) => this.getNewStateFromLoginRequest(request)),
-    ),
-  );
-
-  getNewStateFromLoginRequest(loginData: { credentials: UserCredentials }) {
-    const userCredentialsOrError = parseCredentials(loginData.credentials);
-    if (isMatching(UserCredentialsPattern, userCredentialsOrError))
-      return this.fetchNewStateFromAuthApi(loginData);
-    return of(
-      loginDataError({
-        error: userCredentialsOrError as CredentialsError,
-        credentials: loginData.credentials,
-      }),
-    );
-  }
-
-  saveJWTWhenLoginResponseIsCorrect$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(loginResponseCorrect),
+      ofType(login),
       switchMap((action) =>
         fromPromise(this.authService.authenticate(action.token)),
       ),
       switchMap(() => this.authService.getUserId()),
       map((userId) => {
         if (userId) return loginCompleted({ userId });
-        return loginDeviceError({
-          error: DeviceErrors.COULDN_T_SAVE_USER_DATA,
+        return loginCompleted({
+          userId: 'TODO: ERROR SAVING HERE',
         });
       }),
     ),
+  );
+
+  saveTokenWhenLogin$ = createEffect(
+    () =>
+      combineLatest([
+        this.actions$.pipe(ofType(loginCompleted)),
+        this.actions$.pipe(ofType(login)),
+      ]).pipe(tap(() => this.router.navigate(['/']))),
+    { dispatch: false },
   );
 
   deleteToken$ = createEffect(() =>
@@ -99,67 +70,4 @@ export class AuthEffects {
       map(() => logOutCompleted()),
     ),
   );
-
-  loginCompletedGoToHome$ = createEffect(
-    () =>
-      this.actions$.pipe(
-        ofType(loginResponseCorrect),
-        tap(() => this.router.navigateByUrl('/home')),
-      ),
-    { dispatch: false },
-  );
-
-  private fetchNewStateFromAuthApi(loginData: {
-    credentials: UserCredentials;
-  }) {
-    return this.authService
-      .getToken(parseCredentials(loginData.credentials) as UserCredentials)
-      .pipe(
-        map((response) =>
-          this.getNewStateFromAuthServerResponse(response, loginData),
-        ),
-      );
-  }
-
-  private getNewStateFromAuthServerResponse(
-    response: AuthenticationResponse,
-    loginData: {
-      credentials: UserCredentials;
-    },
-  ) {
-    return match(response)
-      .with({ status: 'error' }, (errorResponse) =>
-        this.getNewStateFromError(errorResponse.error, loginData),
-      )
-      .with({ status: 'authenticated' }, (correctResponse) =>
-        loginResponseCorrect({ token: correctResponse.data }),
-      )
-      .exhaustive();
-  }
-
-  private getNewStateFromError(
-    errorResponse: AuthenticationErrors,
-    loginData: { credentials: UserCredentials },
-  ) {
-    return match(errorResponse)
-      .with(
-        ServerErrors.UNKNOWN_ERROR,
-        ServerErrors.INCORRECT_DATA_FORMAT,
-        DeviceErrors.NOT_CONNECTED,
-        (err) => loginDeviceError({ error: err }),
-      )
-      .with(DeviceErrors.COULDN_T_SAVE_USER_DATA, () => {
-        throw new Error('Impossible');
-      })
-      .with(
-        UserFormErrors.USER_NOT_FOUND,
-        UserFormErrors.INCORRECT_PASSWORD,
-        (err) =>
-          loginDataError({
-            error: err,
-            credentials: loginData.credentials,
-          }),
-      )
-      .exhaustive();
-  }
 }

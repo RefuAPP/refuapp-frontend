@@ -1,32 +1,34 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { phoneMaskPredicate, spainPhoneMask } from '../../schemas/phone/phone';
-import { Subscription, tap } from 'rxjs';
-import { AppState } from '../../state/app.state';
-import { Store } from '@ngrx/store';
-import {
-  getCreateUserForm,
-  getCreateUserFormErrors,
-} from '../../state/create-user/create-user.selectors';
-import { createUserRequest } from '../../state/create-user/create-user.actions';
+import { switchMap, tap } from 'rxjs';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { CreateUserComponentStore } from './create-user.store';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { UserForm } from '../../schemas/user/user';
+import { AppState } from '@capacitor/app';
+import { Store } from '@ngrx/store';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-signup',
   templateUrl: './signup.page.html',
   styleUrls: ['./signup.page.scss'],
+  providers: [CreateUserComponentStore],
 })
-export class SignupPage implements OnInit, OnDestroy {
+export class SignupPage implements OnInit {
   phoneMask = spainPhoneMask;
   maskPredicate = phoneMaskPredicate;
 
   form: FormGroup;
-  formErrors$ = this.store.select(getCreateUserFormErrors);
-  formData$ = this.store.select(getCreateUserForm);
-  formDataSubscription?: Subscription;
+  formErrors$ = this.componentStore.error$;
+  formData$ = this.componentStore.form$;
+  createdUser$ = this.componentStore.createdUser$;
 
   constructor(
-    private store: Store<AppState>,
-    private formBuilder: FormBuilder,
+    private readonly componentStore: CreateUserComponentStore,
+    private readonly store: Store<AppState>,
+    private readonly formBuilder: FormBuilder,
+    private readonly router: Router,
   ) {
     this.form = this.formBuilder.group({
       username: ['', Validators.required],
@@ -35,24 +37,36 @@ export class SignupPage implements OnInit, OnDestroy {
       phone_number: ['', Validators.required],
       emergency_number: ['', Validators.required],
     });
-  }
-
-  submit() {
-    if (this.form.valid)
-      this.store.dispatch(createUserRequest({ credentials: this.form.value }));
-  }
-
-  ngOnInit() {
-    this.formDataSubscription = this.formData$
+    this.formData$
       .pipe(
+        takeUntilDestroyed(),
         tap((formData) => {
           if (formData) this.form.patchValue(formData);
         }),
       )
       .subscribe();
+    this.createdUser$
+      .pipe(
+        takeUntilDestroyed(),
+        switchMap((user) =>
+          this.router.navigate(['/login'], {
+            queryParams: {
+              phone_number: user.phone_number,
+              password: user.password,
+            },
+            queryParamsHandling: 'merge',
+          }),
+        ),
+      )
+      .subscribe();
   }
 
-  ngOnDestroy() {
-    this.formDataSubscription?.unsubscribe();
+  submit() {
+    if (this.form.valid) {
+      const userForm = this.form.value as UserForm;
+      this.componentStore.createUserRequest(userForm);
+    }
   }
+
+  ngOnInit() {}
 }

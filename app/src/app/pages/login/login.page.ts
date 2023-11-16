@@ -1,58 +1,80 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { phoneMaskPredicate, spainPhoneMask } from '../../schemas/phone/phone';
 import { Store } from '@ngrx/store';
-import { loginRequest } from '../../state/auth/auth.actions';
-import {
-  getCurrentCredentials,
-  getLoginFormErrorMessages,
-} from '../../state/auth/auth.selectors';
 import { AppState } from '../../state/app.state';
-import { Subscription, tap } from 'rxjs';
+import { map, tap } from 'rxjs';
+import { LoginComponentStore } from './login.store';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { login } from '../../state/auth/auth.actions';
+import { ActivatedRoute, Params } from '@angular/router';
+import { Maskito, maskitoTransform } from '@maskito/core';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
+  providers: [LoginComponentStore],
 })
-export class LoginPage implements OnInit, OnDestroy {
+export class LoginPage implements OnInit {
   phoneMask = spainPhoneMask;
   maskPredicate = phoneMaskPredicate;
 
   form: FormGroup;
 
-  formErrors$ = this.store.select(getLoginFormErrorMessages);
-  credentials$ = this.store.select(getCurrentCredentials);
-  credentialsSubscription?: Subscription;
+  formErrors$ = this.componentStore.error$;
+  credentials$ = this.componentStore.form$;
+  isLoading$ = this.componentStore.isLoading$;
+  token$ = this.componentStore.token$;
 
   constructor(
+    private readonly componentStore: LoginComponentStore,
     private store: Store<AppState>,
     private formBuilder: FormBuilder,
+    private route: ActivatedRoute,
   ) {
     this.form = this.formBuilder.group({
       phone_number: ['', Validators.required],
       password: ['', Validators.required],
     });
-  }
-
-  ngOnInit() {
-    this.credentialsSubscription = this.credentials$
+    this.credentials$
       .pipe(
-        tap((hasCredentials) => {
-          if (hasCredentials) {
-            this.form.patchValue(hasCredentials);
+        takeUntilDestroyed(),
+        tap((credentials) => {
+          if (credentials) this.form.patchValue(credentials);
+        }),
+      )
+      .subscribe();
+    this.route.queryParams
+      .pipe(
+        takeUntilDestroyed(),
+        tap((queryParams: Params) => {
+          // TODO: Check if this data is correct
+          if (queryParams) {
+            const { phone_number, password } = queryParams;
+            if (!phone_number || !password) return;
+            const user = {
+              phone_number: maskitoTransform(phone_number, spainPhoneMask),
+              password,
+            };
+            this.form.patchValue(user);
+            this.submit();
           }
         }),
       )
       .subscribe();
+    this.token$
+      .pipe(
+        takeUntilDestroyed(),
+        tap((token) => this.store.dispatch(login({ token }))),
+      )
+      .subscribe();
   }
 
-  ngOnDestroy() {
-    this.credentialsSubscription?.unsubscribe();
-  }
+  ngOnInit() {}
 
   submit() {
     if (this.form.invalid) return;
-    this.store.dispatch(loginRequest({ credentials: this.form.value }));
+    this.componentStore.login(this.form.value);
   }
 }

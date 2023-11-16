@@ -1,6 +1,5 @@
 import { createSelector } from '@ngrx/store';
-import { selectAuth } from '../../auth/auth.selectors';
-import { selectLanguage } from '../../language/language.selectors';
+import { isAuthenticated, selectAuth } from '../../auth/auth.selectors';
 
 export type MenuItem = {
   titleTranslateKey: string;
@@ -8,36 +7,32 @@ export type MenuItem = {
   icon: string;
 };
 
-export const getTopItems = createSelector(
-  selectAuth,
-  selectLanguage,
-  (auth, _) => {
-    if (auth.isAuthenticated) {
-      return [
-        {
-          titleTranslateKey: 'MENU.HOME',
-          url: '/home',
-          icon: 'home',
-        },
-        {
-          titleTranslateKey: 'MENU.RESERVATIONS',
-          url: '/reservations',
-          icon: 'folder',
-        },
-      ] as MenuItem[];
-    }
+export const getTopItems = createSelector(isAuthenticated, (auth) => {
+  if (auth) {
     return [
       {
         titleTranslateKey: 'MENU.HOME',
         url: '/home',
         icon: 'home',
       },
+      {
+        titleTranslateKey: 'MENU.RESERVATIONS',
+        url: '/reservations',
+        icon: 'folder',
+      },
     ] as MenuItem[];
-  },
-);
+  }
+  return [
+    {
+      titleTranslateKey: 'MENU.HOME',
+      url: '/home',
+      icon: 'home',
+    },
+  ] as MenuItem[];
+});
 
-export const getBottomItems = createSelector(selectAuth, (auth) => {
-  if (auth.isAuthenticated)
+export const getBottomItems = createSelector(isAuthenticated, (auth) => {
+  if (auth)
     return [
       {
         titleTranslateKey: 'MENU.PROFILE',
