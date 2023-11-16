@@ -1,0 +1,50 @@
+<h3 class="ion-padding-top ion-padding-start">{{ refuge.name }}</h3>
+<ion-list lines="none">
+  <ion-item>
+    <ion-label> {{ "REFUGE.INFORMATION.REGION" | translate }}</ion-label>
+    <ion-label class="ion-text-end"> {{ refuge.region }} </ion-label>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>{{ "REFUGE.INFORMATION.ALTITUDE" | translate }}</ion-label>
+    <ion-label class="ion-text-end">
+      {{
+        "REFUGE.INFORMATION.ALTITUDE_UNITY"
+          | translate
+            : {
+                altitude: refuge.altitude
+              }
+      }}</ion-label
+    >
+  </ion-item>
+
+  <ion-item>
+    <ion-label>{{
+      "REFUGE.INFORMATION.WINTER_CAPACITY" | translate
+    }}</ion-label>
+    <ion-label class="ion-text-end">
+      {{
+        "REFUGE.INFORMATION.CAPACITY_UNITY"
+          | translate
+            : {
+                capacity: refuge.capacity.winter
+              }
+      }}
+    </ion-label>
+  </ion-item>
+
+  <ion-item>
+    <ion-label>{{
+      "REFUGE.INFORMATION.SUMMER_CAPACITY" | translate
+    }}</ion-label>
+    <ion-label class="ion-text-end">
+      {{
+        "REFUGE.INFORMATION.CAPACITY_UNITY"
+          | translate
+            : {
+                capacity: refuge.capacity.summer
+              }
+      }}
+    </ion-label>
+  </ion-item>
+</ion-list>

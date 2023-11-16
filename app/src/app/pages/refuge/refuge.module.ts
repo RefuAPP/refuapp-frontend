@@ -12,6 +12,7 @@ import { ReservationPickerComponent } from '../../components/reservation-picker/
 import { ReservationsChartComponent } from '../../components/reservations-chart/reservations-chart.component';
 import { ReservationsPageModule } from '../reservations/reservations.module';
 import { ReservationsComponent } from '../../components/reservations/reservations.component';
+import { RefugeInfoComponent } from '../../components/refuge-info/refuge-info.component';
 
 @NgModule({
   imports: [
@@ -27,6 +28,7 @@ import { ReservationsComponent } from '../../components/reservations/reservation
     ReservationPickerComponent,
     ReservationsChartComponent,
     ReservationsComponent,
+    RefugeInfoComponent,
   ],
   exports: [RefugePage],
 })
