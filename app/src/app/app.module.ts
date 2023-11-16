@@ -29,8 +29,6 @@ import { environment } from '../environments/environment';
 import { modalReducer } from './state/components/modal/modal.reducer';
 import { mapReducer } from './state/map/map.reducer';
 import { MapEffects } from './state/map/map.effects';
-import { searchReducer } from './state/components/search/search.reducer';
-import { SearchEffects } from './state/components/search/search.effects';
 import { ReservationsEffects } from './state/reservations/reservations.effects';
 import { reservationsReducer } from './state/reservations/reservations.reducer';
 import { errorReducer } from './state/errors/error.reducer';
@@ -66,7 +64,6 @@ export function createTranslateLoader(http: HttpClient) {
         initStatus: initReducer,
         map: mapReducer,
         modal: modalReducer,
-        searchCompletion: searchReducer,
         reservations: reservationsReducer,
         error: errorReducer,
         refuges: refugesReducer,
@@ -93,7 +90,6 @@ export function createTranslateLoader(http: HttpClient) {
       CreateUserEffects,
       LanguageEffects,
       MapEffects,
-      SearchEffects,
       ReservationsEffects,
       ErrorEffects,
       RefugesEffects,

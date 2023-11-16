@@ -1,35 +1,32 @@
 import { Component, OnInit } from '@angular/core';
-import {
-  selectAutoCompletion,
-  selectCurrentSearch,
-} from '../../state/components/search/search.selectors';
 import { AppState } from '../../state/app.state';
 import { Store } from '@ngrx/store';
 import { Coordinates } from '../../services/search/search.service';
-import {
-  addSearch,
-  clearSearch,
-} from '../../state/components/search/search.actions';
 import { first } from 'rxjs';
 import { SearchbarCustomEvent } from '@ionic/angular';
 import { moveMapTo } from '../../state/map/map.actions';
+import { SearchComponentStore } from './search.store';
 
 @Component({
   selector: 'app-searchbar-location',
   templateUrl: './searchbar-location.component.html',
   styleUrls: ['./searchbar-location.component.scss'],
+  providers: [SearchComponentStore],
 })
 export class SearchbarLocationComponent implements OnInit {
-  searchCompletion$ = this.store.select(selectAutoCompletion);
-  searchValue$ = this.store.select(selectCurrentSearch);
+  searchCompletion$ = this.componentStore.completions$;
+  searchValue$ = this.componentStore.search$;
 
-  constructor(private store: Store<AppState>) {}
+  constructor(
+    private readonly componentStore: SearchComponentStore,
+    private readonly store: Store<AppState>,
+  ) {}
 
   ngOnInit() {}
 
   moveMapTo(coordinates: Coordinates) {
     this.store.dispatch(moveMapTo({ coordinates }));
-    this.store.dispatch(clearSearch());
+    this.componentStore.clearSearch();
   }
 
   selectFirstSearchResult() {
@@ -41,6 +38,6 @@ export class SearchbarLocationComponent implements OnInit {
 
   onSearchChange(value: SearchbarCustomEvent) {
     const search = value.detail.value as string;
-    this.store.dispatch(addSearch({ search }));
+    this.componentStore.search(search);
   }
 }
