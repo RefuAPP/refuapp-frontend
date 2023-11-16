@@ -72,12 +72,3 @@
     [buttons]="alertButtons"
   ></ion-alert>
 </ng-container>
-<ng-container *ngIf="minorErrors$ | async as errorMessage">
-  <ion-toast
-    [isOpen]="hasMinorErrors$ | async"
-    message="{{ errorMessage | translate }}"
-    color="danger"
-    icon="bug-outline"
-    [duration]="3000"
-  ></ion-toast>
-</ng-container>

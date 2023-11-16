@@ -9,6 +9,7 @@ import {
   catchError,
   combineLatest,
   map,
+  mergeMap,
   Observable,
   of,
   switchMap,
@@ -29,7 +30,12 @@ import { DeviceErrors } from '../../schemas/errors/device';
 import { customMinorError, minorError } from '../errors/error.actions';
 import { TypedAction } from '@ngrx/store/src/models';
 import { ReservationWithoutUserId } from '../../schemas/reservations/reservation';
-import { CreateReservationDataError } from '../../schemas/reservations/create-reservation';
+import {
+  CorrectCreateReservation,
+  CreateReservationDataError,
+  ErrorCreateReservation,
+} from '../../schemas/reservations/create-reservation';
+import { showMessages } from '../messages/message.actions';
 
 @Injectable()
 export class ReservationsEffects {
@@ -67,11 +73,11 @@ export class ReservationsEffects {
     return this.reservationService.deleteReservation(reservationId).pipe(
       map((reservations) => {
         if (reservations.status == 'ok')
-          // TODO: add side effect of ok message
           return [
             deletedReservation({
               reservation: reservations.reservation,
             }),
+            showMessages({ message: 'TODO: Reserva eliminada correctamente' }),
           ];
         return [
           errorDeletingReservation(),
@@ -90,7 +96,7 @@ export class ReservationsEffects {
       this.actions$.pipe(ofType(loginCompleted)),
       this.actions$.pipe(ofType(addReservation)),
     ]).pipe(
-      switchMap((actions) =>
+      mergeMap((actions) =>
         this.createReservation(actions[0].userId, actions[1].reservation),
       ),
     ),
@@ -99,35 +105,39 @@ export class ReservationsEffects {
   private createReservation(
     userId: string,
     reservation: ReservationWithoutUserId,
-  ): Observable<any> {
+  ): Observable<TypedAction<any>> {
     return this.reservationService
       .createReservation({
         user_id: userId,
         ...reservation,
       })
       .pipe(
-        map((reservations) => {
-          if (reservations.status == 'ok')
-            // TODO: add side effect of ok message
+        mergeMap((reservations) => {
+          if (reservations.status == 'ok') {
             return [
               addedReservation({
                 reservation: reservations.reservation,
               }),
+              showMessages({ message: 'TODO: Reserva creada correctamente' }),
             ];
+          }
           if (
             reservations.error ===
               CreateReservationDataError.NTP_SERVER_IS_DOWN ||
             reservations.error === CreateReservationDataError.INVALID_DATE ||
             reservations.error ===
               CreateReservationDataError.REFUGE_OR_USER_NOT_FOUND
-          )
+          ) {
             return [
               errorAddingReservation(),
               customMinorError({ error: reservations.error }),
             ];
-          return minorError({
-            error: reservations.error,
-          });
+          }
+          return [
+            minorError({
+              error: reservations.error,
+            }),
+          ];
         }),
         catchError(() => of(minorError({ error: DeviceErrors.NOT_CONNECTED }))),
       );

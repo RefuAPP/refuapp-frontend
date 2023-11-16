@@ -6,6 +6,7 @@ import { MapStatus } from './map/map.reducer';
 import { ReservationsState } from './reservations/reservations.reducer';
 import { ErrorState } from './errors/error.reducer';
 import { RefugesState } from './refuges/refuges.reducer';
+import { MessagesState } from './messages/message.reducer';
 
 export interface AppState {
   auth: AuthState;
@@ -16,4 +17,5 @@ export interface AppState {
   refuges: RefugesState;
   reservations: ReservationsState;
   error: ErrorState;
+  messages: MessagesState;
 }

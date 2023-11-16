@@ -17,3 +17,4 @@ export const customMinorError = createAction(
 );
 
 export const fixFatalError = createAction('[Error] Fixing Fatal Error');
+export const fixMinorError = createAction('[Error] Fixing minor error');

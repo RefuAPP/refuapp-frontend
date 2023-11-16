@@ -35,6 +35,7 @@ import { ReservationsPageModule } from './pages/reservations/reservations.module
 import { refugesReducer } from './state/refuges/refuges.reducer';
 import { RefugesEffects } from './state/refuges/refuges.effects';
 import { ModalEffects } from './state/components/modal/modal.effects';
+import { messageReducer } from './state/messages/message.reducer';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -64,6 +65,7 @@ export function createTranslateLoader(http: HttpClient) {
         reservations: reservationsReducer,
         error: errorReducer,
         refuges: refugesReducer,
+        messages: messageReducer,
       },
       {
         // This is because inmutability objects on actions (and google maps libraries and capacitor change the object from the action)

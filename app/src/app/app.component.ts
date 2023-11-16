@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from './state/app.state';
-import { Observable } from 'rxjs';
+import { filter, mergeMap, Observable, tap } from 'rxjs';
 import { areLibrariesLoaded } from './state/init/init.selectors';
 import {
   isLoading,
@@ -16,7 +16,16 @@ import {
   getMinorErrors,
   hasMinorErrors,
 } from './state/errors/error.selectors';
-import { fixFatalError } from './state/errors/error.actions';
+import { fixFatalError, fixMinorError } from './state/errors/error.actions';
+import {
+  getMessages,
+  hasMessages,
+  selectMessages,
+} from './state/messages/message.selectors';
+import { clearMessage } from './state/messages/message.actions';
+import { ToastController } from '@ionic/angular';
+import { fromPromise } from 'rxjs/internal/observable/innerFrom';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-root',
@@ -41,10 +50,54 @@ export class AppComponent implements OnInit {
   );
   canShowPage$ = this.store.select(areLibrariesLoaded);
 
-  hasMinorErrors$ = this.store.select(hasMinorErrors);
-  minorErrors$ = this.store.select(getMinorErrors);
+  minorErrors$ = this.store
+    .select(getMinorErrors)
+    .pipe(filter((errors) => errors !== undefined)) as Observable<string>;
+  messages$ = this.store
+    .select(getMessages)
+    .pipe(filter((messages) => messages !== undefined)) as Observable<string>;
 
-  constructor(private store: Store<AppState>) {}
+  constructor(
+    private store: Store<AppState>,
+    private toast: ToastController,
+  ) {
+    this.minorErrors$
+      .pipe(
+        takeUntilDestroyed(),
+        mergeMap((message) =>
+          fromPromise(
+            this.toast.create({
+              message: message,
+              color: 'danger',
+              icon: 'alert-circle-outline',
+              duration: 3000,
+              position: 'bottom',
+            }),
+          ),
+        ),
+        mergeMap((toast) => fromPromise(toast.present())),
+        tap(() => this.store.dispatch(fixMinorError())),
+      )
+      .subscribe();
+    this.messages$
+      .pipe(
+        takeUntilDestroyed(),
+        mergeMap((message) =>
+          fromPromise(
+            this.toast.create({
+              message: message,
+              color: 'success',
+              icon: 'checkmark-circle-outline',
+              duration: 3000,
+              position: 'bottom',
+            }),
+          ),
+        ),
+        mergeMap((toast: HTMLIonToastElement) => fromPromise(toast.present())),
+        tap(() => this.store.dispatch(clearMessage())),
+      )
+      .subscribe();
+  }
 
   ngOnInit(): void {}
 }

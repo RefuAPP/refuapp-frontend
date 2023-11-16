@@ -4,6 +4,7 @@ import {
   customMinorError,
   fatalError,
   fixFatalError,
+  fixMinorError,
   minorError,
 } from './error.actions';
 
@@ -33,6 +34,9 @@ export const errorReducer = createReducer(
     customMinorError: action.error,
   })),
   on(fixFatalError, (state, action) => ({
+    hasError: false,
+  })),
+  on(fixMinorError, (state, action) => ({
     hasError: false,
   })),
 );

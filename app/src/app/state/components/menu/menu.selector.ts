@@ -1,5 +1,5 @@
 import { createSelector } from '@ngrx/store';
-import { isAuthenticated, selectAuth } from '../../auth/auth.selectors';
+import { isAuthenticated } from '../../auth/auth.selectors';
 
 export type MenuItem = {
   titleTranslateKey: string;
