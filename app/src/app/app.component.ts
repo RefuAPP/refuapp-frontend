@@ -11,7 +11,11 @@ import {
   getBottomItems,
   getTopItems,
 } from './state/components/menu/menu.selector';
-import { clientHasErrorConnection } from './state/errors/error.selectors';
+import {
+  clientHasErrorConnection,
+  getMinorErrors,
+  hasMinorErrors,
+} from './state/errors/error.selectors';
 
 @Component({
   selector: 'app-root',
@@ -35,6 +39,8 @@ export class AppComponent implements OnInit {
     clientHasErrorConnection,
   );
   canShowPage$ = this.store.select(areLibrariesLoaded);
+  hasMinorErrors$ = this.store.select(hasMinorErrors);
+  minorErrors$ = this.store.select(getMinorErrors);
 
   constructor(private store: Store<AppState>) {}
 

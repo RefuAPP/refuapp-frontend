@@ -10,3 +10,8 @@ export const minorError = createAction(
   '[Error] Minor Error',
   props<{ error: AllErrors }>(),
 );
+
+export const customMinorError = createAction(
+  '[Error] Custom Minor Error',
+  props<{ error: string }>(),
+);

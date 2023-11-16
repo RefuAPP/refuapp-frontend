@@ -72,5 +72,12 @@
     [buttons]="alertButtons"
   ></ion-alert>
 </ng-container>
-<!-- NOTE: Read the component description to understand why this is inside app.component -->
-<app-reactive-reservations></app-reactive-reservations>
+<ng-container *ngIf="minorErrors$ | async as errorMessage">
+  <ion-toast
+    [isOpen]="hasMinorErrors$ | async"
+    message="{{ errorMessage | translate }}"
+    color="danger"
+    icon="bug-outline"
+    [duration]="3000"
+  ></ion-toast>
+</ng-container>
