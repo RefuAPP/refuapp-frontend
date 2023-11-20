@@ -22,6 +22,7 @@ export class RefugePage implements OnInit, AfterViewInit {
   @Input() refuge?: Refuge;
   @Output() clickedBar = new EventEmitter();
 
+
   constructor(
     private refugeService: RefugeService,
     private store: Store<AppState>,

@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { fromISOString } from '../../schemas/night/night';
 import { Refuge } from '../../schemas/refuge/refuge';
+import { TranslateService } from '@ngx-translate/core';
 import { AppState } from 'src/app/state/app.state';
 import { Store } from '@ngrx/store';
 import { addReservation } from '../../state/reservations/reservations.actions';
@@ -14,7 +15,10 @@ export class ReservationPickerComponent implements OnInit {
   @Input({ required: true }) refuge!: Refuge;
   date = '';
 
-  constructor(private store: Store<AppState>) {}
+  alertButtons = [this.translate.instant('REFUGE.RESERVATIONS.INFO.OKAY')];
+
+  constructor(private store: Store<AppState>, private translate: TranslateService) {
+  }
 
   ngOnInit() {}
 

@@ -1,19 +1,9 @@
-import {
-  AfterViewInit,
-  ChangeDetectorRef,
-  Component,
-  ElementRef,
-  Input,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
-import { Refuge } from '../../schemas/refuge/refuge';
-import { createChart } from 'lightweight-charts';
-import { getChartConfiguration } from '../../pages/refuge/chart-configuration';
-import {
-  OccupationService,
-  WeeklyOccupation,
-} from '../../services/occupation/occupation.service';
+import {AfterViewInit, ChangeDetectorRef, Component, Input, OnInit, ViewChild} from '@angular/core';
+import {Refuge} from '../../schemas/refuge/refuge';
+import {BarVerticalComponent, Color, LegendOptions, LegendPosition, ScaleType} from '@swimlane/ngx-charts';
+import {OccupationService} from '../../services/occupation/occupation.service';
+import {of} from 'rxjs';
+import {random} from "lodash";
 
 @Component({
   selector: 'app-reservations-chart',
@@ -21,76 +11,78 @@ import {
   styleUrls: ['./reservations-chart.component.scss'],
 })
 export class ReservationsChartComponent implements OnInit, AfterViewInit {
-  @Input({ required: true }) refuge!: Refuge;
-  @ViewChild('chart', { static: false }) chart?: ElementRef;
+  @Input({required: true}) refuge!: Refuge;
+  //    Get vertical bar component with viewchiod
+  @ViewChild('verticalBarChart') verticalBarChart?: BarVerticalComponent;
+  testDate1 = new Date('2023-10-14');
+  testDate2 = new Date('2023-10-15');
+
+  testObservable = of([
+    {
+      testDate1: 1,
+      testDate2: 2,
+    },
+  ]);
+
+  days: { name: string, value: number, tooltipText: string }[] = [];
+
+  view = [700, 400] as [number, number];
+
+  gradient = false;
+
+  colorScheme: Color = {
+    name: 'custom',
+    selectable: true,
+    group: ScaleType.Linear,
+    domain: [],
+  };
+  xAxisTickFormatting = (value: string) => {
+    if (value === new Date().getUTCDate().toString()) {
+      return 'Today';
+    }
+    return value
+  }
 
   constructor(
     private changeDetectorRef: ChangeDetectorRef,
     private occupationService: OccupationService,
-  ) {}
+  ) {
+  }
 
-  ngOnInit() {}
+  onSelect() {
+    console.log('myballs');
+  }
+
+  getLabels() {
+    return this.days.map(entry => entry.name);
+  }
+
+  ngOnInit() {
+    // Populate the multi array based on date conditions
+    for (let i = -7; i <= 7; i++) {
+      const currentDate = new Date(Date.now() + i * 24 * 60 * 60 * 1000);
+
+      const color =
+        i === 0 ? '#01579b' : '#7aa3e5'; // Use different colors for the current day and the rest
+
+      this.days.push({
+        name: currentDate.getUTCDate().toString(),
+        value: random(0, 12),
+        tooltipText: "myballs",
+      });
+
+      this.colorScheme.domain.push(color);
+    }
+
+  }
 
   ngAfterViewInit() {
-    this.createAndStartChart();
-  }
-
-  private createAndStartChart() {
-    this.changeDetectorRef.detectChanges();
-    if (this.chart === undefined) {
-      console.log('chart undefined');
-      return;
-    }
-    const chartElement = this.chart.nativeElement;
-    const chart = createChart(
-      chartElement,
-      getChartConfiguration(
-        this.getTextColorFromCss(),
-        this.getBackgroundColorFromCss(),
-      ),
-    );
-    chart.applyOptions({
-      timeScale: {
-        fixLeftEdge: true,
-        rightBarStaysOnScroll: true,
+    this.verticalBarChart!.activeEntries = [
+      {
+        name: '14',
+        value: 5,
       },
-    });
-    // Create chart adjusting the size to the current div size
-    const lineSeries = chart.addLineSeries();
-    this.occupationService.getWeeklyOccupationMock(this.refuge.id).subscribe({
-      next: (response) => {
-        // TODO check for errors here
-        const occupation = response as WeeklyOccupation;
-        const data = occupation.weekly_data
-          .map((dayData) => {
-            return {
-              time: `${dayData.date.getFullYear()}-${
-                dayData.date.getMonth() + 1
-              }-${this.getFormattedDayDate(dayData.date)}`,
-              value: dayData.count,
-            };
-          })
-          .reverse();
-        lineSeries.setData(data);
-        this.occupationService.getTodayOccupationMock().subscribe({
-          next: (response) => {
-            const time = new Date();
-            const timeString = `${time.getFullYear()}-${
-              time.getMonth() + 1
-            }-${this.getFormattedDayDate(time)}`;
-            lineSeries.update({ time: timeString, value: response });
-          },
-        });
-      },
-    });
-    chart.timeScale().fitContent();
-  }
-
-  private getFormattedDayDate(date: Date): string {
-    if (date.getDate() < 10) {
-      return `0${date.getDate()}`;
-    }
-    return `${date.getDate()}`;
+    ];
   }
 
   private getBackgroundColorFromCss(): string {

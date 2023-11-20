@@ -92,10 +92,17 @@
     },
     "RESERVATIONS": {
       "HEADER": "Make a reservation",
-      "BUTTON": "Reservate"
+      "BUTTON": "Reserve",
+      "INFO": {
+        "OKAY": "Ok",
+        "BODY": "Most refuges don't actually have a reservation system. Guests are expected to use them whenever they want. However, RefuApp aims to provide a mechanism through which guests can notify other RefuApp users about their intent to visit a given refuge on a specific date, making it easier to determine if a refuge will likely be full or not.",
+        "HEADER": "Clarification about reservations"
+      }
     },
     "OCCUPATION": {
-      "HISTORIAL": "Occupation historic"
+      "HISTORIAL": "Occupation historic",
+      "XLABEL": "Day",
+      "YLABEL": "Reservations"
     }
   },
   "RESERVATIONS": {

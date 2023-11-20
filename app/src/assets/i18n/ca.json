@@ -91,11 +91,18 @@
       "CAPACITY_UNITY": "{{capacity}} persones"
     },
     "RESERVATIONS": {
-      "HEADER": "Fes una Reserva",
-      "BUTTON": "Reserva"
+      "HEADER": "Fer una reserva",
+      "BUTTON": "Reservar",
+      "INFO": {
+        "OKAY": "D'acord",
+        "BODY": "La majoria dels refugis en realitat no tenen un sistema de reserves. S'espera que els hostes els utilitzin quan vulguin. No obstant això, el que RefuApp intenta proporcionar és un mecanisme a través del qual els hostes poden notificar a altres usuaris de RefuApp sobre la seva intenció d'anar a un refugi en una data específica, facilitant així saber si un refugi estarà ple o no.",
+        "HEADER": "Aclariment sobre reserves"
+      }
     },
     "OCCUPATION": {
-      "HISTORIAL": "Històric d'Ocupació"
+      "HISTORIAL": "Històric d'Ocupació",
+      "XLABEL": "Dia",
+      "YLABEL": "Reserves"
     }
   },
   "RESERVATIONS": {

@@ -91,11 +91,18 @@
       "CAPACITY_UNITY": "{{capacity}} personas"
     },
     "RESERVATIONS": {
-      "HEADER": "Hacer una Reserva",
-      "BUTTON": "Reservar"
+      "HEADER": "Hacer una reserva",
+      "BUTTON": "Reservar",
+      "INFO": {
+        "OKAY": "Aceptar",
+        "BODY": "La mayoría de los refugios en realidad no tienen un sistema de reservas. Se espera que los huéspedes los utilicen cuando lo deseen. Sin embargo, lo que RefuApp intenta proporcionar es un mecanismo a través del cual los huéspedes pueden notificar a otros usuarios de RefuApp sobre su intención de ir a un refugio en una fecha específica, facilitando así saber si un refugio estará lleno o no.",
+        "HEADER": "Aclaración sobre reservas"
+      }
     },
     "OCCUPATION": {
-      "HISTORIAL": "Histórico de Ocupación"
+      "HISTORIAL": "Histórico de Ocupación",
+      "XLABEL": "Día",
+      "YLABEL": "Reservas"
     }
   },
   "RESERVATIONS": {
