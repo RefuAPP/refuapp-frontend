@@ -40,7 +40,7 @@ export class AuthService {
   }
 
   async deauthenticate() {
-    const hasToken = await this.isAuthenticatedPromise();
+    const hasToken = await this.isAuthenticated();
     if (hasToken) await this.storageService.remove(tokenStorageKey);
   }
 
@@ -51,7 +51,7 @@ export class AuthService {
     return payload.id;
   }
 
-  private async isAuthenticatedPromise(): Promise<boolean> {
+  async isAuthenticated(): Promise<boolean> {
     const token = await this.storageService.get(tokenStorageKey);
     return token != null;
   }

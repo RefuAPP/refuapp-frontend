@@ -48,10 +48,11 @@ export class ErrorEffects {
       .with(ResourceErrors.NOT_FOUND, () =>
         this.router.navigate(['/not-found-page']).then(),
       )
-      .with(
-        PermissionsErrors.NOT_AUTHENTICATED,
-        PermissionsErrors.NOT_ALLOWED_OPERATION_FOR_USER,
-        () => this.router.navigate(['/forbidden']).then(),
+      .with(PermissionsErrors.NOT_AUTHENTICATED, () =>
+        this.router.navigate(['/login']).then(),
+      )
+      .with(PermissionsErrors.NOT_ALLOWED_OPERATION_FOR_USER, () =>
+        this.router.navigate(['/forbidden']).then(),
       )
       .with(DeviceErrors.NOT_CONNECTED, () => {})
       .exhaustive();

@@ -23,25 +23,30 @@ import {
   deleteReservation,
   errorAddingReservation,
   errorDeletingReservation,
+  errorFetchingReservations,
   fetchReservations,
 } from './reservations.actions';
 import { ReservationsService } from '../../services/reservations/reservations.service';
 import { DeviceErrors } from '../../schemas/errors/device';
-import { customMinorError, minorError } from '../errors/error.actions';
+import {
+  customMinorError,
+  fatalError,
+  minorError,
+} from '../errors/error.actions';
 import { TypedAction } from '@ngrx/store/src/models';
 import { ReservationWithoutUserId } from '../../schemas/reservations/reservation';
-import {
-  CorrectCreateReservation,
-  CreateReservationDataError,
-  ErrorCreateReservation,
-} from '../../schemas/reservations/create-reservation';
+import { CreateReservationDataError } from '../../schemas/reservations/create-reservation';
 import { showMessages } from '../messages/message.actions';
+import { AuthService } from '../../services/auth/auth.service';
+import { PermissionsErrors } from '../../schemas/errors/permissions';
+import { closeModal } from '../components/modal/modal.actions';
 
 @Injectable()
 export class ReservationsEffects {
   constructor(
     private actions$: Actions,
     private userReservationService: UserReservationService,
+    private authService: AuthService,
     private reservationService: ReservationsService,
   ) {}
 
@@ -53,20 +58,30 @@ export class ReservationsEffects {
   );
 
   private fetchReservations(userId: string): Observable<any> {
-    // TODO: this is doing it every 3 seconds, maybe we shouldn't pull?
     return this.userReservationService
       .getReservationsGroupedByRefugeForUser(userId)
       .pipe(
         map((reservations) => fetchReservations({ reservations })),
-        catchError(() => of(minorError({ error: DeviceErrors.NOT_CONNECTED }))),
+        catchError(() => [
+          minorError({ error: DeviceErrors.NOT_CONNECTED }),
+          errorFetchingReservations(),
+        ]),
       );
   }
 
   deleteReservation$ = createEffect(() =>
-    combineLatest([
-      this.actions$.pipe(ofType(loginCompleted)),
-      this.actions$.pipe(ofType(deleteReservation)),
-    ]).pipe(switchMap((actions) => this.deleteReservation(actions[1].id))),
+    this.actions$.pipe(ofType(deleteReservation)).pipe(
+      switchMap(async (action) => {
+        return {
+          isAuthenticated: await this.authService.isAuthenticated(),
+          reservationId: action.id,
+        };
+      }),
+      switchMap((a) => {
+        if (a.isAuthenticated) return this.deleteReservation(a.reservationId);
+        return [fatalError({ error: PermissionsErrors.NOT_AUTHENTICATED })];
+      }),
+    ),
   );
 
   private deleteReservation(reservationId: string): Observable<any> {
@@ -92,13 +107,22 @@ export class ReservationsEffects {
   }
 
   addReservation$ = createEffect(() =>
-    combineLatest([
-      this.actions$.pipe(ofType(loginCompleted)),
-      this.actions$.pipe(ofType(addReservation)),
-    ]).pipe(
-      mergeMap((actions) =>
-        this.createReservation(actions[0].userId, actions[1].reservation),
-      ),
+    this.actions$.pipe(ofType(addReservation)).pipe(
+      switchMap(async (action) => {
+        return {
+          isAuthenticated: await this.authService.isAuthenticated(),
+          userId: await this.authService.getUserId(),
+          reservation: action.reservation,
+        };
+      }),
+      switchMap((petition) => {
+        if (petition.isAuthenticated)
+          return this.createReservation(
+            petition.userId as string,
+            petition.reservation,
+          );
+        return [fatalError({ error: PermissionsErrors.NOT_AUTHENTICATED })];
+      }),
     ),
   );
 

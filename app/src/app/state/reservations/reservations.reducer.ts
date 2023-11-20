@@ -6,6 +6,7 @@ import {
   deleteReservation,
   errorAddingReservation,
   errorDeletingReservation,
+  errorFetchingReservations,
   fetchReservations,
 } from './reservations.actions';
 import { RefugeReservationsRelations } from '../../services/reservations/grouped-by/refuge';
@@ -27,6 +28,10 @@ export const reservationsReducer = createReducer(
     isLoading: true,
   })),
   on(fetchReservations, (state, action) => ({
+    ...state,
+    isLoading: true,
+  })),
+  on(errorFetchingReservations, (state, action) => ({
     ...state,
     isLoading: false,
   })),

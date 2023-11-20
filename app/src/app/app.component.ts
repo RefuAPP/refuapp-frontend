@@ -14,15 +14,9 @@ import {
 import {
   clientHasErrorConnection,
   getMinorErrors,
-  hasMinorErrors,
 } from './state/errors/error.selectors';
 import { fixFatalError, fixMinorError } from './state/errors/error.actions';
-import {
-  getMessages,
-  hasMessages,
-  selectMessages,
-} from './state/messages/message.selectors';
-import { clearMessage } from './state/messages/message.actions';
+import { getMessages } from './state/messages/message.selectors';
 import { ToastController } from '@ionic/angular';
 import { fromPromise } from 'rxjs/internal/observable/innerFrom';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -94,7 +88,6 @@ export class AppComponent implements OnInit {
           ),
         ),
         mergeMap((toast: HTMLIonToastElement) => fromPromise(toast.present())),
-        tap(() => this.store.dispatch(clearMessage())),
       )
       .subscribe();
   }

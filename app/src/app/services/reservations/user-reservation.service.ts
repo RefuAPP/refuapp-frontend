@@ -1,17 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import {
-  catchError,
-  distinctUntilChanged,
-  map,
-  mergeAll,
-  mergeMap,
-  Observable,
-  of,
-  retry,
-  share,
-  timer,
-} from 'rxjs';
+import { catchError, map, mergeAll, Observable, of, retry } from 'rxjs';
 import { Reservations } from '../../schemas/reservations/reservation';
 import { isFurtherAway, nightFromDate } from '../../schemas/night/night';
 import { environment } from '../../../environments/environment';
@@ -41,24 +30,12 @@ export class UserReservationService {
   ): Observable<RefugeReservationsRelations> {
     const reservationFactory = (refugeId: string) =>
       this.refugeService.getRefugeIgnoringErrorsFrom(refugeId);
-    return this.getStreamOfReservationsForUser(userId).pipe(
+    return this.getReservationsForUserFromCurrentDate(userId).pipe(
       map((reservations: Reservations) =>
         orderByRefuge(reservations, reservationFactory),
       ),
       mergeAll(),
     );
-  }
-
-  private getStreamOfReservationsForUser(
-    userId: string,
-    secondsFetchData: number = 3000,
-  ): Observable<Reservations> {
-    return timer(0, secondsFetchData)
-      .pipe(
-        mergeMap(() => this.getReservationsForUserFromCurrentDate(userId)),
-        distinctUntilChanged((a, b) => JSON.stringify(a) === JSON.stringify(b)),
-      )
-      .pipe(share());
   }
 
   getReservationsForUserFromCurrentDate(

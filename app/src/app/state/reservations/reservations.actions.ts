@@ -24,6 +24,10 @@ export const fetchReservations = createAction(
   props<{ reservations: RefugeReservationsRelations }>(),
 );
 
+export const errorFetchingReservations = createAction(
+  '[Reservations] Error Fetching Reservations',
+);
+
 export const deleteReservation = createAction(
   '[Reservations] Delete Reservation',
   props<{ id: string }>(),
