@@ -28,7 +28,9 @@ export class ModalEffects {
     () =>
       this.actions$.pipe(
         ofType(closeModal),
-        tap((createData) => this.location.go('/home/')),
+        tap((action) => {
+          if (action.redirectHome) this.location.go('/home/');
+        }),
       ),
     { dispatch: false },
   );

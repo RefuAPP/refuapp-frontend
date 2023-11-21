@@ -25,23 +25,9 @@ import { random } from 'lodash';
 })
 export class ReservationsChartComponent implements OnInit, AfterViewInit {
   @Input({ required: true }) refuge!: Refuge;
-  //    Get vertical bar component with viewchiod
   @ViewChild('verticalBarChart') verticalBarChart?: BarVerticalComponent;
-  testDate1 = new Date('2023-10-14');
-  testDate2 = new Date('2023-10-15');
-
-  testObservable = of([
-    {
-      testDate1: 1,
-      testDate2: 2,
-    },
-  ]);
 
   days: { name: string; value: number; tooltipText: string }[] = [];
-
-  view = [700, 400] as [number, number];
-
-  gradient = false;
 
   colorScheme: Color = {
     name: 'custom',
@@ -56,17 +42,10 @@ export class ReservationsChartComponent implements OnInit, AfterViewInit {
     return value;
   };
 
-  constructor(
-    private changeDetectorRef: ChangeDetectorRef,
-    private occupationService: OccupationService,
-  ) {}
+  constructor() {}
 
   onSelect() {
-    console.log('myballs');
-  }
-
-  getLabels() {
-    return this.days.map((entry) => entry.name);
+    console.log('On Select');
   }
 
   ngOnInit() {
@@ -79,7 +58,7 @@ export class ReservationsChartComponent implements OnInit, AfterViewInit {
       this.days.push({
         name: currentDate.getUTCDate().toString(),
         value: random(0, 12),
-        tooltipText: 'myballs',
+        tooltipText: 'test',
       });
 
       this.colorScheme.domain.push(color);
@@ -93,19 +72,5 @@ export class ReservationsChartComponent implements OnInit, AfterViewInit {
         value: 5,
       },
     ];
-  }
-
-  private getBackgroundColorFromCss(): string {
-    const element = document.querySelector('ion-content');
-    if (element == null) return 'white';
-    const style = window.getComputedStyle(element);
-    return style.backgroundColor;
-  }
-
-  private getTextColorFromCss(): string {
-    const element = document.querySelector('ion-content');
-    if (element == null) return 'black';
-    const style = window.getComputedStyle(element);
-    return style.color;
   }
 }

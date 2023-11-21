@@ -11,4 +11,7 @@ export const openModalWithRefugeId = createAction(
   props<{ refugeId: string }>(),
 );
 
-export const closeModal = createAction('[Modal] Close Modal');
+export const closeModal = createAction(
+  '[Modal] Close Modal',
+  props<{ redirectHome: boolean }>(),
+);

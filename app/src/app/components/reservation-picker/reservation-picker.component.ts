@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { fromISOString } from '../../schemas/night/night';
 import { Refuge } from '../../schemas/refuge/refuge';
 import { TranslateService } from '@ngx-translate/core';
@@ -25,6 +25,5 @@ export class ReservationPickerComponent {
       night,
     };
     this.reservation.emit(reservation);
-    console.log('EMITTED VALUE!');
   }
 }

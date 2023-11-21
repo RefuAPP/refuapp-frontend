@@ -1,5 +1,5 @@
 import { ComponentStore, tapResponse } from '@ngrx/component-store';
-import { concatMap, EMPTY, Observable, of, switchMap, tap } from 'rxjs';
+import { concatMap, EMPTY, Observable, of, switchMap } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { DeviceErrors } from '../../schemas/errors/device';
 import {
@@ -148,9 +148,7 @@ export class ReservationsComponentStore extends ComponentStore<ReservationsState
   readonly createReservation = this.effect(
     (reservation: Observable<ReservationWithoutUserId>) =>
       reservation.pipe(
-        tap(() => console.log('Creating reservation...')),
         concatMap((reservation) => this.createReservation$(reservation)),
-        switchMap(() => this.fetchReservations$()),
       ),
   );
 
@@ -200,6 +198,10 @@ export class ReservationsComponentStore extends ComponentStore<ReservationsState
             );
           },
         ),
+        switchMap((response) => {
+          if (response.status === 'ok') return this.fetchReservations$();
+          else return of(EMPTY);
+        }),
       );
   }
 

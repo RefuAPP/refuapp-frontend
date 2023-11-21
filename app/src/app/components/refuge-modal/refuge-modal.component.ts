@@ -4,21 +4,22 @@ import { closeModal } from '../../state/components/modal/modal.actions';
 import { selectModalState } from '../../state/components/modal/modal.selectors';
 import { AppState } from '../../state/app.state';
 import { Store } from '@ngrx/store';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-refuge-modal',
   templateUrl: './refuge-modal.component.html',
   styleUrls: ['./refuge-modal.component.scss'],
 })
-export class RefugeModalComponent implements OnInit {
+export class RefugeModalComponent {
   modalState$ = this.store.select(selectModalState);
 
   constructor(private store: Store<AppState>) {}
 
-  ngOnInit() {}
-
   dismissedModal() {
-    this.store.dispatch(closeModal());
+    this.modalState$.pipe(take(1)).subscribe((state) => {
+      if (state.isOpen) this.store.dispatch(closeModal({ redirectHome: true }));
+    });
   }
 
   changeCurrentModalSize(modal: IonModal) {
