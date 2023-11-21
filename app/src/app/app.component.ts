@@ -17,6 +17,7 @@ import { clearMessage } from './state/messages/message.actions';
 import { MinorError } from './state/errors/error.reducer';
 import { getBottomItems, getTopItems } from './state/auth/auth.selectors';
 import { isMapLoading } from './state/map/map.selectors';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-root',
@@ -50,6 +51,7 @@ export class AppComponent implements OnInit {
   constructor(
     private store: Store<AppState>,
     private toast: ToastController,
+    private translateService: TranslateService,
   ) {
     this.minorErrors$
       .pipe(
@@ -87,7 +89,7 @@ export class AppComponent implements OnInit {
 
   private async showToast(message: Message, options: ToastOptions) {
     const element = await this.toast.create({
-      message: message.message,
+      message: this.translateService.instant(message.message, message.props),
       ...options,
     });
     await element.present();

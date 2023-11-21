@@ -22,6 +22,10 @@ import {
 } from '../../schemas/reservations/create-reservation';
 import { fromPromise } from 'rxjs/internal/observable/innerFrom';
 import { match } from 'ts-pattern';
+import {
+  CorrectDeleteReservation,
+  ErrorDeleteReservation,
+} from '../../schemas/reservations/delete-reservation';
 
 export interface ReservationsState {
   reservations: RefugeReservationsRelations;
@@ -72,7 +76,7 @@ export class ReservationsComponentStore extends ComponentStore<ReservationsState
           return this.getReservations(userId, (reservations) => {
             this.store.dispatch(
               showMessages({
-                message: 'TODO: Reservas cargadas correctamente',
+                message: 'RESERVATIONS.FETCH_OPERATION.CORRECT',
               }),
             );
           });
@@ -130,20 +134,7 @@ export class ReservationsComponentStore extends ComponentStore<ReservationsState
     this.patchState({ isLoading: true });
     return this.reservationService.deleteReservation(reservationId).pipe(
       tapResponse(
-        (reservations) => {
-          this.store.dispatch(
-            showMessages({ message: 'TODO: Reserva eliminada correctamente' }),
-          );
-          this.patchState((state) => {
-            return {
-              reservations: this.removeReservationWithId(
-                reservationId,
-                state.reservations,
-              ),
-              isLoading: false,
-            };
-          });
-        },
+        (reservation) => this.onDeleteReservationResponse(reservation),
         () => {
           this.patchState({ isLoading: false });
           this.store.dispatch(
@@ -152,6 +143,30 @@ export class ReservationsComponentStore extends ComponentStore<ReservationsState
         },
       ),
     );
+  }
+
+  private onDeleteReservationResponse(
+    reservation: CorrectDeleteReservation | ErrorDeleteReservation,
+  ) {
+    match(reservation)
+      .with({ status: 'ok' }, (res) => {
+        this.store.dispatch(
+          showMessages({ message: 'RESERVATIONS.DELETE_OPERATION.CORRECT' }),
+        );
+        this.patchState((state) => {
+          return {
+            reservations: this.removeReservationWithId(
+              res.reservation.id,
+              state.reservations,
+            ),
+            isLoading: false,
+          };
+        });
+      })
+      .with({ status: 'error' }, (err) => {
+        this.patchState({ isLoading: false });
+        this.store.dispatch(minorError({ error: err.error }));
+      });
   }
 
   readonly createReservation = this.effect(
@@ -193,7 +208,8 @@ export class ReservationsComponentStore extends ComponentStore<ReservationsState
               .with({ status: 'ok' }, (res) => {
                 this.store.dispatch(
                   showMessages({
-                    message: 'TODO: Reserva creada correctamente',
+                    message: 'RESERVATIONS.CREATE_OPERATION.CORRECT',
+                    props: { day: reservation.night.day },
                   }),
                 );
               })
@@ -217,13 +233,25 @@ export class ReservationsComponentStore extends ComponentStore<ReservationsState
   private handleCreateError(error: CreateReservationError) {
     match(error)
       .with(CreateReservationDataError.NTP_SERVER_IS_DOWN, () =>
-        this.store.dispatch(customMinorError({ error })),
+        this.store.dispatch(
+          customMinorError({
+            error: 'RESERVATIONS.CREATE_OPERATION.SERVER_ERROR',
+          }),
+        ),
       )
       .with(CreateReservationDataError.INVALID_DATE, () =>
-        this.store.dispatch(customMinorError({ error })),
+        this.store.dispatch(
+          customMinorError({
+            error: 'RESERVATIONS.CREATE_OPERATION.INVALID_DATE',
+          }),
+        ),
       )
       .with(CreateReservationDataError.REFUGE_OR_USER_NOT_FOUND, () =>
-        this.store.dispatch(customMinorError({ error })),
+        this.store.dispatch(
+          customMinorError({
+            error: 'RESERVATIONS.CREATE_OPERATION.REFUGE_OR_USER_NOT_FOUND',
+          }),
+        ),
       )
       .otherwise((error) => this.store.dispatch(minorError({ error })));
   }

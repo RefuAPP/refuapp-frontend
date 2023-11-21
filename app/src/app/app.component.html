@@ -62,7 +62,7 @@
 <ng-container *ngIf="isMapLoading$ | async as loading">
   <ion-loading
     isOpen="{{ loading }}"
-    message="{{ 'TODO_MAP_LOADING' | translate }}"
+    message="{{ 'MAP.LOADING' | translate }}"
   ></ion-loading>
 </ng-container>
 <ng-container *ngIf="hasConnectionError$ | async as error">

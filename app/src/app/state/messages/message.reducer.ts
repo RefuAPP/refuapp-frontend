@@ -3,6 +3,7 @@ import { clearMessage, showMessages } from './message.actions';
 
 export type Message = {
   message: string;
+  props?: any;
   id: number;
 };
 
@@ -17,9 +18,13 @@ export const messageReducer = createReducer(
     counter: 0,
   },
   on(showMessages, (state, action) => ({
-    message: [{ id: state.counter + 1, message: action.message }].concat(
-      state.message,
-    ),
+    message: [
+      {
+        id: state.counter + 1,
+        message: action.message,
+        props: action.props,
+      } as Message,
+    ].concat(state.message),
     counter: state.counter + 1,
   })),
   on(clearMessage, (state, action) => ({

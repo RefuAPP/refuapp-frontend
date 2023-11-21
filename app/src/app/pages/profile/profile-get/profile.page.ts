@@ -87,7 +87,9 @@ export class ProfilePage implements OnInit {
   private async handleUnauthorizedError() {
     await this.showError(async () => {
       await this.showErrorMessage(
-        this.translateService.instant('UNAUTHORIZED_ERROR.MESSAGE'),
+        this.translateService.instant(
+          'MINOR_ERRORS.NOT_ALLOWED_OPERATION_FOR_USER',
+        ),
       ).then();
     });
   }

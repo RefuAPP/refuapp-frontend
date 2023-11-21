@@ -1,5 +1,5 @@
 import { createReducer, on } from '@ngrx/store';
-import { loginCompleted, logOutRequest } from './auth.actions';
+import { loginCompleted, logOutCompleted } from './auth.actions';
 
 export type AuthState = {
   userId?: string;
@@ -12,5 +12,5 @@ export const authReducer = createReducer(
   on(loginCompleted, (state, action) => ({
     userId: action.userId,
   })),
-  on(logOutRequest, (state) => ({})),
+  on(logOutCompleted, (state) => ({})),
 );

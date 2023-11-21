@@ -3,91 +3,91 @@
     "CLIENT_ERROR": {
       "HEADER": "¡Alerta!",
       "SUBHEADER": "¡Tu dispositivo está fallando!",
-      "MESSAGE": "¿Tu dispositivo tiene acceso a internet? Tal vez sea nuestra culpa y nuestros servidores estén caídos",
+      "MESSAGE": "¿Tu dispositivo tiene acceso a internet? Quizás sea nuestra culpa y nuestros servidores estén caídos",
       "OKAY_BUTTON": "Aceptar"
     },
     "RENDER_MAP_ERROR": {
       "HEADER": "Error",
-      "MESSAGE": "Hemos tenido un error cargando el mapa, por favor inténtalo de nuevo",
+      "MESSAGE": "Tuvimos un error cargando el mapa, por favor inténtalo de nuevo",
       "OKAY_BUTTON": "Aceptar"
     },
     "SEARCH_PLACES_BAR": "Buscar un lugar"
   },
   "INTERNAL_ERROR": {
-    "HEADER": "Error Interno",
-    "MESSAGE": "Lo sentimos, estamos experimentando problemas internos. Inténtalo de nuevo más tarde",
-    "EXIT_BUTTON": "Volver a la Página Principal"
+    "HEADER": "Error interno",
+    "MESSAGE": "Lo siento, estamos teniendo problemas internos. Inténtalo de nuevo más tarde",
+    "EXIT_BUTTON": "Volver a inicio"
   },
   "NOT_FOUND_ERROR": {
     "HEADER": "Recurso no encontrado",
-    "MESSAGE": "La página que estás buscando no existe. Puede que estés haciendo algo incorrecto o sea nuestra culpa.",
-    "EXIT_BUTTON": "Volver a la Página Principal"
+    "MESSAGE": "La página que buscas no existe. O eres travieso o es nuestra culpa.",
+    "EXIT_BUTTON": "Volver a inicio"
   },
   "PROGRAMMING_ERROR": {
-    "HEADER": "Error de Programación",
-    "MESSAGE": "Somos malos, nuestro código tiene un error de programación y no lo notamos. ¡Envíanos un correo electrónico!",
-    "EXIT_BUTTON": "Volver a la Página Principal"
+    "HEADER": "Error de programación",
+    "MESSAGE": "Somos malos, nuestro código tuvo un error de programación y no nos dimos cuenta. ¡Envíanos un correo electrónico!",
+    "EXIT_BUTTON": "Volver a inicio"
   },
   "FORBIDDEN_ERROR": {
     "HEADER": "Recurso prohibido",
-    "MESSAGE": "La página que estás buscando está prohibida para tu rol. O estás siendo travieso o es nuestra culpa.",
+    "MESSAGE": "La página que buscas está prohibida para tu rol. O estás siendo travieso o es nuestra culpa.",
     "EXIT": "Ir a inicio"
   },
   "LOGIN": {
-    "HEADER": "Iniciar Sesión",
+    "HEADER": "Inicio de sesión",
     "USERNAME": {
-      "FIELD": "Nombre de Usuario",
-      "ERROR_REQUIRED": "El nombre de usuario es obligatorio",
+      "FIELD": "Nombre de usuario",
+      "ERROR_REQUIRED": "Se requiere nombre de usuario",
       "ERROR_FORMATTED": "El número de teléfono no es correcto",
       "ERROR_DOESNT_EXIST": "El usuario no existe"
     },
     "PASSWORD": {
       "FIELD": "Contraseña",
-      "ERROR_REQUIRED": "La contraseña es obligatoria",
+      "ERROR_REQUIRED": "Se requiere contraseña",
       "ERROR_INCORRECT_PASSWORD": "La contraseña es incorrecta"
     },
-    "BUTTON": "Iniciar Sesión",
-    "LOADING": "Iniciando sesión..."
+    "BUTTON": "Iniciar sesión",
+    "LOADING": "Iniciando sesión...."
   },
   "SIGNUP": {
-    "HEADER": "Registro",
+    "HEADER": "Registrarse",
     "USERNAME": {
-      "FIELD": "Nombre de Usuario",
-      "ERROR": "El nombre de usuario es obligatorio"
+      "FIELD": "Nombre de usuario",
+      "ERROR": "Se requiere nombre de usuario"
     },
     "PHONE_NUMBER": {
-      "FIELD": "Número de Teléfono",
-      "ERROR": "El número de teléfono es obligatorio",
+      "FIELD": "Número de teléfono",
+      "ERROR": "Se requiere número de teléfono",
       "INCORRECT_PHONE_NUMBER": "El número de teléfono no es correcto"
     },
     "EMERGENCY_NUMBER": {
-      "FIELD": "Número de Emergencia",
-      "ERROR": "El número de emergencia es obligatorio",
+      "FIELD": "Número de emergencia",
+      "ERROR": "Se requiere número de emergencia",
       "INCORRECT_PHONE_NUMBER": "El número de emergencia no es correcto"
     },
     "PASSWORD": {
       "FIELD": "Contraseña",
-      "ERROR": "La contraseña es obligatoria"
+      "ERROR": "Se requiere contraseña"
     },
     "REPEATED_PASSWORD": {
-      "FIELD": "Repetir Contraseña",
-      "ERROR": "Es obligatorio repetir la contraseña"
+      "FIELD": "Repetir contraseña",
+      "ERROR": "Se requiere repetir la contraseña"
     },
     "PASSWORDS_DONT_MATCH": "Las contraseñas no coinciden",
-    "ALREADY_EXISTING_USER": "El usuario ya existe con este número de teléfono",
-    "BUTTON": "Registro",
-    "LOADING": "Creando el usuario..."
+    "ALREADY_EXISTING_USER": "Usuario ya existe con este número de teléfono",
+    "BUTTON": "Registrarse",
+    "LOADING": "Creando el usuario...."
   },
   "LOGOUT": {
-    "HEADER": "Cerrar Sesión"
+    "HEADER": "Cerrar sesión"
   },
   "REFUGE": {
     "INFORMATION": {
       "REGION": "Región",
       "ALTITUDE": "Altitud",
       "ALTITUDE_UNITY": "{{altitude}} metros",
-      "WINTER_CAPACITY": "Capacidad en Invierno",
-      "SUMMER_CAPACITY": "Capacidad en Verano",
+      "WINTER_CAPACITY": "Capacidad de invierno",
+      "SUMMER_CAPACITY": "Capacidad de verano",
       "CAPACITY_UNITY": "{{capacity}} personas"
     },
     "RESERVATIONS": {
@@ -95,12 +95,12 @@
       "BUTTON": "Reservar",
       "INFO": {
         "OKAY": "Aceptar",
-        "BODY": "La mayoría de los refugios en realidad no tienen un sistema de reservas. Se espera que los huéspedes los utilicen cuando lo deseen. Sin embargo, lo que RefuApp intenta proporcionar es un mecanismo a través del cual los huéspedes pueden notificar a otros usuarios de RefuApp sobre su intención de ir a un refugio en una fecha específica, facilitando así saber si un refugio estará lleno o no.",
+        "BODY": "La mayoría de los refugios en realidad no tienen un sistema de reservas. Se espera que los huéspedes los utilicen cuando quieran. Sin embargo, RefuApp tiene como objetivo proporcionar un mecanismo a través del cual los huéspedes puedan notificar a otros usuarios de RefuApp sobre su intención de visitar un refugio dado en una fecha específica, facilitando así determinar si es probable que un refugio esté lleno o no.",
         "HEADER": "Aclaración sobre reservas"
       }
     },
     "OCCUPATION": {
-      "HISTORIAL": "Histórico de Ocupación",
+      "HISTORIAL": "Histórico de ocupación",
       "XLABEL": "Día",
       "YLABEL": "Reservas"
     }
@@ -109,51 +109,62 @@
     "HEADER": "Reservas",
     "DELETE_ALERT": {
       "HEADER": "¡Alerta!",
-      "SUBHEADER": "¿Deseas eliminar tu reserva?",
+      "SUBHEADER": "¿Quieres eliminar tu reserva?",
       "MESSAGE": "¿Quieres eliminar tu reserva para el día {{day}}?",
       "BUTTON": "Sí"
     },
     "DELETE_OPERATION": {
-      "CORRECT": "Reserva eliminada",
-      "NOT_FOUND": "La reserva no existe, ¿tal vez ya fue eliminada?"
+      "CORRECT": "¡Reserva eliminada!"
+    },
+    "CREATE_OPERATION": {
+      "CORRECT": "¡Reserva en el día {{day}} creada!",
+      "INVALID_DATE": "La fecha seleccionada no es válida.",
+      "NOT_ALLOWED_CREATION_FOR_USER": "No puedes crear una reserva para otro usuario",
+      "REFUGE_OR_USER_NOT_FOUND": "Refugio o usuario ha sido eliminado, actualiza la página"
+    },
+    "FETCH_OPERATION": {
+      "CORRECT": "¡Reservas actualizadas correctamente!"
     },
     "DELETE_BUTTON": "Eliminar",
     "DETAILS": {
       "HEADER": "Día {{day}}",
       "MESSAGE": "El día {{day}} del mes {{month}} del año: {{year}}"
-    },
-    "CREATE_OPERATION": {
-      "CORRECT": "¡Reserva en el día {{day}} creada!",
-      "NOT_AUTHENTICATED_OR_INVALID_DATE": "¡La fecha seleccionada no es válida! O estás haciendo algo extraño",
-      "NOT_ALLOWED_CREATION_FOR_USER": "No puedes crear una reserva para otro usuario",
-      "SERVER_ERROR": "Error del servidor, inténtalo de nuevo más tarde",
-      "REFUGE_OR_USER_NOT_FOUND": "Refugio o usuario ha sido eliminado, actualiza la página",
-      "PROGRAMMING_ERROR": "Somos incompetentes, nuestro código tuvo un error de programación y no nos dimos cuenta. ¡Envíanos un correo electrónico!"
     }
+  },
+  "MAP": {
+    "LOADING": "Cargando mapa..."
   },
   "PROFILE": {
     "HEADER": "Perfil",
     "USER_NAME": "Hola, {{username}}",
-    "PHONE_NUMBER": "Número de Teléfono: {{phoneNumber}}",
-    "EMERGENCY_PHONE_NUMBER": "Número de Teléfono de Emergencia: {{emergencyPhoneNumber}}",
-    "SETTINGS": "Configuraciones"
+    "PHONE_NUMBER": "Número de teléfono: {{phoneNumber}}",
+    "EMERGENCY_PHONE_NUMBER": "Número de emergencia: {{emergencyPhoneNumber}}",
+    "SETTINGS": "Configuración"
   },
   "SETTINGS": {
-    "FORCE_LANGUAGE": "Forzar Idioma",
     "LANGUAGE": "Idioma",
+    "FORCE_LANGUAGE": "Forzar idioma",
     "SELECT": "Seleccionar",
     "SPANISH": "Español",
     "CATALAN": "Catalán",
-    "ENGLISH": "Inglés"
+    "ENGLISH": "Inglés",
+    "CHANGED_LANGUAGE": "¡Idioma cambiado correctamente!",
+    "ERROR_CHANGING_LANGUAGE": "Error al cambiar el idioma"
   },
   "MENU": {
     "HOME": "Inicio",
     "RESERVATIONS": "Reservas",
     "PROFILE": "Perfil",
-    "LOGOUT": "Cerrar Sesión",
-    "LOGIN": "Inicia Sesión"
+    "LOGOUT": "Cerrar sesión",
+    "LOGIN": "Iniciar sesión"
   },
-  "UNAUTHORIZED_ERROR": {
-    "MESSAGE": "No estás autorizado para acceder a este recurso. ¿Estás conectado?"
+  "MINOR_ERRORS": {
+    "UNKNOWN": "Error desconocido, inténtalo de nuevo más tarde.",
+    "INCORRECT_DATA_FORMAT_OF_SERVER": "¡Los desarrolladores del backend son malos! Lo arruinaron.",
+    "INCORRECT_DATA_FORMAT_OF_CLIENT": "¡Los desarrolladores del frontend son malos! Lo arruinaron.",
+    "NOT_ALLOWED_OPERATION_FOR_USER": "No tienes permitido realizar esta operación",
+    "NOT_AUTHENTICATED": "No estás autenticado",
+    "NOT_FOUND": "El recurso no se pudo encontrar, inténtalo de nuevo más tarde",
+    "NOT_CONNECTED": "No estás conectado a internet, inténtalo más tarde"
   }
 }

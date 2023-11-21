@@ -18,6 +18,8 @@ import {
 import { fromPromise } from 'rxjs/internal/observable/innerFrom';
 import { LanguageStorage } from '../../services/translate/language-settings.service';
 import { DeviceLanguageService } from '../../services/translate/device-language.service';
+import { showMessages } from '../messages/message.actions';
+import { customMinorError } from '../errors/error.actions';
 
 const LANGUAGES_SUPPORTED = ['en', 'es', 'ca'];
 
@@ -106,14 +108,13 @@ export class LanguageEffects {
           map(() =>
             changeLanguageCorrect({ languageCode: createData.languageCode }),
           ),
-          catchError((error) =>
-            of(
-              changeLanguageError({
-                error: error,
-                languageCode: createData.languageCode,
-              }),
-            ),
-          ),
+          catchError((error) => [
+            changeLanguageError({
+              error: error,
+              languageCode: createData.languageCode,
+            }),
+            customMinorError({ error: 'SETTINGS.ERROR_CHANGING_LANGUAGE' }),
+          ]),
         ),
       ),
     ),

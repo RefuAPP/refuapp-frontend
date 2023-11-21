@@ -3,91 +3,91 @@
     "CLIENT_ERROR": {
       "HEADER": "Alerta!",
       "SUBHEADER": "El teu dispositiu està fallant!",
-      "MESSAGE": "El teu dispositiu té accés a Internet? Potser és culpa nostra i els nostres servidors estan fora de servei",
+      "MESSAGE": "El teu dispositiu té accés a Internet? Potser és culpa nostra i els nostres servidors estan caiguts",
       "OKAY_BUTTON": "D'acord"
     },
     "RENDER_MAP_ERROR": {
       "HEADER": "Error",
-      "MESSAGE": "Hem tingut un error carregant el mapa. Si us plau, torna-ho a provar",
+      "MESSAGE": "Hem tingut un error carregant el mapa, si us plau, torna-ho a provar",
       "OKAY_BUTTON": "D'acord"
     },
     "SEARCH_PLACES_BAR": "Cerca un lloc"
   },
   "INTERNAL_ERROR": {
-    "HEADER": "Error Intern",
-    "MESSAGE": "Ho sentim, estem experimentant problemes interns. Torna-ho a provar més tard",
-    "EXIT_BUTTON": "Torna a la Pàgina Principal"
+    "HEADER": "Error intern",
+    "MESSAGE": "Ho sento, estem tenint problemes interns. Torna-ho a provar més tard",
+    "EXIT_BUTTON": "Tornar a inici"
   },
   "NOT_FOUND_ERROR": {
     "HEADER": "Recurs no trobat",
-    "MESSAGE": "La pàgina que estàs buscant no existeix. Potser estàs fent alguna cosa malament o bé és culpa nostra.",
-    "EXIT_BUTTON": "Torna a la Pàgina Principal"
+    "MESSAGE": "La pàgina que busques no existeix. O ets un poc dolent o és culpa nostra.",
+    "EXIT_BUTTON": "Tornar a inici"
   },
   "PROGRAMMING_ERROR": {
-    "HEADER": "Error de Programació",
-    "MESSAGE": "Som ineficients, el nostre codi té un error de programació i no l'hem detectat. Envian's un correu electrònic!",
-    "EXIT_BUTTON": "Torna a la Pàgina Principal"
+    "HEADER": "Error de programació",
+    "MESSAGE": "Som dolents, el nostre codi té un error de programació i no ens n'hem adonat. Envia'ns un correu electrònic!",
+    "EXIT_BUTTON": "Tornar a inici"
   },
   "FORBIDDEN_ERROR": {
     "HEADER": "Recurs prohibit",
-    "MESSAGE": "La pàgina que estàs buscant està prohibit per al teu rol. O estàs essent un ximplet o és culpa nostra.",
-    "EXIT": "Anar a casa"
+    "MESSAGE": "La pàgina que busques està prohibida pel teu rol. O ets un poc dolent o és culpa nostra.",
+    "EXIT": "Anar a inici"
   },
   "LOGIN": {
-    "HEADER": "Inicia Sessió",
+    "HEADER": "Inici de sessió",
     "USERNAME": {
-      "FIELD": "Nom d'Usuari",
-      "ERROR_REQUIRED": "El nom d'usuari és obligatori",
+      "FIELD": "Nom d'usuari",
+      "ERROR_REQUIRED": "Es requereix un nom d'usuari",
       "ERROR_FORMATTED": "El número de telèfon no és correcte",
       "ERROR_DOESNT_EXIST": "L'usuari no existeix"
     },
     "PASSWORD": {
       "FIELD": "Contrasenya",
-      "ERROR_REQUIRED": "La contrasenya és obligatòria",
-      "ERROR_INCORRECT_PASSWORD": "La contrasenya no és correcta"
+      "ERROR_REQUIRED": "Es requereix una contrasenya",
+      "ERROR_INCORRECT_PASSWORD": "La contrasenya és incorrecta"
     },
-    "BUTTON": "Inicia Sessió",
-    "LOADING": "Iniciant la sessió..."
+    "BUTTON": "Iniciar sessió",
+    "LOADING": "Iniciant sessió...."
   },
   "SIGNUP": {
-    "HEADER": "Registre",
+    "HEADER": "Registrar-se",
     "USERNAME": {
-      "FIELD": "Nom d'Usuari",
-      "ERROR": "El nom d'usuari és obligatori"
+      "FIELD": "Nom d'usuari",
+      "ERROR": "Es requereix un nom d'usuari"
     },
     "PHONE_NUMBER": {
-      "FIELD": "Número de Telèfon",
-      "ERROR": "El número de telèfon és obligatori",
+      "FIELD": "Número de telèfon",
+      "ERROR": "Es requereix un número de telèfon",
       "INCORRECT_PHONE_NUMBER": "El número de telèfon no és correcte"
     },
     "EMERGENCY_NUMBER": {
-      "FIELD": "Número d'Emergència",
-      "ERROR": "El número d'Emergència és obligatori",
-      "INCORRECT_PHONE_NUMBER": "El número d'Emergència no és correcte"
+      "FIELD": "Número d'emergència",
+      "ERROR": "Es requereix un número d'emergència",
+      "INCORRECT_PHONE_NUMBER": "El número d'emergència no és correcte"
     },
     "PASSWORD": {
       "FIELD": "Contrasenya",
-      "ERROR": "La contrasenya és obligatòria"
+      "ERROR": "Es requereix una contrasenya"
     },
     "REPEATED_PASSWORD": {
-      "FIELD": "Repeteix la Contrasenya",
-      "ERROR": "Cal repetir la contrasenya"
+      "FIELD": "Repetir contrasenya",
+      "ERROR": "Es requereix repetir la contrasenya"
     },
     "PASSWORDS_DONT_MATCH": "Les contrasenyes no coincideixen",
-    "ALREADY_EXISTING_USER": "L'usuari ja existeix amb aquest número de telèfon",
-    "BUTTON": "Registre",
-    "LOADING": "Creant l'usuari..."
+    "ALREADY_EXISTING_USER": "Usuari ja existeix amb aquest número de telèfon",
+    "BUTTON": "Registrar-se",
+    "LOADING": "Creant l'usuari...."
   },
   "LOGOUT": {
-    "HEADER": "Tanca la Sessió"
+    "HEADER": "Tancar sessió"
   },
   "REFUGE": {
     "INFORMATION": {
       "REGION": "Regió",
       "ALTITUDE": "Altitud",
       "ALTITUDE_UNITY": "{{altitude}} metres",
-      "WINTER_CAPACITY": "Capacitat a l'Hivern",
-      "SUMMER_CAPACITY": "Capacitat a l'Estiu",
+      "WINTER_CAPACITY": "Capacitat d'hivern",
+      "SUMMER_CAPACITY": "Capacitat d'estiu",
       "CAPACITY_UNITY": "{{capacity}} persones"
     },
     "RESERVATIONS": {
@@ -95,12 +95,12 @@
       "BUTTON": "Reservar",
       "INFO": {
         "OKAY": "D'acord",
-        "BODY": "La majoria dels refugis en realitat no tenen un sistema de reserves. S'espera que els hostes els utilitzin quan vulguin. No obstant això, el que RefuApp intenta proporcionar és un mecanisme a través del qual els hostes poden notificar a altres usuaris de RefuApp sobre la seva intenció d'anar a un refugi en una data específica, facilitant així saber si un refugi estarà ple o no.",
-        "HEADER": "Aclariment sobre reserves"
+        "BODY": "La majoria dels refugis en realitat no tenen un sistema de reserves. S'espera que els hostes els utilitzin quan vulguin. No obstant això, RefuApp té com a objectiu proporcionar un mecanisme a través del qual els hostes puguin notificar a altres usuaris de RefuApp sobre la seva intenció de visitar un refugi donat en una data específica, facilitant així determinar si és probable que un refugi estigui ple o no.",
+        "HEADER": "Clarificació sobre reserves"
       }
     },
     "OCCUPATION": {
-      "HISTORIAL": "Històric d'Ocupació",
+      "HISTORIAL": "Històric d'ocupació",
       "XLABEL": "Dia",
       "YLABEL": "Reserves"
     }
@@ -114,46 +114,57 @@
       "BUTTON": "Sí"
     },
     "DELETE_OPERATION": {
-      "CORRECT": "Reserva eliminada",
-      "NOT_FOUND": "La reserva no existeix, potser ja ha estat eliminada?"
+      "CORRECT": "Reserva eliminada!"
     },
     "CREATE_OPERATION": {
-      "CORRECT": "Reserva pel dia {{day}} creada!",
-      "NOT_AUTHENTICATED_OR_INVALID_DATE": "La data seleccionada no és vàlida! O esteu fent alguna cosa estranya",
-      "NOT_ALLOWED_CREATION_FOR_USER": "No podeu crear una reserva per a un altre usuari",
-      "SERVER_ERROR": "Error del servidor, torneu-ho a intentar més tard",
-      "REFUGE_OR_USER_NOT_FOUND": "Refugi o usuari ha estat eliminat, actualitzeu la pàgina",
-      "PROGRAMMING_ERROR": "Som incompetents, el nostre codi ha tingut un error de programació i no ens hem adonat. Envieu-nos un correu electrònic!"
+      "CORRECT": "Reserva al dia {{day}} creada!",
+      "INVALID_DATE": "La data seleccionada no és vàlida.",
+      "NOT_ALLOWED_CREATION_FOR_USER": "No pots crear una reserva per a un altre usuari",
+      "REFUGE_OR_USER_NOT_FOUND": "Refugi o usuari ha estat eliminat, refresca la pàgina"
     },
-    "DELETE_BUTTON": "Elimina",
+    "FETCH_OPERATION": {
+      "CORRECT": "Reserves actualitzades correctament!"
+    },
+    "DELETE_BUTTON": "Eliminar",
     "DETAILS": {
       "HEADER": "Dia {{day}}",
       "MESSAGE": "El dia {{day}} del mes {{month}} de l'any: {{year}}"
     }
   },
+  "MAP": {
+    "LOADING": "Carregant mapa..."
+  },
   "PROFILE": {
     "HEADER": "Perfil",
     "USER_NAME": "Hola, {{username}}",
-    "PHONE_NUMBER": "Número de Telèfon: {{phoneNumber}}",
-    "EMERGENCY_PHONE_NUMBER": "Número de Telèfon d'Emergència: {{emergencyPhoneNumber}}",
-    "SETTINGS": "Configuracions"
+    "PHONE_NUMBER": "Número de telèfon: {{phoneNumber}}",
+    "EMERGENCY_PHONE_NUMBER": "Número d'emergència: {{emergencyPhoneNumber}}",
+    "SETTINGS": "Configuració"
   },
   "SETTINGS": {
-    "FORCE_LANGUAGE": "Força l'idioma",
     "LANGUAGE": "Idioma",
-    "SELECT": "Selecciona",
+    "FORCE_LANGUAGE": "Forçar idioma",
+    "SELECT": "Seleccionar",
     "SPANISH": "Espanyol",
     "CATALAN": "Català",
-    "ENGLISH": "Anglès"
+    "ENGLISH": "Anglès",
+    "CHANGED_LANGUAGE": "Idioma canviat correctament!",
+    "ERROR_CHANGING_LANGUAGE": "Error en canviar l'idioma"
   },
   "MENU": {
     "HOME": "Inici",
     "RESERVATIONS": "Reserves",
     "PROFILE": "Perfil",
-    "LOGOUT": "Tanca Sessió",
-    "LOGIN": "Inicia Sessió"
+    "LOGOUT": "Tancar sessió",
+    "LOGIN": "Iniciar sessió"
   },
-  "UNAUTHORIZED_ERROR": {
-    "MESSAGE": "No estàs autoritzat a accedir a aquest recurs. Estàs connectat?"
+  "MINOR_ERRORS": {
+    "UNKNOWN": "Error desconegut, torna-ho a provar més tard.",
+    "INCORRECT_DATA_FORMAT_OF_SERVER": "Els desenvolupadors del backend són dolents! Ho han estropejat.",
+    "INCORRECT_DATA_FORMAT_OF_CLIENT": "Els desenvolupadors del frontend són dolents! Ho han estropejat.",
+    "NOT_ALLOWED_OPERATION_FOR_USER": "No tens permès fer aquesta operació",
+    "NOT_AUTHENTICATED": "No estàs autenticat",
+    "NOT_FOUND": "El recurs no es pot trobar, torna-ho a provar més tard",
+    "NOT_CONNECTED": "No estàs connectat a Internet, torna-ho a provar més tard"
   }
 }

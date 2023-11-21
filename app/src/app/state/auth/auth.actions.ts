@@ -6,6 +6,8 @@ export const login = createAction(
   props<{ token: Token }>(),
 );
 
+export const loginFailed = createAction('[Auth] Login Failed');
+
 export const loginCompleted = createAction(
   '[Auth] Login Completed',
   props<{ userId: string }>(),

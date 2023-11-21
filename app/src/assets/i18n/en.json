@@ -114,22 +114,25 @@
       "BUTTON": "Yes"
     },
     "DELETE_OPERATION": {
-      "CORRECT": "Reservation deleted!",
-      "NOT_FOUND": "Reservation doesn't exists, maybe it was already deleted?"
+      "CORRECT": "Reservation deleted!"
     },
     "CREATE_OPERATION": {
       "CORRECT": "Reservation on day {{day}} created!",
-      "NOT_AUTHENTICATED_OR_INVALID_DATE": "The selected date is invalid! Or you are doing something weird",
+      "INVALID_DATE": "The selected date is invalid!",
       "NOT_ALLOWED_CREATION_FOR_USER": "You can't create a reservation for another user",
-      "SERVER_ERROR": "Server error, try again later",
-      "REFUGE_OR_USER_NOT_FOUND": "Refuge or user has been deleted, refresh the page",
-      "PROGRAMMING_ERROR": "We suck, our code had a programming error and we didn't notice it. Send us an email!"
+      "REFUGE_OR_USER_NOT_FOUND": "Refuge or user has been deleted, refresh the page"
+    },
+    "FETCH_OPERATION": {
+      "CORRECT": "Reservations updated correctly!"
     },
     "DELETE_BUTTON": "Delete",
     "DETAILS": {
       "HEADER": "Day {{day}}",
       "MESSAGE": "The day {{day}} of month {{month}} of year: {{year}}"
     }
+  },
+  "MAP": {
+    "LOADING": "Loading map..."
   },
   "PROFILE": {
     "HEADER": "Profile",
@@ -144,7 +147,9 @@
     "SELECT": "Select",
     "SPANISH": "Spanish",
     "CATALAN": "Catalan",
-    "ENGLISH": "English"
+    "ENGLISH": "English",
+    "CHANGED_LANGUAGE": "Language changed correctly!",
+    "ERROR_CHANGING_LANGUAGE": "Error changing language"
   },
   "MENU": {
     "HOME": "Home",
@@ -153,7 +158,13 @@
     "LOGOUT": "LogOut",
     "LOGIN": "LogIn"
   },
-  "UNAUTHORIZED_ERROR": {
-    "MESSAGE": "You are not authorized to access this resource. Are you logged in?"
+  "MINOR_ERRORS": {
+    "UNKNOWN": "Unknown error, try again later.",
+    "INCORRECT_DATA_FORMAT_OF_SERVER": "Backend developers suck! They messed it up.",
+    "INCORRECT_DATA_FORMAT_OF_CLIENT": "Frontend developers suck! They messed it up",
+    "NOT_ALLOWED_OPERATION_FOR_USER": "You are not allowed to do this operation",
+    "NOT_AUTHENTICATED": "You are not authenticated",
+    "NOT_FOUND": "Resource couldn't be found, try again later",
+    "NOT_CONNECTED": "You are not connected to the internet, retry later"
   }
 }

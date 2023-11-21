@@ -43,10 +43,35 @@ export class ErrorEffects {
   createCustomMinorErrorFromNormalError$ = createEffect(() =>
     this.actions$.pipe(
       ofType(minorError),
-      // TODO: here translate the error!
-      map((error) => customMinorError({ error: error.error })),
+      map((error) =>
+        customMinorError({ error: this.getStringFor(error.error) }),
+      ),
     ),
   );
+
+  private getStringFor(error: AllErrors): string {
+    return match(error)
+      .with(ServerErrors.UNKNOWN_ERROR, () => 'MINOR_ERRORS.UNKNOWN')
+      .with(
+        ServerErrors.INCORRECT_DATA_FORMAT_OF_CLIENT,
+        () => 'MINOR_ERRORS.INCORRECT_DATA_FORMAT_OF_CLIENT',
+      )
+      .with(
+        ServerErrors.INCORRECT_DATA_FORMAT_OF_SERVER,
+        () => 'MINOR_ERRORS.INCORRECT_DATA_FORMAT_OF_SERVER',
+      )
+      .with(ResourceErrors.NOT_FOUND, () => 'MINOR_ERRORS.NOT_FOUND')
+      .with(
+        PermissionsErrors.NOT_AUTHENTICATED,
+        () => 'MINOR_ERRORS.NOT_AUTHENTICATED',
+      )
+      .with(
+        PermissionsErrors.NOT_ALLOWED_OPERATION_FOR_USER,
+        () => 'MINOR_ERRORS.NOT_ALLOWED_OPERATION_FOR_USER',
+      )
+      .with(DeviceErrors.NOT_CONNECTED, () => 'MINOR_ERRORS.NOT_CONNECTED')
+      .exhaustive();
+  }
 
   private redirect(error: AllErrors) {
     match(error)

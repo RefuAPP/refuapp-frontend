@@ -11,10 +11,13 @@ import {
   logOutCompleted,
   logOutRequest,
   login,
+  loginFailed,
 } from './auth.actions';
 import { combineLatest, map, switchMap, tap } from 'rxjs';
 import { fromPromise } from 'rxjs/internal/observable/innerFrom';
 import { Router } from '@angular/router';
+import { fatalError } from '../errors/error.actions';
+import { ServerErrors } from 'src/app/schemas/errors/server';
 
 @Injectable()
 export class AuthEffects {
@@ -45,11 +48,12 @@ export class AuthEffects {
         fromPromise(this.authService.authenticate(action.token)),
       ),
       switchMap(() => this.authService.getUserId()),
-      map((userId) => {
-        if (userId) return loginCompleted({ userId });
-        return loginCompleted({
-          userId: 'TODO: ERROR SAVING HERE',
-        });
+      switchMap((userId) => {
+        if (userId) return [loginCompleted({ userId })];
+        return [
+          loginFailed(),
+          fatalError({ error: ServerErrors.UNKNOWN_ERROR }),
+        ];
       }),
     ),
   );
