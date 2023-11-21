@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { IonModal } from '@ionic/angular';
-import { closeModal } from '../../state/components/modal/modal.actions';
-import { selectModalState } from '../../state/components/modal/modal.selectors';
 import { AppState } from '../../state/app.state';
 import { Store } from '@ngrx/store';
 import { take } from 'rxjs';
+import { selectModalState } from '../../state/modal/modal.selectors';
+import { closeModal } from '../../state/modal/modal.actions';
 
 @Component({
   selector: 'app-refuge-modal',

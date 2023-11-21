@@ -25,7 +25,6 @@ import { languageReducer } from './state/language/language.reducer';
 import { InitEffects } from './state/init/init.effects';
 import { initReducer } from './state/init/init.reducer';
 import { environment } from '../environments/environment';
-import { modalReducer } from './state/components/modal/modal.reducer';
 import { mapReducer } from './state/map/map.reducer';
 import { MapEffects } from './state/map/map.effects';
 import { errorReducer } from './state/errors/error.reducer';
@@ -33,9 +32,10 @@ import { ErrorEffects } from './state/errors/error.effects';
 import { ReservationsPageModule } from './pages/reservations/reservations.module';
 import { refugesReducer } from './state/refuges/refuges.reducer';
 import { RefugesEffects } from './state/refuges/refuges.effects';
-import { ModalEffects } from './state/components/modal/modal.effects';
 import { messageReducer } from './state/messages/message.reducer';
 import { HomePageModule } from './pages/home/home.module';
+import { modalReducer } from './state/modal/modal.reducer';
+import { ModalEffects } from './state/modal/modal.effects';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');

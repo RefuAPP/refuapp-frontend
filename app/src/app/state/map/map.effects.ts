@@ -2,7 +2,6 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { catchError, combineLatest, map, of, switchMap, tap } from 'rxjs';
 import { fromPromise } from 'rxjs/internal/observable/innerFrom';
 import { cloneDeep } from 'lodash';
-import { openModal } from '../components/modal/modal.actions';
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../app.state';
@@ -19,6 +18,7 @@ import { loadedMapLibrary } from '../init/init.actions';
 import { loadedRefuges } from '../refuges/refuges.actions';
 import { fatalError } from '../errors/error.actions';
 import { ServerErrors } from '../../schemas/errors/server';
+import { openModal } from '../modal/modal.actions';
 
 @Injectable()
 export class MapEffects {
@@ -26,7 +26,6 @@ export class MapEffects {
     private actions$: Actions,
     private store: Store<AppState>,
     private mapService$: MapService,
-    private refugeService: RefugeService,
   ) {}
 
   loadMap$ = createEffect(() =>

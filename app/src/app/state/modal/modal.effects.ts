@@ -3,9 +3,9 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { catchError, concatMap, map, of, tap } from 'rxjs';
 import { closeModal, openModal, openModalWithRefugeId } from './modal.actions';
 import { Location } from '@angular/common';
-import { RefugeService } from '../../../services/refuge/refuge.service';
-import { fatalError, minorError } from '../../errors/error.actions';
-import { DeviceErrors } from '../../../schemas/errors/device';
+import { RefugeService } from '../../services/refuge/refuge.service';
+import { fatalError, minorError } from '../errors/error.actions';
+import { DeviceErrors } from '../../schemas/errors/device';
 
 @Injectable()
 export class ModalEffects {

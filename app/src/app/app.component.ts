@@ -4,14 +4,6 @@ import { AppState } from './state/app.state';
 import { concatMap, filter, Observable, tap } from 'rxjs';
 import { areLibrariesLoaded } from './state/init/init.selectors';
 import {
-  isLoading,
-  LoadingState,
-} from './state/components/loading/loading.selector';
-import {
-  getBottomItems,
-  getTopItems,
-} from './state/components/menu/menu.selector';
-import {
   clientHasErrorConnection,
   getMinorErrors,
 } from './state/errors/error.selectors';
@@ -23,6 +15,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Message } from './state/messages/message.reducer';
 import { clearMessage } from './state/messages/message.actions';
 import { MinorError } from './state/errors/error.reducer';
+import { getBottomItems, getTopItems } from './state/auth/auth.selectors';
+import { isMapLoading } from './state/map/map.selectors';
 
 @Component({
   selector: 'app-root',
@@ -32,7 +26,7 @@ import { MinorError } from './state/errors/error.reducer';
 export class AppComponent implements OnInit {
   topMenuItems$ = this.store.select(getTopItems);
   bottomMenuItems$ = this.store.select(getBottomItems);
-  isLoading$: Observable<LoadingState> = this.store.select(isLoading);
+  isMapLoading$: Observable<boolean> = this.store.select(isMapLoading);
   public alertButtons = [
     {
       text: 'OK',
@@ -46,11 +40,10 @@ export class AppComponent implements OnInit {
     clientHasErrorConnection,
   );
   canShowPage$ = this.store.select(areLibrariesLoaded);
-
-  minorErrors$ = this.store
+  private minorErrors$ = this.store
     .select(getMinorErrors)
     .pipe(filter((errors) => errors !== undefined)) as Observable<MinorError>;
-  messages$ = this.store
+  private messages$ = this.store
     .select(getMessages)
     .pipe(filter((message) => message !== undefined)) as Observable<Message>;
 

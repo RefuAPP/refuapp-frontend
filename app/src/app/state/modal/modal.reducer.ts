@@ -1,6 +1,6 @@
 import { createReducer, on } from '@ngrx/store';
 import { closeModal, openModal } from './modal.actions';
-import { Refuge } from '../../../schemas/refuge/refuge';
+import { Refuge } from '../../schemas/refuge/refuge';
 
 export type ModalState = {
   refuge?: Refuge;

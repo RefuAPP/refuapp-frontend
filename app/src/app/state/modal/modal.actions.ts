@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { Refuge } from '../../../schemas/refuge/refuge';
+import { Refuge } from '../../schemas/refuge/refuge';
 
 export const openModal = createAction(
   '[Modal] Open Modal',

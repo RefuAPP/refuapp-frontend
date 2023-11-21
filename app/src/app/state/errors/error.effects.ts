@@ -14,7 +14,7 @@ import {
   fixFatalError,
   minorError,
 } from './error.actions';
-import { closeModal } from '../components/modal/modal.actions';
+import { closeModal } from '../modal/modal.actions';
 
 @Injectable()
 export class ErrorEffects {

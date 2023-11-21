@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../state/app.state';
-import { openModalWithRefugeId } from '../../state/components/modal/modal.actions';
+import { openModalWithRefugeId } from '../../state/modal/modal.actions';
 
 @Component({
   selector: 'app-home',
