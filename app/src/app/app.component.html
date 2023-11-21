@@ -58,13 +58,13 @@
   </ion-menu>
   <ion-router-outlet id="main-content"></ion-router-outlet>
   <app-refuge-modal></app-refuge-modal>
+  <ng-container *ngIf="isMapLoading$ | async as loading">
+    <ion-loading
+      isOpen="{{ loading }}"
+      message="{{ 'MAP.LOADING' | translate }}"
+    ></ion-loading>
+  </ng-container>
 </ion-app>
-<ng-container *ngIf="isMapLoading$ | async as loading">
-  <ion-loading
-    isOpen="{{ loading }}"
-    message="{{ 'MAP.LOADING' | translate }}"
-  ></ion-loading>
-</ng-container>
 <ng-container *ngIf="hasConnectionError$ | async as error">
   <ion-alert
     isOpen="{{ error }}"
