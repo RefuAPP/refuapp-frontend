@@ -27,5 +27,6 @@ import { MapComponent } from '../../components/map/map.component';
     MapComponent,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  exports: [RefugeModalComponent],
 })
 export class HomePageModule {}

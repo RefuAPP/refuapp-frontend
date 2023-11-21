@@ -1,9 +1,22 @@
-import {AfterViewInit, ChangeDetectorRef, Component, Input, OnInit, ViewChild} from '@angular/core';
-import {Refuge} from '../../schemas/refuge/refuge';
-import {BarVerticalComponent, Color, LegendOptions, LegendPosition, ScaleType} from '@swimlane/ngx-charts';
-import {OccupationService} from '../../services/occupation/occupation.service';
-import {of} from 'rxjs';
-import {random} from "lodash";
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  Input,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
+import { Refuge } from '../../schemas/refuge/refuge';
+import {
+  BarVerticalComponent,
+  Color,
+  LegendOptions,
+  LegendPosition,
+  ScaleType,
+} from '@swimlane/ngx-charts';
+import { OccupationService } from '../../services/occupation/occupation.service';
+import { of } from 'rxjs';
+import { random } from 'lodash';
 
 @Component({
   selector: 'app-reservations-chart',
@@ -11,7 +24,7 @@ import {random} from "lodash";
   styleUrls: ['./reservations-chart.component.scss'],
 })
 export class ReservationsChartComponent implements OnInit, AfterViewInit {
-  @Input({required: true}) refuge!: Refuge;
+  @Input({ required: true }) refuge!: Refuge;
   //    Get vertical bar component with viewchiod
   @ViewChild('verticalBarChart') verticalBarChart?: BarVerticalComponent;
   testDate1 = new Date('2023-10-14');
@@ -24,7 +37,7 @@ export class ReservationsChartComponent implements OnInit, AfterViewInit {
     },
   ]);
 
-  days: { name: string, value: number, tooltipText: string }[] = [];
+  days: { name: string; value: number; tooltipText: string }[] = [];
 
   view = [700, 400] as [number, number];
 
@@ -40,21 +53,20 @@ export class ReservationsChartComponent implements OnInit, AfterViewInit {
     if (value === new Date().getUTCDate().toString()) {
       return 'Today';
     }
-    return value
-  }
+    return value;
+  };
 
   constructor(
     private changeDetectorRef: ChangeDetectorRef,
     private occupationService: OccupationService,
-  ) {
-  }
+  ) {}
 
   onSelect() {
     console.log('myballs');
   }
 
   getLabels() {
-    return this.days.map(entry => entry.name);
+    return this.days.map((entry) => entry.name);
   }
 
   ngOnInit() {
@@ -62,18 +74,16 @@ export class ReservationsChartComponent implements OnInit, AfterViewInit {
     for (let i = -7; i <= 7; i++) {
       const currentDate = new Date(Date.now() + i * 24 * 60 * 60 * 1000);
 
-      const color =
-        i === 0 ? '#01579b' : '#7aa3e5'; // Use different colors for the current day and the rest
+      const color = i === 0 ? '#01579b' : '#7aa3e5'; // Use different colors for the current day and the rest
 
       this.days.push({
         name: currentDate.getUTCDate().toString(),
         value: random(0, 12),
-        tooltipText: "myballs",
+        tooltipText: 'myballs',
       });
 
       this.colorScheme.domain.push(color);
     }
-
   }
 
   ngAfterViewInit() {

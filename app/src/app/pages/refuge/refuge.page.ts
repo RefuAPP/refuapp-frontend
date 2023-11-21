@@ -80,7 +80,7 @@ export class RefugePage implements OnInit, AfterViewInit {
   }
 
   createReservation($event: ReservationWithoutUserId) {
+    console.log('Clicked on create reservation');
     this.reservationsStore.createReservation($event);
-    // this.reservationsStore.fetchReservations();
   }
 }

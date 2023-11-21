@@ -32,12 +32,16 @@
             </h3>
           </ion-row>
           <ion-row>
-            <app-reservation-picker [refuge]="refuge!"></app-reservation-picker>
+            <app-reservation-picker
+              [refuge]="refuge!"
+              (reservation)="createReservation($event)"
+            ></app-reservation-picker>
           </ion-row>
           <ion-row>
             <ng-container *ngIf="reservations | async as reservationNotNull">
               <app-reservations-item
                 [reservations]="reservationNotNull"
+                (removeReservation)="deleteReservation($event)"
               ></app-reservations-item>
             </ng-container>
           </ion-row>
@@ -75,4 +79,3 @@
     </ion-grid>
   </div>
 </ion-content>
-

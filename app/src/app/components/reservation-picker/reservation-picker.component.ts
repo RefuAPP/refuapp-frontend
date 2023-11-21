@@ -9,16 +9,14 @@ import { ReservationWithoutUserId } from '../../schemas/reservations/reservation
   templateUrl: './reservation-picker.component.html',
   styleUrls: ['./reservation-picker.component.scss'],
 })
-export class ReservationPickerComponent implements OnInit {
+export class ReservationPickerComponent {
   @Input({ required: true }) refuge!: Refuge;
   @Output() reservation = new EventEmitter<ReservationWithoutUserId>();
-  date = '';
+  date = new Date().toISOString();
 
   alertButtons = [this.translate.instant('REFUGE.RESERVATIONS.INFO.OKAY')];
 
   constructor(private translate: TranslateService) {}
-
-  ngOnInit() {}
 
   onBookClick() {
     const night = fromISOString(this.date);
@@ -27,10 +25,6 @@ export class ReservationPickerComponent implements OnInit {
       night,
     };
     this.reservation.emit(reservation);
-  }
-
-  getCurrentDate(): string {
-    const date = new Date();
-    return date.toISOString();
+    console.log('EMITTED VALUE!');
   }
 }

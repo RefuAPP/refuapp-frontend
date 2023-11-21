@@ -12,7 +12,7 @@ import { ReservationPickerComponent } from '../../components/reservation-picker/
 import { ReservationsChartComponent } from '../../components/reservations-chart/reservations-chart.component';
 import { ReservationsPageModule } from '../reservations/reservations.module';
 import { RefugeInfoComponent } from '../../components/refuge-info/refuge-info.component';
-import {BarChartModule} from "@swimlane/ngx-charts";
+import { BarChartModule } from '@swimlane/ngx-charts';
 
 @NgModule({
   imports: [
@@ -22,7 +22,7 @@ import {BarChartModule} from "@swimlane/ngx-charts";
     RefugePageRoutingModule,
     TranslateModule,
     ReservationsPageModule,
-    BarChartModule
+    BarChartModule,
   ],
   declarations: [
     RefugePage,

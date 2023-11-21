@@ -1,5 +1,5 @@
 import { ComponentStore, tapResponse } from '@ngrx/component-store';
-import { concatMap, EMPTY, Observable, of, switchMap } from 'rxjs';
+import { concatMap, EMPTY, Observable, of, switchMap, tap } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { DeviceErrors } from '../../schemas/errors/device';
 import {
@@ -48,7 +48,16 @@ export class ReservationsComponentStore extends ComponentStore<ReservationsState
   }
 
   readonly fetchReservations = this.effect((trigger$: Observable<void>) =>
-    trigger$.pipe(concatMap(() => this.fetchReservations$())),
+    trigger$.pipe(
+      concatMap(() =>
+        fromPromise(this.authService.isAuthenticated()).pipe(
+          concatMap((isAuth) => {
+            if (isAuth) return this.fetchReservations$();
+            return of(EMPTY);
+          }),
+        ),
+      ),
+    ),
   );
 
   private fetchReservations$() {
@@ -139,6 +148,7 @@ export class ReservationsComponentStore extends ComponentStore<ReservationsState
   readonly createReservation = this.effect(
     (reservation: Observable<ReservationWithoutUserId>) =>
       reservation.pipe(
+        tap(() => console.log('Creating reservation...')),
         concatMap((reservation) => this.createReservation$(reservation)),
         switchMap(() => this.fetchReservations$()),
       ),

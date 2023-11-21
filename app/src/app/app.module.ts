@@ -35,6 +35,7 @@ import { refugesReducer } from './state/refuges/refuges.reducer';
 import { RefugesEffects } from './state/refuges/refuges.effects';
 import { ModalEffects } from './state/components/modal/modal.effects';
 import { messageReducer } from './state/messages/message.reducer';
+import { HomePageModule } from './pages/home/home.module';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -92,6 +93,7 @@ export function createTranslateLoader(http: HttpClient) {
       ModalEffects,
     ]),
     ReservationsPageModule,
+    HomePageModule,
   ],
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },

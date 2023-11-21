@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Router } from '@angular/router';
-import { map, tap } from 'rxjs';
+import { concatMap, map, switchMap, tap } from 'rxjs';
 import { AllErrors } from '../../schemas/errors/all-errors';
 import { match } from 'ts-pattern';
 import { ServerErrors } from '../../schemas/errors/server';
@@ -14,6 +14,8 @@ import {
   fixFatalError,
   minorError,
 } from './error.actions';
+import { closeModal } from '../components/modal/modal.actions';
+import { fromPromise } from 'rxjs/internal/observable/innerFrom';
 
 @Injectable()
 export class ErrorEffects {
@@ -22,22 +24,20 @@ export class ErrorEffects {
     private router: Router,
   ) {}
 
-  redirectOnFatalError$ = createEffect(
-    () =>
-      this.actions$.pipe(
-        ofType(fatalError),
-        tap((error) => this.redirect(error.error)),
-      ),
-    { dispatch: false },
+  redirectOnFatalError$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(fatalError),
+      tap((error) => this.redirect(error.error)),
+      map(() => closeModal()),
+    ),
   );
 
-  restartGoToHome$ = createEffect(
-    () =>
-      this.actions$.pipe(
-        ofType(fixFatalError),
-        tap((error) => this.router.navigate(['/']).then()),
-      ),
-    { dispatch: false },
+  restartGoToHome$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(fixFatalError),
+      tap(() => this.router.navigate(['/']).then()),
+      map(() => closeModal()),
+    ),
   );
 
   createCustomMinorErrorFromNormalError$ = createEffect(() =>

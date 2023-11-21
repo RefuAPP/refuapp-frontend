@@ -57,6 +57,7 @@
     </ion-list>
   </ion-menu>
   <ion-router-outlet id="main-content"></ion-router-outlet>
+  <app-refuge-modal></app-refuge-modal>
   <ng-container *ngIf="isLoading$ | async as loading">
     <ion-loading
       isOpen="{{ loading.isLoading }}"
