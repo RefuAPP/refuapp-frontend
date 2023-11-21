@@ -70,6 +70,6 @@
     isOpen="{{ error }}"
     header="{{ 'HOME.CLIENT_ERROR.HEADER' | translate }}"
     message="{{ 'HOME.CLIENT_ERROR.SUBHEADER' | translate }}"
-    [buttons]="alertButtons"
+    [buttons]="getAlertButtons()"
   ></ion-alert>
 </ng-container>

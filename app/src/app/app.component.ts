@@ -28,15 +28,7 @@ export class AppComponent implements OnInit {
   topMenuItems$ = this.store.select(getTopItems);
   bottomMenuItems$ = this.store.select(getBottomItems);
   isMapLoading$: Observable<boolean> = this.store.select(isMapLoading);
-  public alertButtons = [
-    {
-      text: this.translateService.instant('HOME.CLIENT_ERROR.OKAY_BUTTON'),
-      role: 'confirm',
-      handler: () => {
-        this.store.dispatch(fixFatalError());
-      },
-    },
-  ];
+
   hasConnectionError$: Observable<boolean> = this.store.select(
     clientHasErrorConnection,
   );
@@ -95,6 +87,18 @@ export class AppComponent implements OnInit {
     await element.present();
     await element.onDidDismiss();
     return message.id;
+  }
+
+  getAlertButtons() {
+    return [
+      {
+        text: this.translateService.instant('HOME.CLIENT_ERROR.OKAY_BUTTON'),
+        role: 'confirm',
+        handler: () => {
+          this.store.dispatch(fixFatalError());
+        },
+      },
+    ];
   }
 
   ngOnInit(): void {}
