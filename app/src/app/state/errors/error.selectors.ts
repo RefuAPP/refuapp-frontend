@@ -10,11 +10,6 @@ export const clientHasErrorConnection = createSelector(
 );
 
 export const getMinorErrors = createSelector(selectError, (errorState) => {
-  if (errorState.customMinorError) return errorState.customMinorError;
-  if (errorState.minorError) return errorState.minorError;
+  if (errorState.minorErrors.length !== 0) return errorState.minorErrors[0];
   return undefined;
-});
-
-export const hasMinorErrors = createSelector(selectError, (errorState) => {
-  return errorState.minorError !== undefined;
 });

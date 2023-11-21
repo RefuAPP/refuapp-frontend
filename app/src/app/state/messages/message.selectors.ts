@@ -3,12 +3,7 @@ import { AppState } from '../app.state';
 
 export const selectMessages = (state: AppState) => state.messages;
 
-export const getMessages = createSelector(
-  selectMessages,
-  (messagesState) => messagesState.message,
-);
-
-export const hasMessages = createSelector(
-  selectMessages,
-  (messagesState) => messagesState.message !== undefined,
-);
+export const getMessages = createSelector(selectMessages, (messagesState) => {
+  if (messagesState.message.length !== 0) return messagesState.message[0];
+  return undefined;
+});

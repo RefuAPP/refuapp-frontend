@@ -1,13 +1,10 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import {
   Reservations,
   ReservationWithId,
 } from '../../schemas/reservations/reservation';
 import { TranslateService } from '@ngx-translate/core';
 import { AlertController } from '@ionic/angular';
-import { deleteReservation } from '../../state/reservations/reservations.actions';
-import { AppState } from '../../state/app.state';
-import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'app-reservations-item',
@@ -16,18 +13,18 @@ import { Store } from '@ngrx/store';
 })
 export class ReservationsItemComponent implements OnInit {
   @Input() reservations: Reservations = [];
+  @Output() removeReservation = new EventEmitter<ReservationWithId>();
 
   constructor(
     private translateService: TranslateService,
     private alertController: AlertController,
-    private store: Store<AppState>,
   ) {}
 
   ngOnInit() {}
 
   onRemoveReservation(reservation: ReservationWithId) {
     this.showDeleteReservationMessage(reservation, () => {
-      this.store.dispatch(deleteReservation({ id: reservation.id }));
+      this.removeReservation.emit(reservation);
     }).then();
   }
 

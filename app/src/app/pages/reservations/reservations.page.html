@@ -21,6 +21,7 @@
         </ion-item-divider>
         <app-reservations-item
           [reservations]="res.reservations"
+          (removeReservation)="removeReservation($event)"
         ></app-reservations-item>
       </ion-item-group>
     </ion-list>

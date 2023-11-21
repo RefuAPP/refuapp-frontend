@@ -4,6 +4,7 @@ import { RouteReuseStrategy } from '@angular/router';
 
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import {
@@ -27,8 +28,6 @@ import { environment } from '../environments/environment';
 import { modalReducer } from './state/components/modal/modal.reducer';
 import { mapReducer } from './state/map/map.reducer';
 import { MapEffects } from './state/map/map.effects';
-import { ReservationsEffects } from './state/reservations/reservations.effects';
-import { reservationsReducer } from './state/reservations/reservations.reducer';
 import { errorReducer } from './state/errors/error.reducer';
 import { ErrorEffects } from './state/errors/error.effects';
 import { ReservationsPageModule } from './pages/reservations/reservations.module';
@@ -45,6 +44,7 @@ export function createTranslateLoader(http: HttpClient) {
   declarations: [AppComponent],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     IonicModule.forRoot(),
     HttpClientModule,
     TranslateModule.forRoot({
@@ -62,7 +62,6 @@ export function createTranslateLoader(http: HttpClient) {
         initStatus: initReducer,
         map: mapReducer,
         modal: modalReducer,
-        reservations: reservationsReducer,
         error: errorReducer,
         refuges: refugesReducer,
         messages: messageReducer,
@@ -88,7 +87,6 @@ export function createTranslateLoader(http: HttpClient) {
       AuthEffects,
       LanguageEffects,
       MapEffects,
-      ReservationsEffects,
       ErrorEffects,
       RefugesEffects,
       ModalEffects,

@@ -1,17 +1,23 @@
 import { Component, OnInit } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { AppState } from '../../state/app.state';
-import { getReservationsSortedByRefuge } from '../../state/reservations/reservations.selectors';
+import { ReservationsComponentStore } from './reservations.store';
+import { ReservationWithId } from '../../schemas/reservations/reservation';
 
 @Component({
   selector: 'app-reservations',
   templateUrl: './reservations.page.html',
   styleUrls: ['./reservations.page.scss'],
+  providers: [ReservationsComponentStore],
 })
 export class ReservationsPage implements OnInit {
-  reservations$ = this.store.select(getReservationsSortedByRefuge);
+  reservations$ = this.store.reservations$;
 
-  constructor(private store: Store<AppState>) {}
+  constructor(private store: ReservationsComponentStore) {
+    this.store.fetchReservations();
+  }
 
   ngOnInit() {}
+
+  removeReservation(reservation: ReservationWithId) {
+    this.store.deleteReservation(reservation.id);
+  }
 }

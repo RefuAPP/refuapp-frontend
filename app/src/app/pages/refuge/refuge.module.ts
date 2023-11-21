@@ -11,7 +11,6 @@ import { TranslateModule } from '@ngx-translate/core';
 import { ReservationPickerComponent } from '../../components/reservation-picker/reservation-picker.component';
 import { ReservationsChartComponent } from '../../components/reservations-chart/reservations-chart.component';
 import { ReservationsPageModule } from '../reservations/reservations.module';
-import { ReservationsComponent } from '../../components/reservations/reservations.component';
 import { RefugeInfoComponent } from '../../components/refuge-info/refuge-info.component';
 import {BarChartModule} from "@swimlane/ngx-charts";
 
@@ -29,7 +28,6 @@ import {BarChartModule} from "@swimlane/ngx-charts";
     RefugePage,
     ReservationPickerComponent,
     ReservationsChartComponent,
-    ReservationsComponent,
     RefugeInfoComponent,
   ],
   exports: [RefugePage],

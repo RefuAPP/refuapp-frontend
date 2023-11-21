@@ -22,8 +22,57 @@
   </div>
 
   <div class="about-info">
-  </div>
     <app-refuge-info [refuge]="refuge!"></app-refuge-info>
-    <app-reservations [refuge]="refuge!"></app-reservations>
+    <ion-grid *ngIf="!platformIsMobile()">
+      <ion-row>
+        <ion-col>
+          <ion-row>
+            <h3 class="ion-padding-top ion-padding-start">
+              {{ "REFUGE.RESERVATIONS.HEADER" | translate }}
+            </h3>
+          </ion-row>
+          <ion-row>
+            <app-reservation-picker [refuge]="refuge!"></app-reservation-picker>
+          </ion-row>
+          <ion-row>
+            <ng-container *ngIf="reservations | async as reservationNotNull">
+              <app-reservations-item
+                [reservations]="reservationNotNull"
+              ></app-reservations-item>
+            </ng-container>
+          </ion-row>
+        </ion-col>
+        <ion-col size="8">
+          <app-reservations-chart [refuge]="refuge!"></app-reservations-chart>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    <ion-grid *ngIf="platformIsMobile()">
+      <ion-col>
+        <ion-row>
+          <h3 class="ion-padding-top ion-padding-start">
+            {{ "REFUGE.RESERVATIONS.HEADER" | translate }}
+          </h3>
+        </ion-row>
+        <ion-row>
+          <app-reservation-picker
+            [refuge]="refuge!"
+            (reservation)="createReservation($event)"
+          ></app-reservation-picker>
+        </ion-row>
+        <ion-row>
+          <ng-container *ngIf="reservations | async as reservationNotNull">
+            <app-reservations-item
+              [reservations]="reservationNotNull"
+              (removeReservation)="deleteReservation($event)"
+            ></app-reservations-item>
+          </ng-container>
+        </ion-row>
+        <ion-col>
+          <app-reservations-chart [refuge]="refuge!"></app-reservations-chart>
+        </ion-col>
+      </ion-col>
+    </ion-grid>
+  </div>
 </ion-content>
 

@@ -5,38 +5,43 @@ import {
   fatalError,
   fixFatalError,
   fixMinorError,
-  minorError,
 } from './error.actions';
 
+export type MinorError = {
+  id: number;
+  message: string;
+};
+
 export type ErrorState = {
-  hasError: boolean;
   fatalError?: AllErrors;
-  minorError?: AllErrors;
-  customMinorError?: string;
+  minorErrors: MinorError[];
+  counter: number;
 };
 
 export const reservationState = {
-  hasError: false,
+  minorErrors: [],
+  counter: 0,
 } as ErrorState;
 
 export const errorReducer = createReducer(
   reservationState,
   on(fatalError, (state, action) => ({
-    hasError: true,
+    ...state,
     fatalError: action.error,
   })),
-  on(minorError, (state, action) => ({
-    hasError: true,
-    minorError: action.error,
-  })),
   on(customMinorError, (state, action) => ({
-    hasError: true,
-    customMinorError: action.error,
+    ...state,
+    counter: state.counter + 1,
+    minorErrors: [{ id: state.counter, message: action.error }].concat(
+      state.minorErrors,
+    ),
   })),
   on(fixFatalError, (state, action) => ({
-    hasError: false,
+    counter: 0,
+    minorErrors: [],
   })),
   on(fixMinorError, (state, action) => ({
-    hasError: false,
+    ...state,
+    minorErrors: state.minorErrors.filter((error) => error.id !== action.id),
   })),
 );
