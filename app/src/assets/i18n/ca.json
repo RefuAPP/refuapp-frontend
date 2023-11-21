@@ -142,6 +142,14 @@
     "EMERGENCY_PHONE_NUMBER": "Número d'emergència: {{emergencyPhoneNumber}}",
     "SETTINGS": "Configuració"
   },
+  "ABOUT": {
+    "HEADER": "Sobre nosaltres",
+    "CARDHEADER1": "Qui som",
+    "CARDHEADER2": "Sobre RefuApp",
+    "BODY": "Som Ferran, Oriol, Pablo i Alex, estudiants de postgrau en Ciències de la Computació a la Universitat de Lleida (UdL). Units per la nostra passió per la tecnologia i les activitats a l'aire lliure, hem creat RefuAPP - una aplicació innovadora destinada a millorar l'experiència d'aventura a l'aire lliure als Pirineus.",
+    "BODY2": "RefuApp és més que un simple mapa; és el teu guia digital per recórrer els Pirineus. L'aplicació ofereix una visió completa de la regió, incloent les ubicacions dels refugis. Amb un simple toc, pots conèixer les instal·lacions, capacitats i més de cada refugi. El nostre sistema de reserva distintiu permet als usuaris \"reservar\" virtualment un lloc per a la nit, afegint a la comprensió col·lectiva de la capacitat del refugi. En algunes ubicacions, hem integrat tecnologia avançada com ara sensors infrarojos i càmeres tèrmiques per rastrejar la capacitat del refugi en temps real, oferint-te la informació més precisa i actual.",
+    "LEARNMORE": "Sabies que RefuApp és de codi obert? Fes click per veure més!"
+  },
   "SETTINGS": {
     "LANGUAGE": "Idioma",
     "FORCE_LANGUAGE": "Forçar idioma",
@@ -157,6 +165,7 @@
     "RESERVATIONS": "Reserves",
     "PROFILE": "Perfil",
     "LOGOUT": "Tancar sessió",
+    "ABOUT": "Sobre nosaltres",
     "LOGIN": "Iniciar sessió"
   },
   "MINOR_ERRORS": {

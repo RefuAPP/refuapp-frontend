@@ -42,6 +42,13 @@ export const getTopItems = createSelector(isAuthenticated, (auth) => {
 });
 
 export const getBottomItems = createSelector(isAuthenticated, (auth) => {
+  const baseItems = [
+    {
+      titleTranslateKey: 'MENU.ABOUT',
+      url: '/about',
+      icon: 'information-circle',
+    },
+  ] as MenuItem[];
   if (auth)
     return [
       {
@@ -54,12 +61,12 @@ export const getBottomItems = createSelector(isAuthenticated, (auth) => {
         url: '/logout',
         icon: 'log-out',
       },
-    ] as MenuItem[];
+    ].concat(baseItems) as MenuItem[];
   return [
     {
       titleTranslateKey: 'MENU.LOGIN',
       url: '/login',
       icon: 'log-in',
     },
-  ] as MenuItem[];
+  ].concat(baseItems) as MenuItem[];
 });

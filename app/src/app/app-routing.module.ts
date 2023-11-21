@@ -13,6 +13,11 @@ const routes: Routes = [
       import('./pages/home/home.module').then((m) => m.HomePageModule),
   },
   {
+    path: 'about',
+    loadChildren: () =>
+      import('./pages/about/about.module').then((m) => m.AboutPageModule),
+  },
+  {
     path: 'reservations',
     loadChildren: () =>
       import('./pages/reservations/reservations.module').then(
@@ -66,6 +71,10 @@ const routes: Routes = [
       import('./pages/forbidden/forbidden/forbidden.module').then(
         (m) => m.ForbiddenPageModule,
       ),
+  },
+  {
+    path: 'about',
+    loadChildren: () => import('./pages/about/about.module').then(m => m.AboutPageModule)
   },
 ];
 

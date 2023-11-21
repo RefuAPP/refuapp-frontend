@@ -1,0 +1,36 @@
+ion-content {
+  --background: var(--ion-background-color);
+}
+
+ion-card {
+  margin: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  transition: all 0.3s ease-in-out;
+}
+
+ion-card:hover {
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+
+ion-card-content {
+  font-size: 18px;
+  padding: 20px;
+}
+
+ion-img {
+  height: 100%;
+  padding: 5%;
+  border-radius: 50px;
+  object-fit: cover;
+}
+
+.custom-button {
+  margin-top: 40px;
+  white-space: normal;
+  transition: all 0.3s ease-in-out;
+}
+
+.custom-button:hover {
+  transform: scale(1.02);
+}
