@@ -4,7 +4,6 @@ import { AppState } from '../app.state';
 import { MapService } from '../../services/map/map.service';
 import { RefugeService } from '../../services/refuge/refuge.service';
 import { catchError, map, of, switchMap } from 'rxjs';
-import { match } from 'ts-pattern';
 import {
   loadedRefuges,
   loadRefuges,
@@ -16,7 +15,6 @@ import {
   ofType,
   ROOT_EFFECTS_INIT,
 } from '@ngrx/effects';
-import { ServerErrors } from '../../schemas/errors/server';
 import { fatalError } from '../errors/error.actions';
 import { DeviceErrors } from '../../schemas/errors/device';
 

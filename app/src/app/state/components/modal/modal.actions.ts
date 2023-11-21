@@ -6,4 +6,9 @@ export const openModal = createAction(
   props<{ refuge: Refuge }>(),
 );
 
+export const openModalWithRefugeId = createAction(
+  '[Modal] Open Modal with refuge id',
+  props<{ refugeId: string }>(),
+);
+
 export const closeModal = createAction('[Modal] Close Modal');

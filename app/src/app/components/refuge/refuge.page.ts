@@ -1,23 +1,16 @@
-import {
-  AfterViewInit,
-  Component,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output,
-} from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { RefugeService } from '../../services/refuge/refuge.service';
 import { Refuge } from '../../schemas/refuge/refuge';
 import { AppState } from '../../state/app.state';
 import { Store } from '@ngrx/store';
 import { loadRefuges } from '../../state/refuges/refuges.actions';
-import { ReservationsComponentStore } from '../reservations/reservations.store';
 import {
   ReservationWithId,
   ReservationWithoutUserId,
 } from '../../schemas/reservations/reservation';
 import { Platform } from '@ionic/angular';
 import { map } from 'rxjs';
+import { ReservationsComponentStore } from '../../pages/reservations/reservations.store';
 
 @Component({
   selector: 'app-refuge',
@@ -25,7 +18,7 @@ import { map } from 'rxjs';
   styleUrls: ['./refuge.page.scss'],
   providers: [ReservationsComponentStore],
 })
-export class RefugePage implements OnInit, AfterViewInit {
+export class RefugePage {
   @Input() refuge?: Refuge;
   @Output() clickedBar = new EventEmitter();
 
@@ -58,17 +51,8 @@ export class RefugePage implements OnInit, AfterViewInit {
     // TODO: fetch reservations here
   }
 
-  ngOnInit() {}
-
   openFullModal() {
     this.clickedBar.emit();
-  }
-
-  ngAfterViewInit() {
-    if (this.refuge) {
-      return;
-    }
-    // TODO: fetch refuge here
   }
 
   platformIsMobile(): boolean {
@@ -80,7 +64,6 @@ export class RefugePage implements OnInit, AfterViewInit {
   }
 
   createReservation($event: ReservationWithoutUserId) {
-    console.log('Clicked on create reservation');
     this.reservationsStore.createReservation($event);
   }
 }
