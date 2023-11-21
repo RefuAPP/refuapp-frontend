@@ -3,16 +3,14 @@
   *ngIf="refuge !== undefined"
   (click)="openFullModal()"
 >
-  <ion-toolbar>
-    <ion-buttons slot="end">
-      <ion-button (click)="refreshButton()">
-        <ion-icon name="refresh-outline"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-  </ion-toolbar>
+  <ion-toolbar> </ion-toolbar>
 </ion-header>
 
 <ion-content *ngIf="refuge !== undefined">
+  <ion-refresher slot="fixed" (ionRefresh)="refreshButton($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
   <div class="about-header">
     <!-- Instead of loading an image each time the select changes, use opacity to transition them -->
     <div
