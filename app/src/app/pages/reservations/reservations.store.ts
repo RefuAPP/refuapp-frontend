@@ -47,25 +47,35 @@ export class ReservationsComponentStore extends ComponentStore<ReservationsState
     });
   }
 
-  readonly fetchReservations = this.effect((trigger$: Observable<void>) =>
-    trigger$.pipe(
-      concatMap(() =>
-        fromPromise(this.authService.isAuthenticated()).pipe(
-          concatMap((isAuth) => {
-            if (isAuth) return this.fetchReservations$();
-            return of(EMPTY);
-          }),
-        ),
-      ),
+  readonly fetchReservations = this.effect((isUpdating$: Observable<boolean>) =>
+    isUpdating$.pipe(
+      concatMap((isUpdating) => {
+        if (isUpdating) return this.fetchReservationsUpdate$();
+        return this.fetchReservations$();
+      }),
     ),
   );
 
   private fetchReservations$() {
     return fromPromise(this.authService.getUserId()).pipe(
       concatMap((userId) => {
-        if (userId != null) {
-          return this.getReservations(userId);
-        }
+        if (userId != null) return this.getReservations(userId, (_) => {});
+        return of(EMPTY);
+      }),
+    );
+  }
+
+  private fetchReservationsUpdate$() {
+    return fromPromise(this.authService.getUserId()).pipe(
+      concatMap((userId) => {
+        if (userId != null)
+          return this.getReservations(userId, (reservations) => {
+            this.store.dispatch(
+              showMessages({
+                message: 'TODO: Reservas cargadas correctamente',
+              }),
+            );
+          });
         this.store.dispatch(
           fatalError({ error: PermissionsErrors.NOT_AUTHENTICATED }),
         );
@@ -74,7 +84,10 @@ export class ReservationsComponentStore extends ComponentStore<ReservationsState
     );
   }
 
-  private getReservations(userId: string) {
+  private getReservations(
+    userId: string,
+    onUpdate: (reservations: RefugeReservationsRelations) => void,
+  ) {
     this.patchState({ isLoading: true });
     return this.userReservationService
       .getReservationsGroupedByRefugeForUser(userId)
@@ -82,11 +95,7 @@ export class ReservationsComponentStore extends ComponentStore<ReservationsState
         tapResponse(
           (reservations) => {
             this.patchState({ reservations, isLoading: false });
-            this.store.dispatch(
-              showMessages({
-                message: 'TODO: Reservas cargadas correctamente',
-              }),
-            );
+            onUpdate(reservations);
           },
           () => {
             this.patchState({ isLoading: false });

@@ -38,7 +38,7 @@ export class RefugePage {
     private reservationsStore: ReservationsComponentStore,
     private platform: Platform,
   ) {
-    this.reservationsStore.fetchReservations();
+    this.reservationsStore.fetchReservations(false);
   }
 
   getImageUrl(): string | undefined {

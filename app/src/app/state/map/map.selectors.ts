@@ -5,5 +5,5 @@ export const selectMap = (state: AppState) => state.map;
 
 export const isMapLoading = createSelector(
   selectMap,
-  (mapState) => !mapState.refugesOnMap,
+  (mapState) => mapState.loadingMap,
 );
