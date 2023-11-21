@@ -30,7 +30,7 @@ export class AppComponent implements OnInit {
   isMapLoading$: Observable<boolean> = this.store.select(isMapLoading);
   public alertButtons = [
     {
-      text: 'OK',
+      text: this.translateService.instant('HOME.CLIENT_ERROR.OKAY_BUTTON'),
       role: 'confirm',
       handler: () => {
         this.store.dispatch(fixFatalError());

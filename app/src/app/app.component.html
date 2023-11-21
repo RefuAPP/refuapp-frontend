@@ -68,8 +68,8 @@
 <ng-container *ngIf="hasConnectionError$ | async as error">
   <ion-alert
     isOpen="{{ error }}"
-    header="You are offline!"
-    message="You are offline or the server is not reachable. Please check your internet connection and try again."
+    header="{{ 'HOME.CLIENT_ERROR.HEADER' | translate }}"
+    message="{{ 'HOME.CLIENT_ERROR.SUBHEADER' | translate }}"
     [buttons]="alertButtons"
   ></ion-alert>
 </ng-container>

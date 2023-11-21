@@ -239,10 +239,11 @@ export class ReservationsComponentStore extends ComponentStore<ReservationsState
           }),
         ),
       )
-      .with(CreateReservationDataError.INVALID_DATE, () =>
+      .with(CreateReservationDataError.INVALID_DATE_ALREADY_RESERVED, () =>
         this.store.dispatch(
           customMinorError({
-            error: 'RESERVATIONS.CREATE_OPERATION.INVALID_DATE',
+            error:
+              'RESERVATIONS.CREATE_OPERATION.INVALID_DATE_ALREADY_RESERVED',
           }),
         ),
       )
@@ -250,6 +251,13 @@ export class ReservationsComponentStore extends ComponentStore<ReservationsState
         this.store.dispatch(
           customMinorError({
             error: 'RESERVATIONS.CREATE_OPERATION.REFUGE_OR_USER_NOT_FOUND',
+          }),
+        ),
+      )
+      .with(CreateReservationDataError.INVALID_DATE_PAST_DATE, () =>
+        this.store.dispatch(
+          customMinorError({
+            error: 'RESERVATIONS.CREATE_OPERATION.INVALID_DATE_PAST',
           }),
         ),
       )

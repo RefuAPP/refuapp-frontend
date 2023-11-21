@@ -7,7 +7,8 @@ import { getErrorFrom } from '../errors/all-errors';
 
 export enum CreateReservationDataError {
   REFUGE_OR_USER_NOT_FOUND = 'REFUGE_OR_USER_NOT_FOUND',
-  INVALID_DATE = 'INVALID_DATE',
+  INVALID_DATE_ALREADY_RESERVED = 'INVALID_DATE_ALREADY_RESERVED',
+  INVALID_DATE_PAST_DATE = 'INVALID_DATE_IS_PAST',
   NTP_SERVER_IS_DOWN = 'NTP_SERVER_IS_DOWN',
 }
 
@@ -28,7 +29,14 @@ export namespace CreateReservationError {
             'User already has a reservation on this date',
           )
         )
-          return CreateReservationDataError.INVALID_DATE;
+          return CreateReservationDataError.INVALID_DATE_ALREADY_RESERVED;
+        if (
+          error.error.detail !== undefined &&
+          error.error.detail.includes(
+            'You cannot make a reservation for a past date',
+          )
+        )
+          return CreateReservationDataError.INVALID_DATE_PAST_DATE;
         return PermissionsErrors.NOT_ALLOWED_OPERATION_FOR_USER;
       })
       .with(

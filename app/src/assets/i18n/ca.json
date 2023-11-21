@@ -118,7 +118,8 @@
     },
     "CREATE_OPERATION": {
       "CORRECT": "Reserva al dia {{day}} creada!",
-      "INVALID_DATE": "La data seleccionada no és vàlida.",
+      "INVALID_DATE_PAST": "No pots seleccionar una data passada",
+      "INVALID_DATE_ALREADY_RESERVED": "No pots seleccionar una data ja reservada",
       "NOT_ALLOWED_CREATION_FOR_USER": "No pots crear una reserva per a un altre usuari",
       "REFUGE_OR_USER_NOT_FOUND": "Refugi o usuari ha estat eliminat, refresca la pàgina"
     },
