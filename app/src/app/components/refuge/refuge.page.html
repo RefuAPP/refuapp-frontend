@@ -23,7 +23,10 @@
 
   <div class="about-info">
     <app-refuge-info [refuge]="refuge!"></app-refuge-info>
-    <ion-grid *ngIf="!platformIsMobile()">
+    <ion-grid
+      *ngIf="!platformIsMobile()"
+      style="margin-bottom: 30px; margin-top: 15px; margin-inline: 20px"
+    >
       <ion-row>
         <ion-col>
           <ion-row>
@@ -33,6 +36,8 @@
           </ion-row>
           <ion-row>
             <app-reservation-picker
+              class="ion-justify-content-center"
+              size="1"
               [refuge]="refuge!"
               (reservation)="createReservation($event)"
             ></app-reservation-picker>
@@ -46,20 +51,26 @@
             </ng-container>
           </ion-row>
         </ion-col>
-        <ion-col size="8">
+        <ion-col style="margin-bottom: 50px">
           <app-reservations-chart [refuge]="refuge!"></app-reservations-chart>
         </ion-col>
       </ion-row>
     </ion-grid>
-    <ion-grid *ngIf="platformIsMobile()">
+
+    <ion-grid
+      *ngIf="platformIsMobile()"
+      style="margin-bottom: 30px; margin-top: 15px; margin-inline: 20px"
+    >
       <ion-col>
         <ion-row>
-          <h3 class="ion-padding-top ion-padding-start">
+          <h3 class="ion-padding-start" style="margin-top: 10px">
             {{ "REFUGE.RESERVATIONS.HEADER" | translate }}
           </h3>
         </ion-row>
         <ion-row>
           <app-reservation-picker
+            class="ion-justify-content-center"
+            size="1"
             [refuge]="refuge!"
             (reservation)="createReservation($event)"
           ></app-reservation-picker>

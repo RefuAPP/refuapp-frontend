@@ -14,6 +14,7 @@ import { RefugeInfoComponent } from '../../components/refuge-info/refuge-info.co
 import { ReservationPickerComponent } from '../../components/reservation-picker/reservation-picker.component';
 import { ReservationsPageModule } from '../reservations/reservations.module';
 import { ReservationsChartComponent } from '../../components/reservations-chart/reservations-chart.component';
+import { BarChartModule } from '@swimlane/ngx-charts';
 
 @NgModule({
   imports: [
@@ -23,6 +24,7 @@ import { ReservationsChartComponent } from '../../components/reservations-chart/
     HomePageRoutingModule,
     TranslateModule,
     ReservationsPageModule,
+    BarChartModule,
   ],
   declarations: [
     HomePage,
