@@ -1,5 +1,5 @@
 import { ComponentStore, tapResponse } from '@ngrx/component-store';
-import { concatMap, EMPTY, Observable, of, switchMap } from 'rxjs';
+import { concatMap, EMPTY, Observable, of, switchMap, tap } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { DeviceErrors } from '../../schemas/errors/device';
 import {
@@ -96,13 +96,13 @@ export class ReservationsComponentStore extends ComponentStore<ReservationsState
     return this.userReservationService
       .getReservationsGroupedByRefugeForUser(userId)
       .pipe(
+        tap(() => this.patchState({ isLoading: false })),
         tapResponse(
           (reservations) => {
-            this.patchState({ reservations, isLoading: false });
+            this.patchState({ reservations });
             onUpdate(reservations);
           },
           () => {
-            this.patchState({ isLoading: false });
             this.store.dispatch(
               minorError({ error: DeviceErrors.NOT_CONNECTED }),
             );
@@ -133,10 +133,10 @@ export class ReservationsComponentStore extends ComponentStore<ReservationsState
   private deleteReservationForUser(reservationId: string) {
     this.patchState({ isLoading: true });
     return this.reservationService.deleteReservation(reservationId).pipe(
+      tap(() => this.patchState({ isLoading: false })),
       tapResponse(
         (reservation) => this.onDeleteReservationResponse(reservation),
         () => {
-          this.patchState({ isLoading: false });
           this.store.dispatch(
             minorError({ error: DeviceErrors.NOT_CONNECTED }),
           );
@@ -159,12 +159,10 @@ export class ReservationsComponentStore extends ComponentStore<ReservationsState
               res.reservation.id,
               state.reservations,
             ),
-            isLoading: false,
           };
         });
       })
       .with({ status: 'error' }, (err) => {
-        this.patchState({ isLoading: false });
         this.store.dispatch(minorError({ error: err.error }));
       });
   }
@@ -202,6 +200,7 @@ export class ReservationsComponentStore extends ComponentStore<ReservationsState
         ...reservation,
       })
       .pipe(
+        tap(() => this.patchState({ isLoading: false })),
         tapResponse(
           (reservations) => {
             match(reservations)
