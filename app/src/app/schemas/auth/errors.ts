@@ -6,8 +6,8 @@ import { getErrorFrom } from '../errors/all-errors';
 export type AuthenticationErrors = ServerErrors | UserFormErrors;
 
 export enum UserFormErrors {
-  INCORRECT_PASSWORD = 'INCORRECT_PASSWORD',
-  USER_NOT_FOUND = 'USER_NOT_FOUND',
+  INCORRECT_PASSWORD = 'LOGIN.ERROR_INCORRECT_PASSWORD',
+  USER_NOT_FOUND = 'LOGIN.ERROR_DOESNT_EXIST',
 }
 
 export namespace AuthenticationErrors {

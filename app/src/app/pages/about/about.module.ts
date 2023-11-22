@@ -7,7 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { AboutPageRoutingModule } from './about-routing.module';
 
 import { AboutPage } from './about.page';
-import {TranslateModule} from "@ngx-translate/core";
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   imports: [
@@ -15,8 +15,8 @@ import {TranslateModule} from "@ngx-translate/core";
     FormsModule,
     IonicModule,
     AboutPageRoutingModule,
-    TranslateModule
+    TranslateModule,
   ],
-  declarations: [AboutPage]
+  declarations: [AboutPage],
 })
 export class AboutPageModule {}
