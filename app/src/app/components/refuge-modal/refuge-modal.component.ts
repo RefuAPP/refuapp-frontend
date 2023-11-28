@@ -2,9 +2,8 @@ import { Component } from '@angular/core';
 import { IonModal } from '@ionic/angular';
 import { AppState } from '../../state/app.state';
 import { Store } from '@ngrx/store';
-import { take } from 'rxjs';
-import { selectModalState } from '../../state/modal/modal.selectors';
-import { closeModal } from '../../state/modal/modal.actions';
+import { ModalComponentStore } from './modal.store';
+import { combineLatest, map } from 'rxjs';
 
 @Component({
   selector: 'app-refuge-modal',
@@ -12,14 +11,17 @@ import { closeModal } from '../../state/modal/modal.actions';
   styleUrls: ['./refuge-modal.component.scss'],
 })
 export class RefugeModalComponent {
-  modalState$ = this.store.select(selectModalState);
+  modalState$ = combineLatest([this.modal.isOpen$, this.modal.refuge$]).pipe(
+    map(([isOpen, refuge]) => ({ isOpen, refuge })),
+  );
 
-  constructor(private store: Store<AppState>) {}
+  constructor(
+    private store: Store<AppState>,
+    private modal: ModalComponentStore,
+  ) {}
 
   dismissedModal() {
-    this.modalState$.pipe(take(1)).subscribe((state) => {
-      if (state.isOpen) this.store.dispatch(closeModal({ redirectHome: true }));
-    });
+    this.modal.closeModal();
   }
 
   changeCurrentModalSize(modal: IonModal) {

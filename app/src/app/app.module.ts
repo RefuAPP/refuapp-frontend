@@ -28,8 +28,6 @@ import { ErrorEffects } from './state/errors/error.effects';
 import { ReservationsPageModule } from './pages/reservations/reservations.module';
 import { messageReducer } from './state/messages/message.reducer';
 import { HomePageModule } from './pages/home/home.module';
-import { modalReducer } from './state/modal/modal.reducer';
-import { ModalEffects } from './state/modal/modal.effects';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -53,7 +51,6 @@ export function createTranslateLoader(http: HttpClient) {
     StoreModule.forRoot({
       auth: authReducer,
       language: languageReducer,
-      modal: modalReducer,
       error: errorReducer,
       messages: messageReducer,
     }),
@@ -65,12 +62,7 @@ export function createTranslateLoader(http: HttpClient) {
       traceLimit: 75, // maximum stack trace frames to be stored (in case trace option was provided as true)
       connectOutsideZone: true, // If set to true, the connection is established outside the Angular zone for better performance
     }),
-    EffectsModule.forRoot([
-      AuthEffects,
-      LanguageEffects,
-      ErrorEffects,
-      ModalEffects,
-    ]),
+    EffectsModule.forRoot([AuthEffects, LanguageEffects, ErrorEffects]),
     ReservationsPageModule,
     HomePageModule,
   ],

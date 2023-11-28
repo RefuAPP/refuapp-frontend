@@ -1,6 +1,14 @@
 import { ElementRef, Injectable } from '@angular/core';
 import { ComponentStore, tapResponse } from '@ngrx/component-store';
-import { combineLatest, concatMap, EMPTY, map, Observable, tap } from 'rxjs';
+import {
+  combineLatest,
+  concatMap,
+  EMPTY,
+  filter,
+  map,
+  Observable,
+  tap,
+} from 'rxjs';
 import { Refuge } from '../../schemas/refuge/refuge';
 import { MapService } from '../../services/map/map.service';
 import { secretEnvironment } from '../../../environments/environment.secret';
@@ -16,7 +24,6 @@ import {
 import { RefugeService } from '../../services/refuge/refuge.service';
 import { ServerErrors } from '../../schemas/errors/server';
 import { MapConfiguration } from './map-configuration';
-import { openModal } from 'src/app/state/modal/modal.actions';
 import { Coordinates } from 'src/app/services/search/search.service';
 
 export interface MapState {
@@ -24,12 +31,16 @@ export interface MapState {
   isMapLoaded: boolean;
   hasLibraryLoaded: boolean;
   refugesAddedOnMap: boolean;
+  currentRefuge?: Refuge;
 }
 
 @Injectable()
 export class MapComponentStore extends ComponentStore<MapState> {
   readonly isMapLoaded$ = this.select((state) => state.isMapLoaded);
   readonly areLibrariesLoaded$ = this.select((state) => state.hasLibraryLoaded);
+  readonly watchingRefuge$ = this.select((state) => state.currentRefuge).pipe(
+    filter((refuge) => refuge !== undefined),
+  ) as Observable<Refuge>;
 
   constructor(
     private readonly mapService: MapService,
@@ -51,7 +62,7 @@ export class MapComponentStore extends ComponentStore<MapState> {
       concatMap((refuges) =>
         fromPromise(
           this.mapService.addRefuges(refuges, (refuge) => {
-            this.store.dispatch(openModal({ refuge }));
+            this.patchState({ currentRefuge: refuge });
           }),
         ),
       ),

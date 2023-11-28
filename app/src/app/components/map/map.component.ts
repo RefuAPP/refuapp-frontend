@@ -4,6 +4,7 @@ import {
   ElementRef,
   OnDestroy,
   OnInit,
+  Output,
   ViewChild,
 } from '@angular/core';
 import { AppState } from '../../state/app.state';
@@ -20,6 +21,7 @@ import { MapComponentStore } from './map.store';
 export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('mapRef', { static: false }) mapRef?: ElementRef;
 
+  @Output() onClickedRefuge = this.mapStore.watchingRefuge$;
   librariesAreLoaded$ = this.mapStore.areLibrariesLoaded$;
 
   constructor(

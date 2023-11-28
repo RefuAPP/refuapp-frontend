@@ -14,7 +14,6 @@ import {
   fixFatalError,
   minorError,
 } from './error.actions';
-import { closeModal } from '../modal/modal.actions';
 import { fromPromise } from 'rxjs/internal/observable/innerFrom';
 
 @Injectable()
@@ -28,7 +27,6 @@ export class ErrorEffects {
     this.actions$.pipe(
       ofType(fatalError),
       tap((error) => this.redirect(error.error)),
-      map(() => closeModal({ redirectHome: false })),
     ),
   );
 

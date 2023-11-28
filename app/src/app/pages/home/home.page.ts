@@ -1,29 +1,31 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Store } from '@ngrx/store';
-import { AppState } from '../../state/app.state';
-import { openModalWithRefugeId } from '../../state/modal/modal.actions';
 import { MapComponentStore } from 'src/app/components/map/map.store';
+import { ModalComponentStore } from '../../components/refuge-modal/modal.store';
+import { Refuge } from '../../schemas/refuge/refuge';
 
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
-  providers: [MapComponentStore],
+  providers: [MapComponentStore, ModalComponentStore],
 })
 export class HomePage implements OnInit {
   canShowComponents$ = this.mapStore.areLibrariesLoaded$;
 
   constructor(
     private route: ActivatedRoute,
-    private store: Store<AppState>,
     private mapStore: MapComponentStore,
+    private modal: ModalComponentStore,
   ) {
     const refugeId = this.route.snapshot.paramMap.get('id');
-    if (refugeId !== null)
-      this.store.dispatch(openModalWithRefugeId({ refugeId }));
+    if (refugeId !== null) this.modal.openFromRefugeId(refugeId);
     this.mapStore.loadLibraries();
   }
 
   ngOnInit() {}
+
+  clickedRefuge($event: Refuge) {
+    this.modal.openWithRefuge($event);
+  }
 }

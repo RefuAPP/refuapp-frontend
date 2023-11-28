@@ -8,10 +8,9 @@ import {
   ReservationWithoutUserId,
 } from '../../schemas/reservations/reservation';
 import { Platform } from '@ionic/angular';
-import { forkJoin, map, takeWhile, zip } from 'rxjs';
+import { map, takeWhile, zip } from 'rxjs';
 import { ReservationsComponentStore } from '../../pages/reservations/reservations.store';
-import { openModalWithRefugeId } from '../../state/modal/modal.actions';
-import { isModalLoading } from '../../state/modal/modal.selectors';
+import { ModalComponentStore } from '../refuge-modal/modal.store';
 
 @Component({
   selector: 'app-refuge',
@@ -37,6 +36,7 @@ export class RefugePage {
     private refugeService: RefugeService,
     private store: Store<AppState>,
     private reservationsStore: ReservationsComponentStore,
+    private modal: ModalComponentStore,
     private platform: Platform,
   ) {
     this.reservationsStore.fetchReservations(false);
@@ -48,7 +48,7 @@ export class RefugePage {
   }
 
   refreshButton($event: any) {
-    zip([this.reservationsStore.isLoading$, this.store.select(isModalLoading)])
+    zip([this.reservationsStore.isLoading$, this.modal.isLoading$])
       .pipe(takeWhile(([isLoading, isLoading2]) => isLoading || isLoading2))
       .subscribe({
         next: (v) => {
@@ -58,7 +58,7 @@ export class RefugePage {
           $event.target.complete();
         },
       });
-    this.store.dispatch(openModalWithRefugeId({ refugeId: this.refuge.id }));
+    this.modal.openFromRefugeId(this.refuge.id);
     this.reservationsStore.fetchReservations(false);
   }
 
