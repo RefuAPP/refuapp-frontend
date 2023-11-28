@@ -22,16 +22,10 @@ import { authReducer } from './state/auth/auth.reducer';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { LanguageEffects } from './state/language/language.effects';
 import { languageReducer } from './state/language/language.reducer';
-import { InitEffects } from './state/init/init.effects';
-import { initReducer } from './state/init/init.reducer';
 import { environment } from '../environments/environment';
-import { mapReducer } from './state/map/map.reducer';
-import { MapEffects } from './state/map/map.effects';
 import { errorReducer } from './state/errors/error.reducer';
 import { ErrorEffects } from './state/errors/error.effects';
 import { ReservationsPageModule } from './pages/reservations/reservations.module';
-import { refugesReducer } from './state/refuges/refuges.reducer';
-import { RefugesEffects } from './state/refuges/refuges.effects';
 import { messageReducer } from './state/messages/message.reducer';
 import { HomePageModule } from './pages/home/home.module';
 import { modalReducer } from './state/modal/modal.reducer';
@@ -56,25 +50,13 @@ export function createTranslateLoader(http: HttpClient) {
       },
     }),
     AppRoutingModule,
-    StoreModule.forRoot(
-      {
-        auth: authReducer,
-        language: languageReducer,
-        initStatus: initReducer,
-        map: mapReducer,
-        modal: modalReducer,
-        error: errorReducer,
-        refuges: refugesReducer,
-        messages: messageReducer,
-      },
-      {
-        // This is because inmutability objects on actions (and google maps libraries and capacitor change the object from the action)
-        runtimeChecks: {
-          strictStateImmutability: environment.production,
-          strictActionImmutability: environment.production,
-        },
-      },
-    ),
+    StoreModule.forRoot({
+      auth: authReducer,
+      language: languageReducer,
+      modal: modalReducer,
+      error: errorReducer,
+      messages: messageReducer,
+    }),
     StoreDevtoolsModule.instrument({
       maxAge: 25, // Retains last 25 states
       logOnly: environment.production, // Restrict extension to log-only mode
@@ -84,12 +66,9 @@ export function createTranslateLoader(http: HttpClient) {
       connectOutsideZone: true, // If set to true, the connection is established outside the Angular zone for better performance
     }),
     EffectsModule.forRoot([
-      InitEffects,
       AuthEffects,
       LanguageEffects,
-      MapEffects,
       ErrorEffects,
-      RefugesEffects,
       ModalEffects,
     ]),
     ReservationsPageModule,

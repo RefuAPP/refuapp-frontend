@@ -6,12 +6,11 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { destroyMap, loadMap } from '../../state/map/map.actions';
 import { AppState } from '../../state/app.state';
 import { Store } from '@ngrx/store';
-import { MapConfiguration } from './map-configuration';
 import { ServerErrors } from '../../schemas/errors/server';
 import { fatalError } from '../../state/errors/error.actions';
+import { MapComponentStore } from './map.store';
 
 @Component({
   selector: 'app-map',
@@ -21,19 +20,21 @@ import { fatalError } from '../../state/errors/error.actions';
 export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('mapRef', { static: false }) mapRef?: ElementRef;
 
-  constructor(private store: Store<AppState>) {}
+  librariesAreLoaded$ = this.mapStore.areLibrariesLoaded$;
+
+  constructor(
+    private store: Store<AppState>,
+    private mapStore: MapComponentStore,
+  ) {}
 
   ngOnInit() {}
 
   ngAfterViewInit() {
-    if (this.mapRef)
-      this.store.dispatch(
-        loadMap({ map: this.mapRef, config: MapConfiguration }),
-      );
+    if (this.mapRef) this.mapStore.loadMap(this.mapRef);
     else this.store.dispatch(fatalError({ error: ServerErrors.UNKNOWN_ERROR }));
   }
 
   ngOnDestroy() {
-    this.store.dispatch(destroyMap());
+    this.mapStore.destroy();
   }
 }

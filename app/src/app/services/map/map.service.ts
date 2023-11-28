@@ -17,7 +17,7 @@ export class MapService {
 
   constructor() {}
 
-  destroyMap() {
+  async destroyMap() {
     this.map?.destroy();
   }
 
@@ -37,9 +37,9 @@ export class MapService {
     await this.enableClustering();
   }
 
-  move(location: Coordinates) {
+  async move(location: Coordinates) {
     if (!this.map) return;
-    this.moveMapCameraTo({
+    await this.moveMapCameraTo({
       coordinate: {
         lat: location.latitude,
         lng: location.longitude,
@@ -65,7 +65,7 @@ export class MapService {
     await this.map.enableClustering(2);
   }
 
-  private moveMapCameraTo(cameraConfig: CameraConfig) {
-    this.map!.setCamera(cameraConfig).then();
+  private async moveMapCameraTo(cameraConfig: CameraConfig) {
+    await this.map!.setCamera(cameraConfig);
   }
 }

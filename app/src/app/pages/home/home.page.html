@@ -1,4 +1,6 @@
-<app-searchbar-location></app-searchbar-location>
-<ion-content [fullscreen]="true">
-  <app-map></app-map>
-</ion-content>
+<ng-container *ngIf="canShowComponents$ | async">
+  <app-searchbar-location></app-searchbar-location>
+  <ion-content [fullscreen]="true">
+    <app-map></app-map>
+  </ion-content>
+</ng-container>

@@ -1,4 +1,4 @@
-<ion-app *ngIf="canShowPage$ | async">
+<ion-app>
   <ion-menu contentId="main-content" type="overlay">
     <ion-content>
       <ion-list id="top-menu-list">
@@ -58,12 +58,6 @@
   </ion-menu>
   <ion-router-outlet id="main-content"></ion-router-outlet>
   <app-refuge-modal></app-refuge-modal>
-  <ng-container *ngIf="isMapLoading$ | async as loading">
-    <ion-loading
-      isOpen="{{ loading }}"
-      message="{{ 'MAP.LOADING' | translate }}"
-    ></ion-loading>
-  </ng-container>
 </ion-app>
 <ng-container *ngIf="hasConnectionError$ | async as error">
   <ion-alert

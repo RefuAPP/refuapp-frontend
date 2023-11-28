@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from './state/app.state';
 import { concatMap, filter, Observable, tap } from 'rxjs';
-import { areLibrariesLoaded } from './state/init/init.selectors';
 import {
   clientHasErrorConnection,
   getMinorErrors,
@@ -16,7 +15,6 @@ import { Message } from './state/messages/message.reducer';
 import { clearMessage } from './state/messages/message.actions';
 import { MinorError } from './state/errors/error.reducer';
 import { getBottomItems, getTopItems } from './state/auth/auth.selectors';
-import { isMapLoading } from './state/map/map.selectors';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -27,12 +25,10 @@ import { TranslateService } from '@ngx-translate/core';
 export class AppComponent implements OnInit {
   topMenuItems$ = this.store.select(getTopItems);
   bottomMenuItems$ = this.store.select(getBottomItems);
-  isMapLoading$: Observable<boolean> = this.store.select(isMapLoading);
 
   hasConnectionError$: Observable<boolean> = this.store.select(
     clientHasErrorConnection,
   );
-  canShowPage$ = this.store.select(areLibrariesLoaded);
   private minorErrors$ = this.store
     .select(getMinorErrors)
     .pipe(filter((errors) => errors !== undefined)) as Observable<MinorError>;

@@ -1,11 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { AppState } from '../../state/app.state';
-import { Store } from '@ngrx/store';
 import { Coordinates } from '../../services/search/search.service';
 import { first } from 'rxjs';
 import { SearchbarCustomEvent } from '@ionic/angular';
-import { moveMapTo } from '../../state/map/map.actions';
 import { SearchComponentStore } from './search.store';
+import { MapComponentStore } from '../map/map.store';
 
 @Component({
   selector: 'app-searchbar-location',
@@ -19,13 +17,13 @@ export class SearchbarLocationComponent implements OnInit {
 
   constructor(
     private readonly componentStore: SearchComponentStore,
-    private readonly store: Store<AppState>,
+    private readonly mapStore: MapComponentStore,
   ) {}
 
   ngOnInit() {}
 
   moveMapTo(coordinates: Coordinates) {
-    this.store.dispatch(moveMapTo({ coordinates }));
+    this.mapStore.moveMap(coordinates);
     this.componentStore.clearSearch();
   }
 

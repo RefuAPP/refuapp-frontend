@@ -1,1 +1,4 @@
-<capacitor-google-map #mapRef></capacitor-google-map>
+<capacitor-google-map
+  *ngIf="librariesAreLoaded$ | async"
+  #mapRef
+></capacitor-google-map>
