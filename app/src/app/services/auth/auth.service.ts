@@ -10,7 +10,7 @@ import {
   fromResponse,
 } from '../../schemas/auth/authenticate';
 import { Token } from '../../schemas/auth/token';
-import jwtDecode from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 
 const authUri = `${environment.API}/login/`;
 

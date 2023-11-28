@@ -11,7 +11,7 @@ import { AlertController } from '@ionic/angular';
   templateUrl: './reservations-item.component.html',
   styleUrls: ['./reservations-item.component.scss'],
 })
-export class ReservationsItemComponent implements OnInit {
+export class ReservationsItemComponent {
   @Input() reservations: Reservations = [];
   @Output() removeReservation = new EventEmitter<ReservationWithId>();
 
@@ -19,8 +19,6 @@ export class ReservationsItemComponent implements OnInit {
     private translateService: TranslateService,
     private alertController: AlertController,
   ) {}
-
-  ngOnInit() {}
 
   onRemoveReservation(reservation: ReservationWithId) {
     this.showDeleteReservationMessage(reservation, () => {

@@ -11,7 +11,7 @@ import { MapComponentStore } from '../map/map.store';
   styleUrls: ['./searchbar-location.component.scss'],
   providers: [SearchComponentStore],
 })
-export class SearchbarLocationComponent implements OnInit {
+export class SearchbarLocationComponent {
   searchCompletion$ = this.componentStore.completions$;
   searchValue$ = this.componentStore.search$;
 
@@ -19,8 +19,6 @@ export class SearchbarLocationComponent implements OnInit {
     private readonly componentStore: SearchComponentStore,
     private readonly mapStore: MapComponentStore,
   ) {}
-
-  ngOnInit() {}
 
   moveMapTo(coordinates: Coordinates) {
     this.mapStore.moveMap(coordinates);

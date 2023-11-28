@@ -10,7 +10,7 @@ import { Refuge } from '../../schemas/refuge/refuge';
   styleUrls: ['home.page.scss'],
   providers: [MapComponentStore, ModalComponentStore],
 })
-export class HomePage implements OnInit {
+export class HomePage {
   canShowComponents$ = this.mapStore.areLibrariesLoaded$;
 
   constructor(
@@ -22,8 +22,6 @@ export class HomePage implements OnInit {
     if (refugeId !== null) this.modal.openFromRefugeId(refugeId);
     this.mapStore.loadLibraries();
   }
-
-  ngOnInit() {}
 
   clickedRefuge($event: Refuge) {
     this.modal.openWithRefuge($event);

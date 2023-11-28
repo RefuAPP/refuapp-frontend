@@ -22,7 +22,7 @@ import { TranslateService } from '@ngx-translate/core';
   templateUrl: 'app.component.html',
   styleUrls: ['app.component.scss'],
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
   topMenuItems$ = this.store.select(getTopItems);
   bottomMenuItems$ = this.store.select(getBottomItems);
 
@@ -96,6 +96,4 @@ export class AppComponent implements OnInit {
       },
     ];
   }
-
-  ngOnInit(): void {}
 }

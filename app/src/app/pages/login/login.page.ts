@@ -21,7 +21,7 @@ import { TranslateService } from '@ngx-translate/core';
   styleUrls: ['./login.page.scss'],
   providers: [LoginComponentStore],
 })
-export class LoginPage implements OnInit, OnDestroy {
+export class LoginPage implements OnDestroy {
   phoneMask = spainPhoneMask;
   maskPredicate = phoneMaskPredicate;
 
@@ -98,8 +98,6 @@ export class LoginPage implements OnInit, OnDestroy {
     });
     await loading.present();
   }
-
-  ngOnInit() {}
 
   ngOnDestroy() {
     this.stopLoading().then();

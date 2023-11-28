@@ -18,18 +18,16 @@ import { MapComponentStore } from './map.store';
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.scss'],
 })
-export class MapComponent implements OnInit, AfterViewInit, OnDestroy {
+export class MapComponent implements AfterViewInit, OnDestroy {
   @ViewChild('mapRef', { static: false }) mapRef?: ElementRef;
 
-  @Output() onClickedRefuge = this.mapStore.watchingRefuge$;
+  @Output() clickedRefuge = this.mapStore.watchingRefuge$;
   librariesAreLoaded$ = this.mapStore.areLibrariesLoaded$;
 
   constructor(
     private store: Store<AppState>,
     private mapStore: MapComponentStore,
   ) {}
-
-  ngOnInit() {}
 
   ngAfterViewInit() {
     if (this.mapRef) this.mapStore.loadMap(this.mapRef);

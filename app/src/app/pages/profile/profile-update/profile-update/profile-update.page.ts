@@ -18,7 +18,7 @@ import { ServerErrors } from '../../../../schemas/errors/server';
   templateUrl: './profile-update.page.html',
   styleUrls: ['./profile-update.page.scss'],
 })
-export class ProfileUpdatePage implements OnInit {
+export class ProfileUpdatePage {
   user?: UserCreated;
   form: UpdateUser = {
     id: '',
@@ -42,8 +42,6 @@ export class ProfileUpdatePage implements OnInit {
     const userId = this.getUserIdFromUrl();
     this.fetchUser(userId).then();
   }
-
-  ngOnInit() {}
 
   private getUserIdFromUrl(): string | null {
     return this.route.snapshot.paramMap.get('id');

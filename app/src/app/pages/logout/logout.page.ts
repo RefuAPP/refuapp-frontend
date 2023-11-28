@@ -9,7 +9,7 @@ import { logOutRequest } from '../../state/auth/auth.actions';
   templateUrl: './logout.page.html',
   styleUrls: ['./logout.page.scss'],
 })
-export class LogoutPage implements OnInit {
+export class LogoutPage {
   constructor(
     private store: Store<AppState>,
     private router: Router,
@@ -17,6 +17,4 @@ export class LogoutPage implements OnInit {
     this.store.dispatch(logOutRequest());
     this.router.navigate(['/home']).then();
   }
-
-  ngOnInit() {}
 }

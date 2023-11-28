@@ -8,10 +8,8 @@ import { fixFatalError } from '../../state/errors/error.actions';
   templateUrl: './internal-error-page.page.html',
   styleUrls: ['./internal-error-page.page.scss'],
 })
-export class InternalErrorPagePage implements OnInit {
+export class InternalErrorPagePage {
   constructor(private store: Store<AppState>) {}
-
-  ngOnInit() {}
 
   cleanError() {
     this.store.dispatch(fixFatalError());

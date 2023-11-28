@@ -93,6 +93,7 @@ export class MapComponentStore extends ComponentStore<MapState> {
         },
         (error) => {
           this.patchState({ hasLibraryLoaded: false });
+          // TODO: change this, probably breaking ui
           this.store.dispatch(
             fatalError({ error: ServerErrors.UNKNOWN_ERROR }),
           );

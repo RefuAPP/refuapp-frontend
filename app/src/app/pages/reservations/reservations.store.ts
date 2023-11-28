@@ -81,7 +81,8 @@ export class ReservationsComponentStore extends ComponentStore<ReservationsState
             );
           });
         this.store.dispatch(
-          fatalError({ error: PermissionsErrors.NOT_AUTHENTICATED }),
+          // TODO: This was fatalError, but we have to change it to minorError because of performance issues
+          minorError({ error: PermissionsErrors.NOT_AUTHENTICATED }),
         );
         return of(EMPTY);
       }),
@@ -179,13 +180,17 @@ export class ReservationsComponentStore extends ComponentStore<ReservationsState
       concatMap((userId) => {
         if (userId != null)
           return this.createReservationFor(userId, reservation);
-        else {
-          this.store.dispatch(
-            fatalError({ error: PermissionsErrors.NOT_AUTHENTICATED }),
-          );
-          return of(EMPTY);
-        }
+        else throw new Error();
       }),
+      tapResponse(
+        () => {},
+        (error) => {
+          // TODO: This was fatalError, but we have to change it to minorError because of performance issues
+          this.store.dispatch(
+            minorError({ error: PermissionsErrors.NOT_AUTHENTICATED }),
+          );
+        },
+      ),
     );
   }
 

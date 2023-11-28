@@ -8,10 +8,8 @@ import { fixFatalError } from '../../state/errors/error.actions';
   templateUrl: './not-found-page.page.html',
   styleUrls: ['./not-found-page.page.scss'],
 })
-export class NotFoundPagePage implements OnInit {
+export class NotFoundPagePage {
   constructor(private store: Store<AppState>) {}
-
-  ngOnInit() {}
 
   cleanError() {
     this.store.dispatch(fixFatalError());

@@ -8,10 +8,8 @@ import { fixFatalError } from '../../../state/errors/error.actions';
   templateUrl: './forbidden.page.html',
   styleUrls: ['./forbidden.page.scss'],
 })
-export class ForbiddenPage implements OnInit {
+export class ForbiddenPage {
   constructor(private readonly store: Store<AppState>) {}
-
-  ngOnInit() {}
 
   cleanError() {
     this.store.dispatch(fixFatalError());

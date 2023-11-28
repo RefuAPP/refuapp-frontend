@@ -9,14 +9,12 @@ import { takeUntil, takeWhile } from 'rxjs';
   styleUrls: ['./reservations.page.scss'],
   providers: [ReservationsComponentStore],
 })
-export class ReservationsPage implements OnInit {
+export class ReservationsPage {
   reservations$ = this.store.reservations$;
 
   constructor(private store: ReservationsComponentStore) {
     this.store.fetchReservations(false);
   }
-
-  ngOnInit() {}
 
   removeReservation(reservation: ReservationWithId) {
     this.store.deleteReservation(reservation.id);

@@ -18,13 +18,11 @@ import { ToggleCustomEvent } from '@ionic/angular';
   templateUrl: './language-settings.component.html',
   styleUrls: ['./language-settings.component.scss'],
 })
-export class LanguageSettingsComponent implements OnInit {
+export class LanguageSettingsComponent {
   currentLanguage$ = this.store.select(getCurrentLanguage);
   isForcedLanguageByUser$ = this.store.select(isForcedLanguage);
 
   constructor(private store: Store<AppState>) {}
-
-  ngOnInit() {}
 
   changeLanguage(event: CustomEvent) {
     const languageCode = event.detail.value;

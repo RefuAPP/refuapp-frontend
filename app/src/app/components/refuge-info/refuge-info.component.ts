@@ -6,10 +6,8 @@ import { Refuge } from '../../schemas/refuge/refuge';
   templateUrl: './refuge-info.component.html',
   styleUrls: ['./refuge-info.component.scss'],
 })
-export class RefugeInfoComponent implements OnInit {
+export class RefugeInfoComponent {
   @Input() refuge!: Refuge;
 
   constructor() {}
-
-  ngOnInit() {}
 }

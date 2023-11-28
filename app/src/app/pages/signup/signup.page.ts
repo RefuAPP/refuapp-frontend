@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { phoneMaskPredicate, spainPhoneMask } from '../../schemas/phone/phone';
 import { concatMap, switchMap, tap } from 'rxjs';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -18,7 +18,7 @@ import { TranslateService } from '@ngx-translate/core';
   styleUrls: ['./signup.page.scss'],
   providers: [CreateUserComponentStore],
 })
-export class SignupPage implements OnInit {
+export class SignupPage implements OnDestroy {
   phoneMask = spainPhoneMask;
   maskPredicate = phoneMaskPredicate;
 
@@ -97,6 +97,4 @@ export class SignupPage implements OnInit {
   ngOnDestroy() {
     this.stopLoading().then();
   }
-
-  ngOnInit() {}
 }
