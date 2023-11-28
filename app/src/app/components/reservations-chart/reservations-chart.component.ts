@@ -7,16 +7,9 @@ import {
   ViewChild,
 } from '@angular/core';
 import { Refuge } from '../../schemas/refuge/refuge';
-import {
-  BarVerticalComponent,
-  Color,
-  LegendOptions,
-  LegendPosition,
-  ScaleType,
-} from '@swimlane/ngx-charts';
+import { BarVerticalComponent, Color, ScaleType } from '@swimlane/ngx-charts';
 import { OccupationService } from '../../services/occupation/occupation.service';
 import { of } from 'rxjs';
-import { random } from 'lodash';
 
 @Component({
   selector: 'app-reservations-chart',
@@ -37,7 +30,11 @@ export class ReservationsChartComponent implements OnInit, AfterViewInit {
     },
   ]);
 
-  days: { name: string; value: number; tooltipText: string }[] = [];
+  days: {
+    name: string;
+    value: number;
+    tooltipText: string;
+  }[] = [];
 
   view = [700, 400] as [number, number];
 
@@ -78,7 +75,7 @@ export class ReservationsChartComponent implements OnInit, AfterViewInit {
 
       this.days.push({
         name: currentDate.getUTCDate().toString(),
-        value: random(0, 12),
+        value: Math.floor(Math.random() * 12),
         tooltipText: 'myballs',
       });
 
