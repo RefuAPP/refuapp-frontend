@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UserCreated } from 'src/app/schemas/user/user';
+import { UpdateUser, UserCreated } from 'src/app/schemas/user/user';
 import { Router } from '@angular/router';
 import {
   GetUserFromIdErrors,
@@ -13,17 +13,34 @@ import { AuthService } from '../../../services/auth/auth.service';
 import { PermissionsErrors } from '../../../schemas/errors/permissions';
 import { ResourceErrors } from '../../../schemas/errors/resource';
 import { ServerErrors } from '../../../schemas/errors/server';
+import { NgForm } from '@angular/forms';
+import {
+  format,
+  phoneMaskPredicate,
+  spainPhoneMask,
+} from '../../../schemas/phone/phone';
 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.page.html',
   styleUrls: ['./profile.page.scss'],
 })
-export class ProfilePage {
+export class ProfilePage implements OnInit {
+  phoneMask = spainPhoneMask;
+  maskPredicate = phoneMaskPredicate;
+
   user?: UserCreated;
   hasError = false;
   errorMessage = '';
   avatar: string = '';
+  isEditing: boolean = true;
+  updateUserForm: UpdateUser = {
+    id: '',
+    username: '',
+    phone_number: '',
+    emergency_number: '',
+    password: '',
+  };
 
   constructor(
     private router: Router,
@@ -36,6 +53,8 @@ export class ProfilePage {
     this.getUserId().then((userId: string | null) => this.fetchUser(userId));
     this.avatar = this.getRandomAvatar();
   }
+
+  ngOnInit() {}
 
   private async getUserId(): Promise<string | null> {
     return this.authService.getUserId().then();
@@ -57,6 +76,13 @@ export class ProfilePage {
     match(response)
       .with({ status: 'correct' }, (response) => {
         this.user = response.data;
+        this.updateUserForm = {
+          id: this.user.id,
+          username: this.user.username,
+          phone_number: this.user.phone_number,
+          emergency_number: this.user.emergency_number,
+          password: '',
+        };
       })
       .with({ status: 'error' }, (response) => {
         this.handleGetError(response.error);
@@ -169,8 +195,8 @@ export class ProfilePage {
     return Math.floor(Math.random() * 8) + 1;
   }
 
-  updateUser() {
-    if (this.user === undefined) return;
-    this.router.navigate(['/profile/update', this.user.id]).then();
+  onUpdate(form: NgForm) {
+    if (form.invalid) return;
+    console.log(form.value);
   }
 }

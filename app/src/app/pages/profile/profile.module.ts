@@ -10,6 +10,7 @@ import { ProfilePage } from './profile-get/profile.page';
 import { TranslateModule } from '@ngx-translate/core';
 import { ProfileUpdatePage } from './profile-update/profile-update/profile-update.page';
 import { LanguageSettingsComponent } from '../../components/language-settings/language-settings.component';
+import { MaskitoModule } from '@maskito/angular';
 
 @NgModule({
   imports: [
@@ -18,6 +19,7 @@ import { LanguageSettingsComponent } from '../../components/language-settings/la
     IonicModule,
     ProfilePageRoutingModule,
     TranslateModule,
+    MaskitoModule,
   ],
   declarations: [ProfilePage, ProfileUpdatePage, LanguageSettingsComponent],
 })

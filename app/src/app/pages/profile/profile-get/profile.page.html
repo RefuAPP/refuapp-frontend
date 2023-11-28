@@ -13,9 +13,9 @@
       <div class="header-container">
         <img class="profile-image" [src]="avatar" alt="Profile photo" />
         <ion-card-title class="user-name">
-          {{ 'PROFILE.USER_NAME' | translate: { username: user?.username } }}
+          {{ 'PROFILE.USER_NAME' | translate: {username: user?.username} }}
         </ion-card-title>
-        <div class="details">
+        <div class="details" *ngIf="!isEditing; else editUserFrom">
           <p>
             {{ 'PROFILE.PHONE_NUMBER' | translate: { phoneNumber:
             user?.phone_number } }}
@@ -37,10 +37,69 @@
     </ion-list>
   </ion-card>
   <ion-note color="danger" *ngIf="hasError"> {{errorMessage}} </ion-note>
-
-  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-    <ion-fab-button (click)="updateUser()">
-      <ion-icon name="pencil-outline"></ion-icon>
-    </ion-fab-button>
-  </ion-fab>
 </ion-content>
+
+<ng-template #editUserFrom>
+  <form #updateUser="ngForm" novalidate>
+    <ion-input
+      label-placement="floating"
+      label="Username"
+      clearOnEdit="true"
+      fill="outline"
+      class="ion-text-left"
+      type="text"
+      name="username"
+      [(ngModel)]="updateUserForm.username"
+      error-text="Please enter a valid username"
+      required="true"
+    ></ion-input>
+    <ion-input
+      name="phone_number"
+      label-placement="floating"
+      label="Phone number"
+      [maskito]="phoneMask"
+      [maskitoElement]="maskPredicate"
+      placeholder="(+34) xxx xxx xxx"
+      class="ion-text-left"
+      error-text="Please enter a valid phone number"
+      fill="outline"
+      type="tel"
+      clearOnEdit="true"
+      [(ngModel)]="updateUserForm.phone_number"
+      required="true"
+    ></ion-input>
+    <ion-input
+      name="emergency_number"
+      [maskito]="phoneMask"
+      label-placement="floating"
+      label="Emergency phone number"
+      [maskitoElement]="maskPredicate"
+      error-text="Please enter a valid emergency phone number"
+      fill="outline"
+      type="tel"
+      [(ngModel)]="updateUserForm.emergency_number"
+      placeholder="(+34) xxx xxx xxx"
+      class="ion-text-left"
+      required="true"
+      clearOnEdit="true"
+    ></ion-input>
+    <ion-input
+      type="password"
+      class="ion-text-left"
+      clearOnEdit="true"
+      name="password"
+      label="Password"
+      label-placement="floating"
+      fill="outline"
+      [(ngModel)]="updateUserForm.password"
+      error-text="Please enter a valid password"
+      required="true"
+      (keyup.enter)="onUpdate(updateUser)"
+    ></ion-input>
+    <ion-note color="danger" *ngIf="hasError"> {{errorMessage}} </ion-note>
+
+    <ion-button (click)="onUpdate(updateUser)" type="submit" expand="block"
+      >Update user
+    </ion-button>
+  </form>
+</ng-template>
