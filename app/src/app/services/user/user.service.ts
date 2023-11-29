@@ -5,6 +5,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import {
   CreateUser,
   isValidId,
+  UpdateUser,
   User,
   UserCreated,
   UserPattern,
@@ -18,6 +19,13 @@ import { GetUserResponse } from '../../schemas/user/fetch/get-refuge-schema';
 import { isMatching } from 'ts-pattern';
 import { ServerErrors } from '../../schemas/errors/server';
 import { getErrorFrom } from '../../schemas/errors/all-errors';
+import {
+  UpdateUserResponse,
+  updateUserResponseFromError,
+  updateUserResponseFromResponse,
+} from '../../schemas/user/update/update-user-response';
+import { UpdateUserError } from '../../schemas/user/update/update-user-error';
+import fromHttp = UpdateUserError.fromHttp;
 
 const createUserUri = `${environment.API}/users/`;
 
@@ -69,5 +77,26 @@ export class UserService {
 
   private getUserFromIdEndpoint(id: string): string {
     return `${environment.API}/users/${id}`;
+  }
+
+  updateUser(user: UpdateUser): Observable<UpdateUserResponse> {
+    return this.updateUserFromApi(user);
+  }
+
+  private updateUserFromApi(user: UpdateUser): Observable<UpdateUserResponse> {
+    const endpoint = this.updateUserEndpoint(user.id);
+    return this.http.put<UpdateUserResponse>(endpoint, user).pipe(
+      map((response: UpdateUserResponse) =>
+        updateUserResponseFromResponse(response),
+      ),
+      catchError((err: HttpErrorResponse) =>
+        of(updateUserResponseFromError(err)),
+      ),
+      retry(3),
+    );
+  }
+
+  private updateUserEndpoint(userId: string): string {
+    return `${environment.API}/users/${userId}`;
   }
 }

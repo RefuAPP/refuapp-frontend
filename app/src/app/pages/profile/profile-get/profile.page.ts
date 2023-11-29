@@ -15,9 +15,11 @@ import { ResourceErrors } from '../../../schemas/errors/resource';
 import { ServerErrors } from '../../../schemas/errors/server';
 import { NgForm } from '@angular/forms';
 import {
+  format,
   phoneMaskPredicate,
   spainPhoneMask,
 } from '../../../schemas/phone/phone';
+import { UpdateUserResponse } from '../../../schemas/user/update/update-user-response';
 
 @Component({
   selector: 'app-profile',
@@ -196,6 +198,29 @@ export class ProfilePage implements OnInit {
 
   onUpdate(form: NgForm) {
     if (form.invalid) return;
-    console.log(form.value);
+    const formattedPhoneNumber: string | null = format(
+      this.updateUserForm.phone_number,
+    );
+    const formattedEmergencyPhoneNumber: string | null = format(
+      this.updateUserForm.emergency_number,
+    );
+    if (
+      formattedPhoneNumber === null ||
+      formattedEmergencyPhoneNumber === null
+    ) {
+      this.hasError = true;
+      this.errorMessage = 'Cannot format phone numbers';
+      return;
+    }
+    this.updateUserForm.phone_number = formattedPhoneNumber;
+    this.updateUserForm.emergency_number = formattedEmergencyPhoneNumber;
+    this.userService.updateUser(this.updateUserForm).subscribe({
+      next: (response) => this.handleUpdateUserResponse(response),
+      error: () => this.handleClientError().then(),
+    });
+  }
+
+  private handleUpdateUserResponse(response: UpdateUserResponse): void {
+    console.log(response);
   }
 }
