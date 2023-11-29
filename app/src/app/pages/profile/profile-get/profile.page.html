@@ -6,6 +6,7 @@
     <ion-title>{{ 'PROFILE.HEADER' | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>
+<!--TODO: Translate this page-->
 
 <ion-content *ngIf="user !== undefined">
   <ion-card class="profile-card">
@@ -37,6 +38,11 @@
     </ion-list>
   </ion-card>
   <ion-note color="danger" *ngIf="hasError"> {{errorMessage}} </ion-note>
+  <ion-fab *ngIf="!isEditing" vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="isEditing = true">
+      <ion-icon name="pencil-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 </ion-content>
 
 <ng-template #editUserFrom>

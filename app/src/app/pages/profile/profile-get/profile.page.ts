@@ -15,7 +15,6 @@ import { ResourceErrors } from '../../../schemas/errors/resource';
 import { ServerErrors } from '../../../schemas/errors/server';
 import { NgForm } from '@angular/forms';
 import {
-  format,
   phoneMaskPredicate,
   spainPhoneMask,
 } from '../../../schemas/phone/phone';
@@ -33,7 +32,7 @@ export class ProfilePage implements OnInit {
   hasError = false;
   errorMessage = '';
   avatar: string = '';
-  isEditing: boolean = true;
+  isEditing: boolean = false;
   updateUserForm: UpdateUser = {
     id: '',
     username: '',
