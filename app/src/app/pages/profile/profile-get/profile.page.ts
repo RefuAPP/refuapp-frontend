@@ -26,7 +26,7 @@ import { UpdateUserResponse } from '../../../schemas/user/update/update-user-res
   templateUrl: './profile.page.html',
   styleUrls: ['./profile.page.scss'],
 })
-export class ProfilePage implements OnInit {
+export class ProfilePage {
   phoneMask = spainPhoneMask;
   maskPredicate = phoneMaskPredicate;
 
@@ -54,8 +54,6 @@ export class ProfilePage implements OnInit {
     this.getUserId().then((userId: string | null) => this.fetchUser(userId));
     this.avatar = this.getRandomAvatar();
   }
-
-  ngOnInit() {}
 
   private async getUserId(): Promise<string | null> {
     return this.authService.getUserId().then();
