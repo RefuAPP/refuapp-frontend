@@ -33,9 +33,9 @@
     <ion-card-header>
       <ion-card-title> {{ 'PROFILE.SETTINGS' | translate }} </ion-card-title>
     </ion-card-header>
-    <ion-list>
-      <app-language-settings></app-language-settings>
-    </ion-list>
+    <!--    <ion-list>-->
+    <!--      <app-language-settings></app-language-settings>-->
+    <!--    </ion-list>-->
   </ion-card>
   <ion-note color="danger" *ngIf="hasError"> {{errorMessage}} </ion-note>
   <ion-fab *ngIf="!isEditing" vertical="bottom" horizontal="end" slot="fixed">

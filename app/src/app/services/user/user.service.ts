@@ -6,9 +6,8 @@ import {
   CreateUser,
   isValidId,
   UpdateUser,
-  User,
   UserCreated,
-  UserPattern,
+  UserCreatedPattern,
 } from '../../schemas/user/user';
 import {
   CreateUserResponse,
@@ -24,8 +23,6 @@ import {
   updateUserResponseFromError,
   updateUserResponseFromResponse,
 } from '../../schemas/user/update/update-user-response';
-import { UpdateUserError } from '../../schemas/user/update/update-user-error';
-import fromHttp = UpdateUserError.fromHttp;
 
 const createUserUri = `${environment.API}/users/`;
 
@@ -55,9 +52,9 @@ export class UserService {
 
   private getUserFromApi(userId: string): Observable<GetUserResponse> {
     const endpoint = this.getUserFromIdEndpoint(userId);
-    return this.http.get<User>(endpoint).pipe(
-      map<User, GetUserResponse | Error>((user: User) => {
-        if (isMatching(UserPattern, user))
+    return this.http.get<UserCreated>(endpoint).pipe(
+      map<UserCreated, GetUserResponse | Error>((user: UserCreated) => {
+        if (isMatching(UserCreatedPattern, user))
           return { status: 'correct', data: user };
         return {
           status: 'error',

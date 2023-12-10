@@ -1,4 +1,4 @@
-import { User } from '../user';
+import { UserCreated } from '../user';
 import { ServerErrors } from '../../errors/server';
 import { PermissionsErrors } from '../../errors/permissions';
 import { ResourceErrors } from '../../errors/resource';
@@ -11,7 +11,7 @@ export type GetUserFromIdErrors =
 export type GetUserResponse =
   | {
       status: 'correct';
-      data: User;
+      data: UserCreated;
     }
   | {
       status: 'error';
