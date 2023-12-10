@@ -1,5 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { UpdateUser, UserCreated } from 'src/app/schemas/user/user';
+import { Component } from '@angular/core';
+import {
+  UpdateUser,
+  UserCreated,
+  UserUpdated,
+} from 'src/app/schemas/user/user';
 import { Router } from '@angular/router';
 import {
   GetUserFromIdErrors,
@@ -20,6 +24,11 @@ import {
   spainPhoneMask,
 } from '../../../schemas/phone/phone';
 import { UpdateUserResponse } from '../../../schemas/user/update/update-user-response';
+import {
+  ServerError,
+  ClientError,
+  UpdateUserError,
+} from '../../../schemas/user/update/update-user-error';
 
 @Component({
   selector: 'app-profile',
@@ -219,6 +228,45 @@ export class ProfilePage {
   }
 
   private handleUpdateUserResponse(response: UpdateUserResponse): void {
-    console.log(response);
+    match(response)
+      .with({ status: 'updated' }, (response) =>
+        this.handleUpdateUserCorrect(response.data),
+      )
+      .with({ status: 'error' }, (response) =>
+        this.handleUpdateUserError(response.error),
+      )
+      .exhaustive();
+  }
+
+  private handleUpdateUserCorrect(user: UserUpdated): void {
+    this.user = user;
+    this.isEditing = false;
+  }
+
+  private handleUpdateUserError(error: UpdateUserError): void {
+    match(error)
+      .with(ServerError.UNAUTHORIZED, () => this.handleUnauthorizedError())
+      .with(ServerError.FORBIDDEN, () => this.handleForbiddenError())
+      .with(ServerError.NOT_FOUND, () => this.handleNotFoundError())
+      .with(ServerError.CONFLICT, () => this.handleConflictError())
+      .with(ServerError.UNKNOWN_ERROR, () => this.handleUnknownError())
+      .with(ServerError.INCORRECT_DATA, () => this.handleBadUserData())
+      .with({ type: 'INVALID_USER_DATA' }, (err: ClientError) =>
+        this.handleInvalidUserData(err.message),
+      );
+  }
+
+  private async handleConflictError() {
+    await this.showError(async () => {
+      await this.showErrorMessage(
+        this.translateService.instant('Phone already exists'), // TODO: Translate
+      ).then();
+    });
+  }
+
+  private async handleInvalidUserData(message: string) {
+    await this.showError(async () => {
+      await this.showErrorMessage(message).then();
+    });
   }
 }
