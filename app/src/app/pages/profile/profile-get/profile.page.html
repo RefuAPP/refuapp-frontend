@@ -6,7 +6,6 @@
     <ion-title>{{ 'PROFILE.HEADER' | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>
-<!--TODO: Translate this page-->
 
 <ion-content *ngIf="user !== undefined">
   <ion-card class="profile-card">
@@ -49,25 +48,25 @@
   <form #updateUser="ngForm" novalidate>
     <ion-input
       label-placement="floating"
-      label="Username"
+      label="{{ 'UPDATE_USER.USERNAME' | translate }}"
       clearOnEdit="true"
       fill="outline"
       class="ion-text-left"
       type="text"
       name="username"
       [(ngModel)]="updateUserForm.username"
-      error-text="Please enter a valid username"
+      errorText="{{ 'UPDATE_USER.USERNAME_NOT_FILLED' | translate }}"
       required="true"
     ></ion-input>
     <ion-input
       name="phone_number"
       label-placement="floating"
-      label="Phone number"
+      label=" {{ 'UPDATE_USER.PHONE_NUMBER' | translate }}"
       [maskito]="phoneMask"
       [maskitoElement]="maskPredicate"
       placeholder="(+34) xxx xxx xxx"
       class="ion-text-left"
-      error-text="Please enter a valid phone number"
+      errorText=" {{ 'UPDATE_USER.PHONE_NUMBER_NOT_FILLED' | translate }}"
       fill="outline"
       type="tel"
       clearOnEdit="true"
@@ -78,9 +77,9 @@
       name="emergency_number"
       [maskito]="phoneMask"
       label-placement="floating"
-      label="Emergency phone number"
+      label=" {{ 'UPDATE_USER.EMERGENCY_PHONE_NUMBER' | translate }}"
       [maskitoElement]="maskPredicate"
-      error-text="Please enter a valid emergency phone number"
+      errorText=" {{ 'UPDATE_USER.EMERGENCY_PHONE_NUMBER_NOT_FILLED' | translate }}"
       fill="outline"
       type="tel"
       [(ngModel)]="updateUserForm.emergency_number"
@@ -94,18 +93,18 @@
       class="ion-text-left"
       clearOnEdit="true"
       name="password"
-      label="Password"
+      label=" {{ 'UPDATE_USER.PASSWORD' | translate }}"
       label-placement="floating"
       fill="outline"
       [(ngModel)]="updateUserForm.password"
-      error-text="Please enter a valid password"
+      errorText=" {{ 'UPDATE_USER.PASSWORD_NOT_FILLED' | translate }}"
       required="true"
       (keyup.enter)="onUpdate(updateUser)"
     ></ion-input>
     <ion-note color="danger" *ngIf="hasError"> {{errorMessage}} </ion-note>
 
     <ion-button (click)="onUpdate(updateUser)" type="submit" expand="block"
-      >Update user
+      >{{ 'UPDATE_USER.SUBMIT' | translate }}
     </ion-button>
   </form>
 </ng-template>

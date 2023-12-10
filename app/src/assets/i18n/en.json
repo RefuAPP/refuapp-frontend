@@ -176,5 +176,18 @@
     "NOT_AUTHENTICATED": "You are not authenticated",
     "NOT_FOUND": "Resource couldn't be found, try again later",
     "NOT_CONNECTED": "You are not connected to the internet, retry later"
+  },
+  "UPDATE_USER": {
+    "USERNAME": "Username",
+    "USERNAME_NOT_FILLED": "Please enter a valid username",
+    "PHONE_NUMBER": "Phone Number",
+    "PHONE_NUMBER_NOT_FILLED": "Please enter a valid phone number",
+    "EMERGENCY_PHONE_NUMBER": "Emergency Phone Number",
+    "EMERGENCY_PHONE_NUMBER_NOT_FILLED": "Please enter a valid emergency phone number",
+    "PASSWORD": "Password",
+    "PASSWORD_NOT_FILLED": "Please enter a valid password",
+    "SUBMIT": "Update user",
+    "PHONE_NUMBER_ALREADY_EXIST": "Phone number already exists",
+    "PHONE_FORMAT_INCORRECT": "Phone number format is incorrect"
   }
 }

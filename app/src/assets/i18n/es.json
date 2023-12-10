@@ -176,5 +176,18 @@
     "NOT_AUTHENTICATED": "No estás autenticado",
     "NOT_FOUND": "El recurso no se pudo encontrar, inténtalo de nuevo más tarde",
     "NOT_CONNECTED": "No estás conectado a internet, inténtalo más tarde"
+  },
+  "UPDATE_USER": {
+    "USERNAME": "Nombre de usuario",
+    "USERNAME_NOT_FILLED": "Por favor, ingresa un nombre de usuario válido",
+    "PHONE_NUMBER": "Número de teléfono",
+    "PHONE_NUMBER_NOT_FILLED": "Por favor, ingresa un número de teléfono válido",
+    "EMERGENCY_PHONE_NUMBER": "Número de teléfono de emergencia",
+    "EMERGENCY_PHONE_NUMBER_NOT_FILLED": "Por favor, ingresa un número de teléfono de emergencia válido",
+    "PASSWORD": "Contraseña",
+    "PASSWORD_NOT_FILLED": "Por favor, ingresa una contraseña válida",
+    "SUBMIT": "Actualizar usuario",
+    "PHONE_NUMBER_ALREADY_EXIST": "El número de teléfono ya existe",
+    "PHONE_FORMAT_INCORRECT": "El formato del número de teléfono es incorrecto"
   }
 }

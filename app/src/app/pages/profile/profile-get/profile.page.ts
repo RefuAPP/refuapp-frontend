@@ -216,7 +216,9 @@ export class ProfilePage {
       formattedEmergencyPhoneNumber === null
     ) {
       this.hasError = true;
-      this.errorMessage = 'Cannot format phone numbers';
+      this.errorMessage = this.translateService.instant(
+        'PHONE_FORMAT_INCORRECT',
+      );
       return;
     }
     this.updateUserForm.phone_number = formattedPhoneNumber;
@@ -259,7 +261,7 @@ export class ProfilePage {
   private async handleConflictError() {
     await this.showError(async () => {
       await this.showErrorMessage(
-        this.translateService.instant('Phone already exists'), // TODO: Translate
+        this.translateService.instant('PHONE_NUMBER_ALREADY_EXIST'),
       ).then();
     });
   }

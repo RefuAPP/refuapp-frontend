@@ -176,5 +176,18 @@
     "NOT_AUTHENTICATED": "No estàs autenticat",
     "NOT_FOUND": "El recurs no es pot trobar, torna-ho a provar més tard",
     "NOT_CONNECTED": "No estàs connectat a Internet, torna-ho a provar més tard"
+  },
+  "UPDATE_USER": {
+    "USERNAME": "Nom d'usuari",
+    "USERNAME_NOT_FILLED": "Si us plau, introdueix un nom d'usuari vàlid",
+    "PHONE_NUMBER": "Número de telèfon",
+    "PHONE_NUMBER_NOT_FILLED": "Si us plau, introdueix un número de telèfon vàlid",
+    "EMERGENCY_PHONE_NUMBER": "Número de telèfon d'emergència",
+    "EMERGENCY_PHONE_NUMBER_NOT_FILLED": "Si us plau, introdueix un número de telèfon d'emergència vàlid",
+    "PASSWORD": "Contrasenya",
+    "PASSWORD_NOT_FILLED": "Si us plau, introdueix una contrasenya vàlida",
+    "SUBMIT": "Actualitzar usuari",
+    "PHONE_NUMBER_ALREADY_EXIST": "El número de telèfon ja existeix",
+    "PHONE_FORMAT_INCORRECT": "El format del número de telèfon és incorrecte"
   }
 }
