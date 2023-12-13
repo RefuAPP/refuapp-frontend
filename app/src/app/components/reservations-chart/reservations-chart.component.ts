@@ -24,6 +24,8 @@ export class ReservationsChartComponent implements OnInit {
   todayMonth = new Date().getMonth() + 1;
   today = new Date().getDate().toString() + '/' + this.todayMonth.toString() + '/' + new Date().getFullYear().toString();
 
+  offset = 0;
+
   formattedChartReservations: {
     name: string;
     value: number;
@@ -68,8 +70,11 @@ export class ReservationsChartComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.updateChart()
+  }
 
-    this.reservationService.getWeekReservationsForRefuge(this.refuge.id, 0).subscribe({
+  private updateChart() {
+    this.reservationService.getWeekReservationsForRefuge(this.refuge.id, this.offset).subscribe({
       next: (response) => {
         this.chartReservations = response;
         this.formatChartReservations();
@@ -79,5 +84,15 @@ export class ReservationsChartComponent implements OnInit {
         console.log("error" + err);
       }
     });
+  }
+
+  previousWeek() {
+    this.offset--;
+    this.updateChart()
+  }
+
+  nextWeek() {
+    this.offset++;
+    this.updateChart()
   }
 }

@@ -1,6 +1,14 @@
 <h3 class="ion-padding-start" style="margin-bottom: 30px">
   {{ "REFUGE.OCCUPATION.HISTORIAL" | translate }}
 </h3>
+<ion-row style="margin-bottom: 10px">
+    <ion-button class="close-button" (click)="previousWeek()">
+      <ion-icon name="caret-back-outline"></ion-icon>
+    </ion-button>
+    <ion-button class="close-button" (click)="nextWeek()">
+      <ion-icon name="caret-forward-outline"></ion-icon>
+    </ion-button>
+</ion-row>
 <div class="modal-card">
   <ngx-charts-bar-vertical
     #verticalBarChart
