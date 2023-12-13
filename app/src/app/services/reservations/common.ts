@@ -4,8 +4,12 @@ import {
   CorrectGetReservationsPattern,
   GetReservations,
 } from '../../schemas/reservations/get-reservations-refuge-user';
-import { Reservations } from '../../schemas/reservations/reservation';
+import {Reservations, ReservationsWeek} from '../../schemas/reservations/reservation';
 import { isMatching } from 'ts-pattern';
+import {
+  CorrectGetWeekReservations,
+  CorrectGetWeekReservationsPattern, GetWeekReservations
+} from "../../schemas/reservations/get-week-reservations-refuge";
 
 export function toReservations(
   getReservations: Observable<GetReservations>,
@@ -15,6 +19,18 @@ export function toReservations(
       // TODO: Search about pattern matching with arrays!
       if (isMatching(CorrectGetReservationsPattern, reservations))
         return (reservations as CorrectGetReservations).reservations;
+      return [];
+    }),
+  );
+}
+
+export function toReservationsWeek(
+  getWeekReservations: Observable<GetWeekReservations>,
+): Observable<ReservationsWeek> {
+  return getWeekReservations.pipe(
+    map((reservations) => {
+      if (isMatching(CorrectGetWeekReservationsPattern, reservations))
+        return (reservations as CorrectGetWeekReservations).week;
       return [];
     }),
   );

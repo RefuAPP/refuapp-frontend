@@ -6,10 +6,12 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { Refuge } from '../../schemas/refuge/refuge';
-import { BarVerticalComponent, Color, ScaleType } from '@swimlane/ngx-charts';
-import { OccupationService } from '../../services/occupation/occupation.service';
-import { of } from 'rxjs';
+import {Refuge} from '../../schemas/refuge/refuge';
+import {BarVerticalComponent, Color, ScaleType} from '@swimlane/ngx-charts';
+import {OccupationService} from '../../services/occupation/occupation.service';
+import {of} from 'rxjs';
+import {RefugeReservationService} from "../../services/reservations/refuge-reservation.service";
+import {GetUserResponse} from "../../schemas/user/fetch/get-refuge-schema";
 
 @Component({
   selector: 'app-reservations-chart',
@@ -17,8 +19,7 @@ import { of } from 'rxjs';
   styleUrls: ['./reservations-chart.component.scss'],
 })
 export class ReservationsChartComponent implements OnInit, AfterViewInit {
-  @Input({ required: true }) refuge!: Refuge;
-  //    Get vertical bar component with viewchiod
+  @Input({required: true}) refuge!: Refuge;
   @ViewChild('verticalBarChart') verticalBarChart?: BarVerticalComponent;
   testDate1 = new Date('2023-10-14');
   testDate2 = new Date('2023-10-15');
@@ -56,7 +57,9 @@ export class ReservationsChartComponent implements OnInit, AfterViewInit {
   constructor(
     private changeDetectorRef: ChangeDetectorRef,
     private occupationService: OccupationService,
-  ) {}
+    private reservationService: RefugeReservationService,
+  ) {
+  }
 
   onSelect() {
     console.log('myballs');
@@ -81,6 +84,15 @@ export class ReservationsChartComponent implements OnInit, AfterViewInit {
 
       this.colorScheme.domain.push(color);
     }
+
+    this.reservationService.getWeekReservationsForRefuge(this.refuge.id, 0).subscribe({
+      next: (response) => {
+        console.log("correct" + response);
+      },
+      error: (err) => {
+        console.log("error" + err);
+      }
+    });
   }
 
   ngAfterViewInit() {
