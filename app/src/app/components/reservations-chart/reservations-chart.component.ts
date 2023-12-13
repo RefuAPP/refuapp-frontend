@@ -12,6 +12,7 @@ import {OccupationService} from '../../services/occupation/occupation.service';
 import {of} from 'rxjs';
 import {RefugeReservationService} from "../../services/reservations/refuge-reservation.service";
 import {GetUserResponse} from "../../schemas/user/fetch/get-refuge-schema";
+import {WeekReservations} from "../../schemas/reservations/reservation";
 
 @Component({
   selector: 'app-reservations-chart',
@@ -21,6 +22,8 @@ import {GetUserResponse} from "../../schemas/user/fetch/get-refuge-schema";
 export class ReservationsChartComponent implements OnInit, AfterViewInit {
   @Input({required: true}) refuge!: Refuge;
   @ViewChild('verticalBarChart') verticalBarChart?: BarVerticalComponent;
+
+  chartReservations: WeekReservations = [];
   testDate1 = new Date('2023-10-14');
   testDate2 = new Date('2023-10-15');
 
@@ -87,7 +90,7 @@ export class ReservationsChartComponent implements OnInit, AfterViewInit {
 
     this.reservationService.getWeekReservationsForRefuge(this.refuge.id, 0).subscribe({
       next: (response) => {
-        console.log("correct" + response);
+        this.chartReservations = response;
       },
       error: (err) => {
         console.log("error" + err);

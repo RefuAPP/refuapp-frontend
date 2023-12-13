@@ -4,7 +4,7 @@ import {
   CorrectGetReservationsPattern,
   GetReservations,
 } from '../../schemas/reservations/get-reservations-refuge-user';
-import {Reservations, ReservationsWeek} from '../../schemas/reservations/reservation';
+import {Reservations, WeekReservations} from '../../schemas/reservations/reservation';
 import { isMatching } from 'ts-pattern';
 import {
   CorrectGetWeekReservations,
@@ -26,7 +26,7 @@ export function toReservations(
 
 export function toReservationsWeek(
   getWeekReservations: Observable<GetWeekReservations>,
-): Observable<ReservationsWeek> {
+): Observable<WeekReservations> {
   return getWeekReservations.pipe(
     map((reservations) => {
       if (isMatching(CorrectGetWeekReservationsPattern, reservations))

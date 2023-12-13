@@ -1,6 +1,6 @@
 import {HttpErrorResponse} from '@angular/common/http';
 import {isMatching} from 'ts-pattern';
-import {ReservationsWeek, ReservationsWeekPattern} from './reservation';
+import {WeekReservations, ReservationsWeekPattern} from './reservation';
 import {P} from 'ts-pattern/dist';
 import {ResourceErrors} from '../errors/resource';
 import {ServerErrors} from '../errors/server';
@@ -9,7 +9,7 @@ import {getErrorFrom} from '../errors/all-errors';
 
 export type CorrectGetWeekReservations = {
   status: 'ok';
-  week: ReservationsWeek;
+  week: WeekReservations;
 };
 
 export const CorrectGetWeekReservationsPattern: P.Pattern<CorrectGetWeekReservations> =

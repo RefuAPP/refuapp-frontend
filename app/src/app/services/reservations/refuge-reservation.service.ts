@@ -11,7 +11,7 @@ import {
   of,
   retry,
 } from 'rxjs';
-import {Reservations, ReservationsWeek, WeekReservation} from '../../schemas/reservations/reservation';
+import {Reservations, WeekReservations, ChartReservation} from '../../schemas/reservations/reservation';
 import {toReservations, toReservationsWeek} from './common';
 import {
   fromError as fromReservationsError,
@@ -35,7 +35,7 @@ export class RefugeReservationService {
   getWeekReservationsForRefuge(
     refugeId: string,
     offset: number,
-  ): Observable<ReservationsWeek> {
+  ): Observable<WeekReservations> {
     const today = new Date();
     const night = nightFromDate(today)
     return toReservationsWeek(
@@ -49,7 +49,7 @@ export class RefugeReservationService {
     offset: number,
   ): Observable<GetWeekReservations> {
     const uri = this.getUriForWeekRefugeAndNight(refugeId, night, offset);
-    return this.http.get<ReservationsWeek>(uri).pipe(
+    return this.http.get<WeekReservations>(uri).pipe(
       map((reservations) => fromWeekReservationsResponse(reservations)),
       catchError((err: HttpErrorResponse) => of(fromWeekReservationsError(err))),
       retry(3),
