@@ -11,6 +11,9 @@ import {OccupationService} from '../../services/occupation/occupation.service';
 import {RefugeReservationService} from "../../services/reservations/refuge-reservation.service";
 import {WeekReservations} from "../../schemas/reservations/reservation";
 import {toShortString} from "../../schemas/night/night";
+import {TranslateService} from "@ngx-translate/core";
+import {AlertController} from "@ionic/angular";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-reservations-chart',
@@ -40,7 +43,7 @@ export class ReservationsChartComponent implements OnInit {
   };
   xAxisTickFormatting = (value: string) => {
     if (value === this.today) {
-      return 'Today';
+      return this.translateService.instant('REFUGE.OCCUPATION.TODAY');
     }
     return value;
   };
@@ -49,6 +52,9 @@ export class ReservationsChartComponent implements OnInit {
     private changeDetectorRef: ChangeDetectorRef,
     private occupationService: OccupationService,
     private reservationService: RefugeReservationService,
+    private translateService: TranslateService,
+    private alertController: AlertController,
+    private router: Router,
   ) {
   }
 
@@ -80,10 +86,26 @@ export class ReservationsChartComponent implements OnInit {
         this.formatChartReservations();
         console.log(this.formattedChartReservations)
       },
-      error: (err) => {
-        console.log("error" + err);
-      }
+      error: () => this.handleClientError().then(),
     });
+  }
+
+  private async handleClientError() {
+    const alert = await this.alertController.create({
+      header: this.translateService.instant('HOME.CLIENT_ERROR.HEADER'),
+      subHeader: this.translateService.instant('HOME.CLIENT_ERROR.SUBHEADER'),
+      message: this.translateService.instant('HOME.CLIENT_ERROR.MESSAGE'),
+      buttons: [
+        {
+          text: this.translateService.instant('HOME.CLIENT_ERROR.OKAY_BUTTON'),
+          handler: () => {
+            this.alertController.dismiss().then();
+            this.router.navigate(['/home']).then();
+          },
+        },
+      ],
+    });
+    return await alert.present();
   }
 
   previousWeek() {

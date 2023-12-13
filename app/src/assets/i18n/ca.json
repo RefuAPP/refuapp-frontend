@@ -102,7 +102,8 @@
     "OCCUPATION": {
       "HISTORIAL": "Històric d'ocupació",
       "XLABEL": "Dia",
-      "YLABEL": "Reserves"
+      "YLABEL": "Reserves",
+      "TODAY": "Avui"
     }
   },
   "RESERVATIONS": {
