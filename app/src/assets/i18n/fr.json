@@ -1,0 +1,194 @@
+{
+  "HOME": {
+    "CLIENT_ERROR": {
+      "HEADER": "Alerte !",
+      "SUBHEADER": "Votre appareil rencontre des problèmes !",
+      "MESSAGE": "Votre appareil a-t-il accès à Internet ? Peut-être est-ce de notre faute et nos serveurs sont hors service.",
+      "OKAY_BUTTON": "D'accord"
+    },
+    "RENDER_MAP_ERROR": {
+      "HEADER": "Erreur",
+      "MESSAGE": "Nous avons rencontré une erreur lors du chargement de la carte, veuillez réessayer.",
+      "OKAY_BUTTON": "D'accord"
+    },
+    "SEARCH_PLACES_BAR": "Rechercher un lieu"
+  },
+  "INTERNAL_ERROR": {
+    "HEADER": "Erreur interne",
+    "MESSAGE": "Désolé, nous rencontrons des problèmes internes. Réessayez plus tard.",
+    "EXIT_BUTTON": "Retour à l'accueil"
+  },
+  "NOT_FOUND_ERROR": {
+    "HEADER": "Ressource introuvable",
+    "MESSAGE": "La page que vous recherchez n'existe pas. Soit vous faites quelque chose de mal, soit c'est de notre faute.",
+    "EXIT_BUTTON": "Retour à l'accueil"
+  },
+  "PROGRAMMING_ERROR": {
+    "HEADER": "Erreur de programmation",
+    "MESSAGE": "Nous sommes désolés, notre code a une erreur de programmation et nous ne l'avons pas remarqué. Envoyez-nous un e-mail !",
+    "EXIT_BUTTON": "Retour à l'accueil"
+  },
+  "FORBIDDEN_ERROR": {
+    "HEADER": "Ressource interdite",
+    "MESSAGE": "La page que vous cherchez est interdite pour votre rôle. Soit vous êtes désobéissant, soit c'est de notre faute.",
+    "EXIT": "Retour à la page d'accueil"
+  },
+  "LOGIN": {
+    "HEADER": "Connexion",
+    "USERNAME": {
+      "FIELD": "Nom d'utilisateur",
+      "ERROR_REQUIRED": "Le nom d'utilisateur est requis",
+      "ERROR_FORMATTED": "Le numéro de téléphone n'est pas correct",
+      "ERROR_DOESNT_EXIST": "L'utilisateur n'existe pas"
+    },
+    "PASSWORD": {
+      "FIELD": "Mot de passe",
+      "ERROR_REQUIRED": "Le mot de passe est requis",
+      "ERROR_INCORRECT_PASSWORD": "Le mot de passe est incorrect"
+    },
+    "BUTTON": "Connexion",
+    "LOADING": "Connexion en cours...."
+  },
+  "SIGNUP": {
+    "HEADER": "Inscription",
+    "USERNAME": {
+      "FIELD": "Nom d'utilisateur",
+      "ERROR": "Le nom d'utilisateur est requis"
+    },
+    "PHONE_NUMBER": {
+      "FIELD": "Numéro de téléphone",
+      "ERROR": "Le numéro de téléphone est requis",
+      "INCORRECT_PHONE_NUMBER": "Le numéro de téléphone n'est pas correct"
+    },
+    "EMERGENCY_NUMBER": {
+      "FIELD": "Numéro d'urgence",
+      "ERROR": "Le numéro de téléphone d'urgence est requis",
+      "INCORRECT_PHONE_NUMBER": "Le numéro de téléphone d'urgence n'est pas correct"
+    },
+    "PASSWORD": {
+      "FIELD": "Mot de passe",
+      "ERROR": "Le mot de passe est requis"
+    },
+    "REPEATED_PASSWORD": {
+      "FIELD": "Répéter le mot de passe",
+      "ERROR": "La répétition du mot de passe est requise"
+    },
+    "PASSWORDS_DONT_MATCH": "Les mots de passe ne correspondent pas",
+    "ALREADY_EXISTING_USER": "Un utilisateur existe déjà avec ce numéro de téléphone",
+    "BUTTON": "Inscription",
+    "LOADING": "Création de l'utilisateur...."
+  },
+  "LOGOUT": {
+    "HEADER": "Déconnexion"
+  },
+  "REFUGE": {
+    "INFORMATION": {
+      "REGION": "Région",
+      "ALTITUDE": "Altitude",
+      "ALTITUDE_UNITY": "{{altitude}} mètres",
+      "WINTER_CAPACITY": "Capacité hivernale",
+      "SUMMER_CAPACITY": "Capacité estivale",
+      "CAPACITY_UNITY": "{{capacity}} personnes"
+    },
+    "RESERVATIONS": {
+      "HEADER": "Faire une réservation",
+      "BUTTON": "Réserver",
+      "INFO": {
+        "OKAY": "D'accord",
+        "BODY": "La plupart des refuges n'ont en réalité pas de système de réservation. Les clients sont censés les utiliser quand ils le souhaitent. Cependant, RefuApp vise à fournir un mécanisme grâce auquel les clients peuvent informer les autres utilisateurs de RefuApp de leur intention de visiter un refuge donné à une date spécifique, facilitant ainsi la détermination de la probabilité de remplissage d'un refuge.",
+        "HEADER": "Clarification concernant les réservations"
+      }
+    },
+    "OCCUPATION": {
+      "HISTORIAL": "Historique d'occupation",
+      "XLABEL": "Jour",
+      "YLABEL": "Réservations"
+    }
+  },
+  "RESERVATIONS": {
+    "HEADER": "Réservations",
+    "DELETE_ALERT": {
+      "HEADER": "Alerte !",
+      "SUBHEADER": "Voulez-vous supprimer votre réservation ?",
+      "MESSAGE": "Voulez-vous supprimer votre réservation pour le jour {{day}} ?",
+      "BUTTON": "Oui"
+    },
+    "DELETE_OPERATION": {
+      "CORRECT": "Réservation supprimée !"
+    },
+    "CREATE_OPERATION": {
+      "CORRECT": "Réservation pour le jour {{day}} créée !",
+      "INVALID_DATE_PAST": "Impossible de sélectionner une date passée !",
+      "INVALID_DATE_ALREADY_RESERVED": "Impossible de sélectionner une date déjà réservée !",
+      "NOT_ALLOWED_CREATION_FOR_USER": "Vous ne pouvez pas créer une réservation pour un autre utilisateur",
+      "REFUGE_OR_USER_NOT_FOUND": "Refuge ou utilisateur supprimé, rafraîchissez la page"
+    },
+    "FETCH_OPERATION": {
+      "CORRECT": "Réservations mises à jour correctement !"
+    },
+    "DELETE_BUTTON": "Supprimer",
+    "DETAILS": {
+      "HEADER": "Jour {{day}}",
+      "MESSAGE": "Le jour {{day}} du mois {{month}} de l'année : {{year}}"
+    }
+  },
+  "MAP": {
+    "LOADING": "Chargement de la carte..."
+  },
+  "PROFILE": {
+    "HEADER": "Profil",
+    "USER_NAME": "Bonjour, {{username}}",
+    "PHONE_NUMBER": "Numéro de téléphone : {{phoneNumber}}",
+    "EMERGENCY_PHONE_NUMBER": "Numéro de téléphone d'urgence : {{emergencyPhoneNumber}}",
+    "SETTINGS": "Paramètres"
+  },
+  "ABOUT": {
+    "HEADER": "À propos de nous",
+    "CARDHEADER1": "Qui sommes-nous",
+    "CARDHEADER2": "À propos de RefuApp",
+    "BODY": "Nous sommes Ferran, Oriol, Pablo et Alex, étudiants en informatique à l'Université de Lleida (UdL). Unis par notre passion pour la technologie et les activités de plein air, nous avons créé RefuAPP - une application révolutionnaire destinée à améliorer l'expérience des aventures en plein air dans les Pyrénées.",
+    "BODY2": "RefuApp est bien plus qu'une simple carte ; c'est votre guide numérique pour traverser les Pyrénées. L'application offre une vue complète de la région, y compris l'emplacement des refuges. D'un simple toucher, vous pouvez en apprendre davantage sur les installations de chaque refuge, leurs capacités, et bien plus encore. Notre système de réservation distinctif permet aux utilisateurs de \"réserver\" virtuellement une place pour la nuit, contribuant ainsi à la compréhension collective de la capacité du refuge. À certains endroits, nous avons intégré des technologies avancées telles que des capteurs infrarouges et des caméras thermiques pour suivre en temps réel la capacité du refuge, vous offrant ainsi les informations les plus précises et les plus actuelles.",
+    "LEARNMORE": "Saviez-vous que RefuApp est open source ? Cliquez pour en savoir plus !"
+  },
+  "SETTINGS": {
+    "LANGUAGE": "Langue",
+    "FORCE_LANGUAGE": "Forcer la langue",
+    "SELECT": "Sélectionner",
+    "SPANISH": "Espagnol",
+    "CATALAN": "Catalan",
+    "ENGLISH": "Anglais",
+    "FRENCH": "Français",
+    "CHANGED_LANGUAGE": "Langue modifiée avec succès !",
+    "ERROR_CHANGING_LANGUAGE": "Erreur lors du changement de langue"
+  },
+  "MENU": {
+    "HOME": "Accueil",
+    "RESERVATIONS": "Réservations",
+    "PROFILE": "Profil",
+    "ABOUT": "À propos de nous",
+    "LOGOUT": "Déconnexion",
+    "LOGIN": "Connexion"
+  },
+  "MINOR_ERRORS": {
+    "UNKNOWN": "Erreur inconnue, réessayez ultérieurement.",
+    "INCORRECT_DATA_FORMAT_OF_SERVER": "Les développeurs du backend sont nuls ! Ils ont tout gâché.",
+    "INCORRECT_DATA_FORMAT_OF_CLIENT": "Les développeurs du frontend sont nuls ! Ils ont tout gâché.",
+    "NOT_ALLOWED_OPERATION_FOR_USER": "Vous n'êtes pas autorisé à effectuer cette opération.",
+    "NOT_AUTHENTICATED": "Vous n'êtes pas authentifié.",
+    "NOT_FOUND": "La ressource est introuvable, réessayez ultérieurement.",
+    "NOT_CONNECTED": "Vous n'êtes pas connecté à Internet, réessayez plus tard."
+  },
+  "UPDATE_USER": {
+    "USERNAME": "Nom d'utilisateur",
+    "USERNAME_NOT_FILLED": "Veuillez entrer un nom d'utilisateur valide.",
+    "PHONE_NUMBER": "Numéro de téléphone",
+    "PHONE_NUMBER_NOT_FILLED": "Veuillez entrer un numéro de téléphone valide.",
+    "EMERGENCY_PHONE_NUMBER": "Numéro de téléphone d'urgence",
+    "EMERGENCY_PHONE_NUMBER_NOT_FILLED": "Veuillez entrer un numéro de téléphone d'urgence valide.",
+    "PASSWORD": "Mot de passe",
+    "PASSWORD_NOT_FILLED": "Veuillez entrer un mot de passe valide.",
+    "SUBMIT": "Mettre à jour l'utilisateur",
+    "PHONE_NUMBER_ALREADY_EXIST": "Le numéro de téléphone existe déjà.",
+    "PHONE_FORMAT_INCORRECT": "Le format du numéro de téléphone est incorrect."
+  }
+}

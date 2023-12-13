@@ -157,6 +157,7 @@
     "SPANISH": "Espanyol",
     "CATALAN": "Català",
     "ENGLISH": "Anglès",
+    "FRENCH": "Francès",
     "CHANGED_LANGUAGE": "Idioma canviat correctament!",
     "ERROR_CHANGING_LANGUAGE": "Error en canviar l'idioma"
   },
