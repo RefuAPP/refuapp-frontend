@@ -16,7 +16,7 @@ export type Reservations = ReservationWithId[];
 export type WeekReservations = ChartReservation[];
 
 export type ChartReservation = {
-  night: Night;
+  date: Night;
   count: number;
 }
 

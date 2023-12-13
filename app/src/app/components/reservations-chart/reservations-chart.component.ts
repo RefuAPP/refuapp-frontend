@@ -1,5 +1,4 @@
 import {
-  AfterViewInit,
   ChangeDetectorRef,
   Component,
   Input,
@@ -9,40 +8,27 @@ import {
 import {Refuge} from '../../schemas/refuge/refuge';
 import {BarVerticalComponent, Color, ScaleType} from '@swimlane/ngx-charts';
 import {OccupationService} from '../../services/occupation/occupation.service';
-import {of} from 'rxjs';
 import {RefugeReservationService} from "../../services/reservations/refuge-reservation.service";
-import {GetUserResponse} from "../../schemas/user/fetch/get-refuge-schema";
 import {WeekReservations} from "../../schemas/reservations/reservation";
+import {toShortString} from "../../schemas/night/night";
 
 @Component({
   selector: 'app-reservations-chart',
   templateUrl: './reservations-chart.component.html',
   styleUrls: ['./reservations-chart.component.scss'],
 })
-export class ReservationsChartComponent implements OnInit, AfterViewInit {
+export class ReservationsChartComponent implements OnInit {
   @Input({required: true}) refuge!: Refuge;
   @ViewChild('verticalBarChart') verticalBarChart?: BarVerticalComponent;
-
   chartReservations: WeekReservations = [];
-  testDate1 = new Date('2023-10-14');
-  testDate2 = new Date('2023-10-15');
+  todayMonth = new Date().getMonth() + 1;
+  today = new Date().getDate().toString() + '/' + this.todayMonth.toString() + '/' + new Date().getFullYear().toString();
 
-  testObservable = of([
-    {
-      testDate1: 1,
-      testDate2: 2,
-    },
-  ]);
-
-  days: {
+  formattedChartReservations: {
     name: string;
     value: number;
     tooltipText: string;
   }[] = [];
-
-  view = [700, 400] as [number, number];
-
-  gradient = false;
 
   colorScheme: Color = {
     name: 'custom',
@@ -51,7 +37,7 @@ export class ReservationsChartComponent implements OnInit, AfterViewInit {
     domain: [],
   };
   xAxisTickFormatting = (value: string) => {
-    if (value === new Date().getUTCDate().toString()) {
+    if (value === this.today) {
       return 'Today';
     }
     return value;
@@ -64,60 +50,34 @@ export class ReservationsChartComponent implements OnInit, AfterViewInit {
   ) {
   }
 
-  onSelect() {
-    console.log('myballs');
+  getLabels() {
+    return this.formattedChartReservations.map((entry) => entry.name);
   }
 
-  getLabels() {
-    return this.days.map((entry) => entry.name);
+  private formatChartReservations() {
+    this.colorScheme.domain = [];
+    this.formattedChartReservations = this.chartReservations.map((entry) => {
+      const color = this.today == toShortString(entry.date) ? '#01579b' : '#7aa3e5';
+      this.colorScheme.domain.push(color);
+      return {
+        name: toShortString(entry.date),
+        value: entry.count,
+        tooltipText: entry.count.toString() + ' reservations',
+      };
+    });
   }
 
   ngOnInit() {
-    // Populate the multi array based on date conditions
-    for (let i = -7; i <= 7; i++) {
-      const currentDate = new Date(Date.now() + i * 24 * 60 * 60 * 1000);
-
-      const color = i === 0 ? '#01579b' : '#7aa3e5'; // Use different colors for the current day and the rest
-
-      this.days.push({
-        name: currentDate.getUTCDate().toString(),
-        value: Math.floor(Math.random() * 12),
-        tooltipText: 'myballs',
-      });
-
-      this.colorScheme.domain.push(color);
-    }
 
     this.reservationService.getWeekReservationsForRefuge(this.refuge.id, 0).subscribe({
       next: (response) => {
         this.chartReservations = response;
+        this.formatChartReservations();
+        console.log(this.formattedChartReservations)
       },
       error: (err) => {
         console.log("error" + err);
       }
     });
-  }
-
-  ngAfterViewInit() {
-    this.verticalBarChart!.activeEntries = [
-      {
-        name: '14',
-        value: 5,
-      },
-    ];
-  }
-
-  private getBackgroundColorFromCss(): string {
-    const element = document.querySelector('ion-content');
-    if (element == null) return 'white';
-    const style = window.getComputedStyle(element);
-    return style.backgroundColor;
-  }
-
-  private getTextColorFromCss(): string {
-    const element = document.querySelector('ion-content');
-    if (element == null) return 'black';
-    const style = window.getComputedStyle(element);
-    return style.color;
   }
 }

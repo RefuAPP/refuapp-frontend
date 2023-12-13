@@ -5,7 +5,7 @@
   <ngx-charts-bar-vertical
     #verticalBarChart
     [scheme]="colorScheme"
-    [results]="days"
+    [results]="formattedChartReservations"
     [gradient]="false"
     [xAxis]="true"
     [yAxis]="true"
@@ -15,11 +15,6 @@
     [xAxisLabel]="'REFUGE.OCCUPATION.XLABEL' | translate"
     [yAxisLabel]="'REFUGE.OCCUPATION.YLABEL' | translate"
     [xAxisTickFormatting]="xAxisTickFormatting"
-    (select)="onSelect()"
   >
-    <ng-template #tooltipTemplate let-model="model">
-      <!-- fields are series/name/value -->
-      <div class="tt">Custom tooltip -</div>
-    </ng-template>
   </ngx-charts-bar-vertical>
 </div>

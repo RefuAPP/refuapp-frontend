@@ -6,6 +6,10 @@ export type Night = {
   year: number;
 };
 
+export function toShortString(night: Night): string {
+  return `${night.day}/${night.month}/${night.year}`;
+}
+
 export function isFurtherAway(night1: Night, night2: Night): boolean {
   if (isEqual(night1, night2)) return false;
   return (
