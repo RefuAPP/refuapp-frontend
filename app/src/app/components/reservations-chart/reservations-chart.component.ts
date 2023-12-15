@@ -14,6 +14,7 @@ import { toShortString } from '../../schemas/night/night';
 import { TranslateService } from '@ngx-translate/core';
 import { AlertController } from '@ionic/angular';
 import { Router } from '@angular/router';
+import { DataService } from '../../services/data/data.service';
 
 @Component({
   selector: 'app-reservations-chart',
@@ -60,6 +61,7 @@ export class ReservationsChartComponent implements OnInit {
     private translateService: TranslateService,
     private alertController: AlertController,
     private router: Router,
+    private dataService: DataService,
   ) {}
 
   getLabels() {
@@ -126,6 +128,14 @@ export class ReservationsChartComponent implements OnInit {
   }
 
   exportChartData() {
-    console.log('Exporting chart data');
+    this.dataService
+      .generateCsvForRefuge(this.refuge.id, this.offset)
+      .subscribe({
+        next: (response) => {
+          console.log(response);
+          // this.downloadFile(response);
+        },
+        error: () => this.handleClientError().then(),
+      });
   }
 }
