@@ -12,9 +12,12 @@ import { RefugeReservationService } from '../../services/reservations/refuge-res
 import { WeekReservations } from '../../schemas/reservations/reservation';
 import { toShortString } from '../../schemas/night/night';
 import { TranslateService } from '@ngx-translate/core';
-import { AlertController } from '@ionic/angular';
+import { AlertController, LoadingController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { DataService } from '../../services/data/data.service';
+import { GenerateDataCsvResponse } from '../../schemas/data/generate-data-response';
+import { match } from 'ts-pattern';
+import { GenerateDataError } from '../../schemas/data/generate-data-error';
 
 @Component({
   selector: 'app-reservations-chart',
@@ -62,6 +65,7 @@ export class ReservationsChartComponent implements OnInit {
     private alertController: AlertController,
     private router: Router,
     private dataService: DataService,
+    private loadingController: LoadingController,
   ) {}
 
   getLabels() {
@@ -131,11 +135,74 @@ export class ReservationsChartComponent implements OnInit {
     this.dataService
       .generateCsvForRefuge(this.refuge.id, this.offset)
       .subscribe({
-        next: (response) => {
-          console.log(response);
-          // this.downloadFile(response);
+        next: (response: GenerateDataCsvResponse) => {
+          this.handleGenerateDataCsvResponse(response);
         },
         error: () => this.handleClientError().then(),
       });
+  }
+
+  private handleGenerateDataCsvResponse(response: GenerateDataCsvResponse) {
+    match(response)
+      .with({ status: 'generated' }, ({ data }) => {
+        this.handleGeneratedCsv(data);
+      })
+      .with({ status: 'error' }, ({ error }) => {
+        this.handleGenerateDataError(error);
+      })
+      .exhaustive();
+  }
+
+  private handleGeneratedCsv(data: string) {
+    console.log('Generated CSV: ' + data);
+  }
+
+  private handleGenerateDataError(error: GenerateDataError) {
+    match(error)
+      .with(GenerateDataError.NOT_FOUND, () => {
+        this.handleNotFoundError();
+      })
+      .with(GenerateDataError.INCORRECT_DATA, () => {
+        this.handleBadUserData();
+      })
+      .with(GenerateDataError.UNKNOWN_ERROR, () => {
+        this.handleUnknownError();
+      })
+      .exhaustive();
+  }
+
+  private async handleNotFoundError() {
+    await this.showError(async () => {
+      await this.router
+        .navigate(['/not-found-page'], {
+          skipLocationChange: true,
+        })
+        .then();
+    });
+  }
+
+  private async handleUnknownError() {
+    this.showError(() =>
+      this.router
+        .navigate(['/internal-error-page'], {
+          skipLocationChange: true,
+        })
+        .then(),
+    ).then();
+  }
+
+  private async handleBadUserData() {
+    this.showError(() =>
+      this.router
+        .navigate(['/programming-error'], {
+          skipLocationChange: true,
+        })
+        .then(),
+    ).then();
+  }
+
+  private async showError(func: (() => void) | (() => Promise<void>)) {
+    await this.loadingController.dismiss().then();
+    await func();
   }
 }

@@ -149,7 +149,7 @@ export class ProfilePage {
   private async handleBadUserData() {
     this.showError(() =>
       this.router
-        .navigate(['/not-found-page'], {
+        .navigate(['/programming-error'], {
           skipLocationChange: true,
         })
         .then(),
