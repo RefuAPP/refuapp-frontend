@@ -18,7 +18,7 @@ export type WeekReservations = ChartReservation[];
 export type ChartReservation = {
   date: Night;
   count: number;
-}
+};
 
 export const ReservationsWeekPattern: P.Pattern<ChartReservation> = {};
 

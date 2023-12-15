@@ -5,15 +5,15 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import {Refuge} from '../../schemas/refuge/refuge';
-import {BarVerticalComponent, Color, ScaleType} from '@swimlane/ngx-charts';
-import {OccupationService} from '../../services/occupation/occupation.service';
-import {RefugeReservationService} from "../../services/reservations/refuge-reservation.service";
-import {WeekReservations} from "../../schemas/reservations/reservation";
-import {toShortString} from "../../schemas/night/night";
-import {TranslateService} from "@ngx-translate/core";
-import {AlertController} from "@ionic/angular";
-import {Router} from "@angular/router";
+import { Refuge } from '../../schemas/refuge/refuge';
+import { BarVerticalComponent, Color, ScaleType } from '@swimlane/ngx-charts';
+import { OccupationService } from '../../services/occupation/occupation.service';
+import { RefugeReservationService } from '../../services/reservations/refuge-reservation.service';
+import { WeekReservations } from '../../schemas/reservations/reservation';
+import { toShortString } from '../../schemas/night/night';
+import { TranslateService } from '@ngx-translate/core';
+import { AlertController } from '@ionic/angular';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-reservations-chart',
@@ -21,11 +21,16 @@ import {Router} from "@angular/router";
   styleUrls: ['./reservations-chart.component.scss'],
 })
 export class ReservationsChartComponent implements OnInit {
-  @Input({required: true}) refuge!: Refuge;
+  @Input({ required: true }) refuge!: Refuge;
   @ViewChild('verticalBarChart') verticalBarChart?: BarVerticalComponent;
   chartReservations: WeekReservations = [];
   todayMonth = new Date().getMonth() + 1;
-  today = new Date().getDate().toString() + '/' + this.todayMonth.toString() + '/' + new Date().getFullYear().toString();
+  today =
+    new Date().getDate().toString() +
+    '/' +
+    this.todayMonth.toString() +
+    '/' +
+    new Date().getFullYear().toString();
 
   offset = 0;
 
@@ -55,8 +60,7 @@ export class ReservationsChartComponent implements OnInit {
     private translateService: TranslateService,
     private alertController: AlertController,
     private router: Router,
-  ) {
-  }
+  ) {}
 
   getLabels() {
     return this.formattedChartReservations.map((entry) => entry.name);
@@ -65,7 +69,8 @@ export class ReservationsChartComponent implements OnInit {
   private formatChartReservations() {
     this.colorScheme.domain = [];
     this.formattedChartReservations = this.chartReservations.map((entry) => {
-      const color = this.today == toShortString(entry.date) ? '#01579b' : '#7aa3e5';
+      const color =
+        this.today == toShortString(entry.date) ? '#01579b' : '#7aa3e5';
       this.colorScheme.domain.push(color);
       return {
         name: toShortString(entry.date),
@@ -76,18 +81,20 @@ export class ReservationsChartComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.updateChart()
+    this.updateChart();
   }
 
   private updateChart() {
-    this.reservationService.getWeekReservationsForRefuge(this.refuge.id, this.offset).subscribe({
-      next: (response) => {
-        this.chartReservations = response;
-        this.formatChartReservations();
-        console.log(this.formattedChartReservations)
-      },
-      error: () => this.handleClientError().then(),
-    });
+    this.reservationService
+      .getWeekReservationsForRefuge(this.refuge.id, this.offset)
+      .subscribe({
+        next: (response) => {
+          this.chartReservations = response;
+          this.formatChartReservations();
+          console.log(this.formattedChartReservations);
+        },
+        error: () => this.handleClientError().then(),
+      });
   }
 
   private async handleClientError() {
@@ -110,11 +117,15 @@ export class ReservationsChartComponent implements OnInit {
 
   previousWeek() {
     this.offset--;
-    this.updateChart()
+    this.updateChart();
   }
 
   nextWeek() {
     this.offset++;
-    this.updateChart()
+    this.updateChart();
+  }
+
+  exportChartData() {
+    console.log('Exporting chart data');
   }
 }

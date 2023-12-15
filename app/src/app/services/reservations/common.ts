@@ -4,12 +4,16 @@ import {
   CorrectGetReservationsPattern,
   GetReservations,
 } from '../../schemas/reservations/get-reservations-refuge-user';
-import {Reservations, WeekReservations} from '../../schemas/reservations/reservation';
+import {
+  Reservations,
+  WeekReservations,
+} from '../../schemas/reservations/reservation';
 import { isMatching } from 'ts-pattern';
 import {
   CorrectGetWeekReservations,
-  CorrectGetWeekReservationsPattern, GetWeekReservations
-} from "../../schemas/reservations/get-week-reservations-refuge";
+  CorrectGetWeekReservationsPattern,
+  GetWeekReservations,
+} from '../../schemas/reservations/get-week-reservations-refuge';
 
 export function toReservations(
   getReservations: Observable<GetReservations>,

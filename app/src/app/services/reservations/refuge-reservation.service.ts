@@ -1,7 +1,7 @@
-import {Injectable} from '@angular/core';
-import {HttpClient, HttpErrorResponse} from '@angular/common/http';
-import {getNightsFrom, Night, nightFromDate} from '../../schemas/night/night';
-import {environment} from '../../../environments/environment';
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { getNightsFrom, Night, nightFromDate } from '../../schemas/night/night';
+import { environment } from '../../../environments/environment';
 import {
   catchError,
   forkJoin,
@@ -11,8 +11,12 @@ import {
   of,
   retry,
 } from 'rxjs';
-import {Reservations, WeekReservations, ChartReservation} from '../../schemas/reservations/reservation';
-import {toReservations, toReservationsWeek} from './common';
+import {
+  Reservations,
+  WeekReservations,
+  ChartReservation,
+} from '../../schemas/reservations/reservation';
+import { toReservations, toReservationsWeek } from './common';
 import {
   fromError as fromReservationsError,
   fromResponse as fromReservationsResponse,
@@ -29,18 +33,17 @@ import {
   providedIn: 'root',
 })
 export class RefugeReservationService {
-  constructor(private http: HttpClient) {
-  }
+  constructor(private http: HttpClient) {}
 
   getWeekReservationsForRefuge(
     refugeId: string,
     offset: number,
   ): Observable<WeekReservations> {
     const today = new Date();
-    const night = nightFromDate(today)
+    const night = nightFromDate(today);
     return toReservationsWeek(
       this.getWeekReservationsForRefugeAndNight(refugeId, night, offset),
-    )
+    );
   }
 
   private getWeekReservationsForRefugeAndNight(
@@ -51,12 +54,18 @@ export class RefugeReservationService {
     const uri = this.getUriForWeekRefugeAndNight(refugeId, night, offset);
     return this.http.get<WeekReservations>(uri).pipe(
       map((reservations) => fromWeekReservationsResponse(reservations)),
-      catchError((err: HttpErrorResponse) => of(fromWeekReservationsError(err))),
+      catchError((err: HttpErrorResponse) =>
+        of(fromWeekReservationsError(err)),
+      ),
       retry(3),
     );
   }
 
-  private getUriForWeekRefugeAndNight(refugeId: string, night: Night, offset: number) {
+  private getUriForWeekRefugeAndNight(
+    refugeId: string,
+    night: Night,
+    offset: number,
+  ) {
     return `${environment.API}/reservations/refuge/${refugeId}/week/year/${night.year}/month/${night.month}/day/${night.day}/?offset=${offset}`;
   }
 
@@ -74,7 +83,7 @@ export class RefugeReservationService {
         this.getReservationsForRefugeAndNight(refugeId, night),
       ).pipe(
         map((reservations) => {
-          return {night: night, reservations: reservations};
+          return { night: night, reservations: reservations };
         }),
       );
     });
