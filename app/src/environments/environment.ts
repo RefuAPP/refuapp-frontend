@@ -6,7 +6,7 @@ export const environment = {
   production: false,
   API: 'https://backend.refuapp.online',
   MAPS_FORCE_CREATE: true,
-  SENSORS_API: 'http://localhost:8001',
+  SENSORS_API: 'https://sensors.refuapp.online',
 };
 
 /*
