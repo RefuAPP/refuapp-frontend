@@ -34,6 +34,6 @@ export class RefugeInfoComponent implements OnInit {
     const activityDate = new Date(lastActivity);
     const now = new Date();
     const differenceInHours = (now.getTime() - activityDate.getTime()) / 1000 / 3600;
-    return differenceInHours <= 12;
+    return differenceInHours <= 1;
   }
 }
