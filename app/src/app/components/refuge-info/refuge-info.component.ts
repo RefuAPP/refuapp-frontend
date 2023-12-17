@@ -18,6 +18,12 @@ export class RefugeInfoComponent implements OnInit {
   constructor(private http: HttpClient) {}
  
   ngOnInit() {
+    if (!this.refuge || !this.refuge.id) {
+      console.error('Refuge or refuge.id is undefined');
+      this.sensorStatus = 'error';
+      return;
+    }
+  
     this.http.get<any>(`${sensorsApiUrl}/refugio/${this.refuge.id}`)
       .subscribe({
         next: (data) => {
@@ -29,6 +35,7 @@ export class RefugeInfoComponent implements OnInit {
         }
       });
   }
+  
  
   isActivityRecent(lastActivity: string): boolean {
     const activityDate = new Date(lastActivity);
