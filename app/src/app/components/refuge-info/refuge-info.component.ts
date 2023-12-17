@@ -24,7 +24,8 @@ export class RefugeInfoComponent implements OnInit {
       return;
     }
   
-    this.http.get<any>(`${sensorsApiUrl}/refugio/${this.refuge.id}`)
+   // this.http.get<any>(`${sensorsApiUrl}/refugio/${this.refuge.id}`)
+    this.http.get<any>(`https://sensors.refuapp.online/refugio/${this.refuge.id}`)
 
       .subscribe({
         next: (data) => {
