@@ -16,6 +16,7 @@ import { clearMessage } from './state/messages/message.actions';
 import { MinorError } from './state/errors/error.reducer';
 import { getBottomItems, getTopItems } from './state/auth/auth.selectors';
 import { TranslateService } from '@ngx-translate/core';
+import { FcmService } from './services/notifications/fcm.service';
 
 @Component({
   selector: 'app-root',
@@ -40,6 +41,7 @@ export class AppComponent {
     private store: Store<AppState>,
     private toast: ToastController,
     private translateService: TranslateService,
+    private fcmService: FcmService,
   ) {
     this.minorErrors$
       .pipe(
@@ -73,6 +75,7 @@ export class AppComponent {
         tap((id) => this.store.dispatch(clearMessage({ id }))),
       )
       .subscribe();
+    this.fcmService.init();
   }
 
   private async showToast(message: Message, options: ToastOptions) {

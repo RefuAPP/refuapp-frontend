@@ -109,12 +109,12 @@
 }
 @media (hover: none) and (pointer: coarse) {
   .activity-bubble:active {
-    transform: scale(1.1); 
+    transform: scale(1.1);
   }
 }
-@media screen and (max-width: 600px) { 
+@media screen and (max-width: 600px) {
   .activity-bubble {
-    width: 15px; 
+    width: 15px;
     height: 15px;
   }
 }
