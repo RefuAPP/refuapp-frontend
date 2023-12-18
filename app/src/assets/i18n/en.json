@@ -126,6 +126,7 @@
     "FETCH_OPERATION": {
       "CORRECT": "Reservations updated correctly!"
     },
+    "EMPTY": "There are no reservations for this user",
     "DELETE_BUTTON": "Delete",
     "DETAILS": {
       "HEADER": "Day {{day}}",

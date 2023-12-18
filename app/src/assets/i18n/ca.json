@@ -126,6 +126,7 @@
     "FETCH_OPERATION": {
       "CORRECT": "Reserves actualitzades correctament!"
     },
+    "EMPTY": "No hi han reserves per aquest usuari.",
     "DELETE_BUTTON": "Eliminar",
     "DETAILS": {
       "HEADER": "Dia {{day}}",

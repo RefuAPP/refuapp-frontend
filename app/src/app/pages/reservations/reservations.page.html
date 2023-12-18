@@ -12,21 +12,27 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
   <div class="page-reservations-fullscreen">
-    <ion-list>
-      <ion-item-group *ngFor="let res of reservations$ | async">
-        <ion-item-divider>
-          <ion-label class="refuge_name"> {{ res.refuge.name }} </ion-label>
-          <img
-            class="refuge-image"
-            [src]="'https://backend.refuapp.online/static/images/refuges/' + res.refuge.image"
-            alt="{{ res.refuge.name }}"
-          />`
-        </ion-item-divider>
-        <app-reservations-item
-          [reservations]="res.reservations"
-          (removeReservation)="removeReservation($event)"
-        ></app-reservations-item>
-      </ion-item-group>
-    </ion-list>
+    <ng-container *ngIf="reservations$ | async as reservations">
+      @if (reservations.length === 0) {
+      <app-empty-reservations></app-empty-reservations>
+      } @else {
+      <ion-list>
+        <ion-item-group *ngFor="let res of reservations$ | async">
+          <ion-item-divider>
+            <ion-label class="refuge_name"> {{ res.refuge.name }} </ion-label>
+            <img
+              class="refuge-image"
+              [src]="'https://backend.refuapp.online/static/images/refuges/' + res.refuge.image"
+              alt="{{ res.refuge.name }}"
+            />`
+          </ion-item-divider>
+          <app-reservations-item
+            [reservations]="res.reservations"
+            (removeReservation)="removeReservation($event)"
+          ></app-reservations-item>
+        </ion-item-group>
+      </ion-list>
+      }
+    </ng-container>
   </div>
 </ion-content>

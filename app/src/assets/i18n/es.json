@@ -127,6 +127,7 @@
       "CORRECT": "¡Reservas actualizadas correctamente!"
     },
     "DELETE_BUTTON": "Eliminar",
+    "EMPTY": "No hay reservas para este usuario",
     "DETAILS": {
       "HEADER": "Día {{day}}",
       "MESSAGE": "El día {{day}} del mes {{month}} del año: {{year}}"
