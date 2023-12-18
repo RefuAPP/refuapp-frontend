@@ -45,4 +45,8 @@ export class DataService {
   ): string {
     return `${environment.API}/reservations/refuge/${refugeId}/week/year/${night.year}/month/${night.month}/day/${night.day}/data?offset=${offset}`;
   }
+
+  getUriForCsvDownload(path: string): string {
+    return `${environment.API}/data/${path}`;
+  }
 }

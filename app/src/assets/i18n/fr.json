@@ -97,7 +97,8 @@
         "OKAY": "D'accord",
         "BODY": "La plupart des refuges n'ont en réalité pas de système de réservation. Les clients sont censés les utiliser quand ils le souhaitent. Cependant, RefuApp vise à fournir un mécanisme grâce auquel les clients peuvent informer les autres utilisateurs de RefuApp de leur intention de visiter un refuge donné à une date spécifique, facilitant ainsi la détermination de la probabilité de remplissage d'un refuge.",
         "HEADER": "Clarification concernant les réservations"
-      }
+      },
+      "EXPORT": "Exporter les réservations"
     },
     "OCCUPATION": {
       "HISTORIAL": "Historique d'occupation",

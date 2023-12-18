@@ -3,7 +3,7 @@
   width: 100%;
   height: 30%;
 }
- 
+
 .about-header .about-image {
   position: absolute;
   inset: 0;
@@ -13,7 +13,7 @@
   background-size: cover;
   opacity: 0;
 }
- 
+
 .about-info {
   position: relative;
   margin-top: -10px;
@@ -21,55 +21,55 @@
   background: var(--ion-background-color, #ffffff);
   z-index: 2; // display rounded border above header image
 }
- 
+
 :host ::ng-deep .tv-lightweight-charts {
   width: 95% !important;
   margin-inline: 5%;
 }
- 
+
 :host ::ng-deep .tv-lightweight-charts table {
   width: 95% !important;
 }
- 
+
 .about-info {
   display: flex;
   align-items: center; // Añadido para centrar verticalmente
   justify-content: space-between; // Añadido para alinear el título y el indicador
   padding: 10px 20px; // Añadido para espaciado interior
 }
- 
+
 .about-info h3 {
   margin-top: 0;
   display: flex;
   align-items: center;
 }
- 
+
 .about-info p {
   color: var(--ion-color-dark);
   line-height: 130%;
 }
- 
+
 .about-info ion-icon {
   margin-inline-end: 32px;
 }
- 
+
 #date-input-popover {
   --offset-y: -var(--ion-safe-area-bottom);
   --max-width: 90%;
   --width: 336px;
 }
- 
+
 /*
 * iOS Only
 */
 .ios .about-info {
   --ion-padding: 19px;
 }
- 
+
 .ios .about-info h3 {
   font-weight: 700;
 }
- 
+
 .refuge-header {
   display: flex;
   align-items: center;
@@ -81,24 +81,24 @@
   z-index: 2; // display rounded border above header image
   height: 30%;
 }
- 
+
 .header-content {
   display: flex;
   align-items: center;
 }
- 
+
 .about-info h3 {
   margin-top: 0;
   display: flex;
   align-items: center;
 }
- 
+
 .last-activity-indicator {
   display: flex;
   align-items: center;
   cursor: pointer;
 }
- 
+
 .activity-bubble {
   width: 20px;
   height: 20px;
@@ -107,24 +107,23 @@
   margin-left: 10px;
   margin-top: 5px;
 }
- 
+
 .green {
   background-color: green;
 }
- 
+
 .red {
   background-color: red;
 }
- 
+
 .yellow {
   background-color: yellow;
 }
- 
+
 .activity-info {
   display: none;
 }
- 
+
 .last-activity-indicator:hover .activity-info {
   display: inline-block;
 }
- 

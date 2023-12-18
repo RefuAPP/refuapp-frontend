@@ -97,7 +97,8 @@
         "OKAY": "D'acord",
         "BODY": "La majoria dels refugis en realitat no tenen un sistema de reserves. S'espera que els hostes els utilitzin quan vulguin. No obstant això, RefuApp té com a objectiu proporcionar un mecanisme a través del qual els hostes puguin notificar a altres usuaris de RefuApp sobre la seva intenció de visitar un refugi donat en una data específica, facilitant així determinar si és probable que un refugi estigui ple o no.",
         "HEADER": "Clarificació sobre reserves"
-      }
+      },
+      "EXPORT": "Exportar les reserves"
     },
     "OCCUPATION": {
       "HISTORIAL": "Històric d'ocupació",

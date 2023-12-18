@@ -2,25 +2,37 @@
   <div class="header-content">
     <h3 class="ion-padding-top ion-padding-start">{{ refuge.name }}</h3>
     <div class="activity-container">
-      <div *ngIf="sensorStatus === 'active' && lastActivity" class="last-activity-indicator">
-        <span class="activity-bubble" [ngClass]="{'green': isActivityRecent(lastActivity), 'yellow': !isActivityRecent(lastActivity)}"></span>
-        <span class="activity-info">Última actividad: {{ lastActivity | date: 'medium' }}</span>
+      <div
+        *ngIf="sensorStatus === 'active' && lastActivity"
+        class="last-activity-indicator"
+      >
+        <span
+          class="activity-bubble"
+          [ngClass]="{
+            green: isActivityRecent(lastActivity),
+            yellow: !isActivityRecent(lastActivity)
+          }"
+        ></span>
+        <span class="activity-info"
+          >Última actividad: {{ lastActivity | date: "medium" }}</span
+        >
       </div>
       <div *ngIf="sensorStatus !== 'active'" class="last-activity-indicator">
         <span class="activity-bubble red"></span>
-        <span class="activity-info">No hay dispositivo con sensores instalados.</span>
+        <span class="activity-info"
+          >No hay dispositivo con sensores instalados.</span
+        >
       </div>
     </div>
   </div>
 </div>
- 
 
 <ion-list lines="none">
   <ion-item>
     <ion-label> {{ "REFUGE.INFORMATION.REGION" | translate }}</ion-label>
     <ion-label class="ion-text-end"> {{ refuge.region }} </ion-label>
   </ion-item>
- 
+
   <ion-item>
     <ion-label>{{ "REFUGE.INFORMATION.ALTITUDE" | translate }}</ion-label>
     <ion-label class="ion-text-end">
@@ -33,7 +45,7 @@
       }}</ion-label
     >
   </ion-item>
- 
+
   <ion-item>
     <ion-label>{{
       "REFUGE.INFORMATION.WINTER_CAPACITY" | translate
@@ -48,7 +60,7 @@
       }}
     </ion-label>
   </ion-item>
- 
+
   <ion-item>
     <ion-label>{{
       "REFUGE.INFORMATION.SUMMER_CAPACITY" | translate

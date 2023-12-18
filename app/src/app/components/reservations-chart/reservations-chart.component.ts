@@ -155,6 +155,12 @@ export class ReservationsChartComponent implements OnInit {
 
   private handleGeneratedCsv(data: string) {
     console.log('Generated CSV: ' + data);
+    const uri = this.dataService.getUriForCsvDownload(data);
+    const link = document.createElement('a');
+    link.href = uri;
+    link.download = data;
+    link.click();
+    // TODO: Translate data export string
   }
 
   private handleGenerateDataError(error: GenerateDataError) {
