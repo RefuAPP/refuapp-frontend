@@ -107,7 +107,17 @@
   margin-left: 10px;
   margin-top: 5px;
 }
-
+@media (hover: none) and (pointer: coarse) {
+  .activity-bubble:active {
+    transform: scale(1.1); 
+  }
+}
+@media screen and (max-width: 600px) { 
+  .activity-bubble {
+    width: 15px; 
+    height: 15px;
+  }
+}
 .green {
   background-color: green;
 }
