@@ -23,7 +23,7 @@ export class HomePage {
     this.mapStore.loadLibraries();
   }
 
-  clickedRefuge($event: Refuge) {
-    this.modal.openWithRefuge($event);
+  clickedRefuge($event: { refuge: Refuge; counter: number }) {
+    this.modal.openWithRefuge($event.refuge);
   }
 }

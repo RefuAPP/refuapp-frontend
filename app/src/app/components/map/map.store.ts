@@ -32,15 +32,22 @@ export interface MapState {
   hasLibraryLoaded: boolean;
   refugesAddedOnMap: boolean;
   currentRefuge?: Refuge;
+  counter: number;
 }
 
 @Injectable()
 export class MapComponentStore extends ComponentStore<MapState> {
   readonly isMapLoaded$ = this.select((state) => state.isMapLoaded);
   readonly areLibrariesLoaded$ = this.select((state) => state.hasLibraryLoaded);
-  readonly watchingRefuge$ = this.select((state) => state.currentRefuge).pipe(
-    filter((refuge) => refuge !== undefined),
-  ) as Observable<Refuge>;
+  readonly watchingRefuge$ = this.select((state) => {
+    return {
+      refuge: state.currentRefuge,
+      counter: state.counter,
+    };
+  }).pipe(filter((s) => s.refuge !== undefined)) as Observable<{
+    refuge: Refuge;
+    counter: number;
+  }>;
 
   constructor(
     private readonly mapService: MapService,
@@ -52,6 +59,7 @@ export class MapComponentStore extends ComponentStore<MapState> {
       isMapLoaded: false,
       hasLibraryLoaded: false,
       refugesAddedOnMap: false,
+      counter: 0,
     });
   }
 
@@ -62,7 +70,12 @@ export class MapComponentStore extends ComponentStore<MapState> {
       concatMap((refuges) =>
         fromPromise(
           this.mapService.addRefuges(refuges, (refuge) => {
-            this.patchState({ currentRefuge: refuge });
+            this.patchState((state) => {
+              return {
+                counter: state.counter + 1,
+                currentRefuge: refuge,
+              };
+            });
           }),
         ),
       ),
