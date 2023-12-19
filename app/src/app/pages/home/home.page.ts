@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MapComponentStore } from 'src/app/components/map/map.store';
 import { ModalComponentStore } from '../../components/refuge-modal/modal.store';
 import { Refuge } from '../../schemas/refuge/refuge';

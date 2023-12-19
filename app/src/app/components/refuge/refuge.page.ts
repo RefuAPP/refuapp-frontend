@@ -7,10 +7,9 @@ import {
   ReservationWithId,
   ReservationWithoutUserId,
 } from '../../schemas/reservations/reservation';
-import { Platform } from '@ionic/angular';
+import { ModalController, Platform } from '@ionic/angular';
 import { map, takeWhile, zip } from 'rxjs';
 import { ReservationsComponentStore } from '../../pages/reservations/reservations.store';
-import { ModalComponentStore } from '../refuge-modal/modal.store';
 
 @Component({
   selector: 'app-refuge',
@@ -20,7 +19,6 @@ import { ModalComponentStore } from '../refuge-modal/modal.store';
 })
 export class RefugePage {
   @Input() refuge!: Refuge;
-  @Output() clickedBar = new EventEmitter();
 
   reservations = this.reservationsStore.reservations$.pipe(
     map((reservations) => {
@@ -36,8 +34,8 @@ export class RefugePage {
     private refugeService: RefugeService,
     private store: Store<AppState>,
     private reservationsStore: ReservationsComponentStore,
-    private modal: ModalComponentStore,
     private platform: Platform,
+    private modalCtrl: ModalController,
   ) {
     this.reservationsStore.fetchReservations(false);
   }
@@ -48,8 +46,8 @@ export class RefugePage {
   }
 
   refreshButton($event: any) {
-    zip([this.reservationsStore.isLoading$, this.modal.isLoading$])
-      .pipe(takeWhile(([isLoading, isLoading2]) => isLoading || isLoading2))
+    zip([this.reservationsStore.isLoading$])
+      .pipe(takeWhile(([isLoading]) => isLoading))
       .subscribe({
         next: (v) => {
           console.log(JSON.stringify(v));
@@ -58,12 +56,16 @@ export class RefugePage {
           $event.target.complete();
         },
       });
-    this.modal.openFromRefugeId(this.refuge.id);
     this.reservationsStore.fetchReservations(false);
   }
 
   openFullModal() {
-    this.clickedBar.emit();
+    this.modalCtrl.getTop().then((modal) => {
+      modal?.getCurrentBreakpoint().then((r) => {
+        if (r == 1) modal?.setCurrentBreakpoint(0.3).then();
+        if (r == 0.3) modal?.setCurrentBreakpoint(1).then();
+      });
+    });
   }
 
   platformIsMobile(): boolean {

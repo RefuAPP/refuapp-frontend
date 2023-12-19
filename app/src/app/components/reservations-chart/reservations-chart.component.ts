@@ -97,7 +97,6 @@ export class ReservationsChartComponent implements OnInit {
         next: (response) => {
           this.chartReservations = response;
           this.formatChartReservations();
-          console.log(this.formattedChartReservations);
         },
         error: () => this.handleClientError().then(),
       });
@@ -154,7 +153,6 @@ export class ReservationsChartComponent implements OnInit {
   }
 
   private handleGeneratedCsv(data: string) {
-    console.log('Generated CSV: ' + data);
     const uri = this.dataService.getUriForCsvDownload(data);
     const link = document.createElement('a');
     link.href = uri;

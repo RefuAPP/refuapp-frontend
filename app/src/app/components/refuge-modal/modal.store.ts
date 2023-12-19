@@ -12,6 +12,7 @@ import { Location } from '@angular/common';
 
 export interface ModalState {
   refuge?: Refuge;
+  counter: number;
   isLoading: boolean;
 }
 
@@ -20,9 +21,15 @@ export class ModalComponentStore extends ComponentStore<ModalState> {
   readonly isOpen$ = this.select((state) => state.refuge).pipe(
     map((refuge) => refuge !== undefined),
   );
-  readonly refuge$ = this.select((state) => state.refuge).pipe(
-    filter((refuge) => refuge !== undefined),
-  ) as Observable<Refuge>;
+  readonly refuge$ = this.select((state) => {
+    return {
+      refuge: state.refuge,
+      counter: state.counter,
+    };
+  }).pipe(filter((refuge) => refuge.refuge !== undefined)) as Observable<{
+    refuge: Refuge;
+    counter: number;
+  }>;
 
   readonly isLoading$ = this.select((state) => state.isLoading);
 
@@ -31,23 +38,28 @@ export class ModalComponentStore extends ComponentStore<ModalState> {
     private readonly store: Store<AppState>,
     private readonly location: Location,
   ) {
-    super({ isLoading: false });
+    super({ isLoading: false, counter: 0 });
   }
 
   readonly openWithRefuge = this.effect((refuge: Observable<Refuge>) =>
     refuge.pipe(
-      tap(() => this.patchState({ isLoading: true })),
-      tap((refuge) => this.patchState({ refuge })),
+      tap((refuge) =>
+        this.patchState((state) => {
+          return { refuge: refuge, counter: state.counter + 1 };
+        }),
+      ),
+      tap((refuge) =>
+        console.log('Patched state with new refuge: ' + JSON.stringify(refuge)),
+      ),
       tap((refuge) => this.location.go('/home/' + refuge.id)),
-      tap(() => this.patchState({ isLoading: false })),
     ),
   );
 
   readonly closeModal = this.effect((obs) =>
     obs.pipe(
-      tap(() => this.patchState({ isLoading: true, refuge: undefined })),
       tap(() => this.location.go('/home')),
-      tap(() => this.patchState({ isLoading: false })),
+      tap(() => this.patchState({ refuge: undefined })),
+      tap(() => console.log('Patched state with undefined refuge')),
     ),
   );
 
@@ -59,7 +71,9 @@ export class ModalComponentStore extends ComponentStore<ModalState> {
       tapResponse(
         (refuge: GetRefugeResponse) => {
           if (refuge.status === 'correct') {
-            this.patchState({ refuge: refuge.data });
+            this.patchState((state) => {
+              return { counter: state.counter + 1, refuge: refuge.data };
+            });
             this.location.go('/home/' + refuge.data.id);
           }
           // TODO: Handle error
