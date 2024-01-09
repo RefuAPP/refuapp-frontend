@@ -150,7 +150,8 @@
     "CARDHEADER2": "Sobre RefuApp",
     "BODY": "Somos Ferran, Oriol, Pablo y Alex, estudiantes de postgrado en Ciencias de la Computación en la Universidad de Lleida (UdL). Unidos por nuestro amor por la tecnología y las actividades al aire libre, hemos creado RefuAPP - una aplicación innovadora destinada a mejorar la experiencia de aventura al aire libre en los Pirineos.",
     "BODY2": "RefuApp es más que un simple mapa; es tu guía digital para recorrer los Pirineos. La aplicación ofrece una visión completa de la región, incluyendo las ubicaciones de los refugios. Con un simple toque, puedes conocer las instalaciones, capacidades y más de cada refugio. Nuestro sistema de reserva distintivo permite a los usuarios \"reservar\" virtualmente un lugar para pasar la noche, contribuyendo al conocimiento colectivo de la capacidad del refugio. En algunas ubicaciones, hemos integrado tecnología avanzada como sensores infrarrojos y cámaras térmicas para rastrear la capacidad del refugio en tiempo real, ofreciéndote la información más precisa y actualizada.",
-    "LEARNMORE": "¿Sabías que RefuApp es de código abierto? Haz click para ver más!"
+    "LEARNMORE": "¿Sabías que RefuApp es de código abierto? Haz click para ver más!",
+    "DONATE": "¿Quieres apoyar nuestro proyecto? Haz click para donar!"
   },
   "SETTINGS": {
     "LANGUAGE": "Idioma",

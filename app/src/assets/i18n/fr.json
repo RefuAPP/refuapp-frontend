@@ -150,7 +150,8 @@
     "CARDHEADER2": "À propos de RefuApp",
     "BODY": "Nous sommes Ferran, Oriol, Pablo et Alex, étudiants en informatique à l'Université de Lleida (UdL). Unis par notre passion pour la technologie et les activités de plein air, nous avons créé RefuAPP - une application révolutionnaire destinée à améliorer l'expérience des aventures en plein air dans les Pyrénées.",
     "BODY2": "RefuApp est bien plus qu'une simple carte ; c'est votre guide numérique pour traverser les Pyrénées. L'application offre une vue complète de la région, y compris l'emplacement des refuges. D'un simple toucher, vous pouvez en apprendre davantage sur les installations de chaque refuge, leurs capacités, et bien plus encore. Notre système de réservation distinctif permet aux utilisateurs de \"réserver\" virtuellement une place pour la nuit, contribuant ainsi à la compréhension collective de la capacité du refuge. À certains endroits, nous avons intégré des technologies avancées telles que des capteurs infrarouges et des caméras thermiques pour suivre en temps réel la capacité du refuge, vous offrant ainsi les informations les plus précises et les plus actuelles.",
-    "LEARNMORE": "Saviez-vous que RefuApp est open source ? Cliquez pour en savoir plus !"
+    "LEARNMORE": "Saviez-vous que RefuApp est open source ? Cliquez pour en savoir plus !",
+    "DONATE": "Cliquez ici pour faire un don!"
   },
   "SETTINGS": {
     "LANGUAGE": "Langue",
