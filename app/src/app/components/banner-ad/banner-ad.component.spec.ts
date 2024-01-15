@@ -9,8 +9,8 @@ describe('BannerAdComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ BannerAdComponent ],
-      imports: [IonicModule.forRoot()]
+      declarations: [BannerAdComponent],
+      imports: [IonicModule.forRoot()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(BannerAdComponent);
